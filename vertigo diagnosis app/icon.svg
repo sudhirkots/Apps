@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Vertigo intake icon">
+  <rect width="512" height="512" rx="80" fill="#0c7c7c"/>
+  <path d="M132 263c0-68 55-123 123-123 45 0 85 24 106 60" fill="none" stroke="#ffffff" stroke-width="32" stroke-linecap="round"/>
+  <path d="M380 249c0 68-55 123-123 123-46 0-86-25-107-62" fill="none" stroke="#ffffff" stroke-width="32" stroke-linecap="round"/>
+  <path d="M350 136v68h-68" fill="none" stroke="#ffffff" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M162 376v-68h68" fill="none" stroke="#ffffff" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="256" cy="256" r="38" fill="#f4c35f"/>
+</svg>

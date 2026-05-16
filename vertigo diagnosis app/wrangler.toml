@@ -1,0 +1,13 @@
+name = "vertigo-diagnosis-intake"
+compatibility_date = "2026-05-16"
+pages_build_output_dir = "."
+
+[[d1_databases]]
+binding = "DB"
+database_name = "vertigo_diagnosis"
+database_id = "replace-with-your-d1-database-id"
+migrations_dir = "migrations"
+
+[[r2_buckets]]
+binding = "EXPORTS"
+bucket_name = "vertigo-diagnosis-exports"

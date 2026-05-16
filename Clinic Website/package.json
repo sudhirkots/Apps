@@ -1,0 +1,12 @@
+{
+  "name": "drsudhir-kothari-website",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler pages dev .",
+    "deploy": "wrangler pages deploy . --project-name drsudhir-kothari"
+  },
+  "devDependencies": {
+    "wrangler": "^4.92.0"
+  }
+}

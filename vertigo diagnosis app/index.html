@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0c7c7c">
+    <title>Vertigo Diagnosis Intake</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">Vestibular intake</p>
+        <h1>Vertigo Diagnosis Intake</h1>
+      </div>
+      <div class="status-badge" id="syncStatus">Starting</div>
+    </header>
+
+    <nav class="role-tabs" aria-label="App role">
+      <button class="tab-button active" type="button" data-tab="patient">Patient</button>
+      <button class="tab-button" type="button" data-tab="doctor">Doctor</button>
+      <button class="tab-button" type="button" data-tab="admin">Admin</button>
+    </nav>
+
+    <main id="app" class="app-shell" tabindex="-1"></main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Clinic Diagnosis Registry</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">CD</div>
+          <div>
+            <h1>Clinic Registry</h1>
+            <p>Healthplix reference tracker</p>
+          </div>
+        </div>
+
+        <nav class="nav-tabs" aria-label="Primary">
+          <button class="nav-tab active" type="button" data-view="patients">Patients</button>
+          <button class="nav-tab" type="button" data-view="taxonomy">Diagnosis</button>
+          <button class="nav-tab" type="button" data-view="data">Data</button>
+        </nav>
+
+        <section class="summary" aria-label="Registry summary">
+          <div>
+            <span id="statPatients">0</span>
+            <small>patients</small>
+          </div>
+          <div>
+            <span id="statCategories">0</span>
+            <small>categories</small>
+          </div>
+          <div>
+            <span id="statSubcategories">0</span>
+            <small>subtypes</small>
+          </div>
+        </section>
+      </aside>
+
+      <main class="main">
+        <section class="view active" id="patientsView">
+          <header class="topbar">
+            <div>
+              <h2>Patients</h2>
+              <p id="activeFilterLabel">All diagnoses</p>
+            </div>
+            <div class="actions">
+              <button class="secondary" type="button" id="resetDemoButton">Reset demo</button>
+              <button class="primary" type="button" id="newPatientButton">New patient</button>
+            </div>
+          </header>
+
+          <section class="workspace patients-layout">
+            <form class="entry-panel" id="patientForm">
+              <input type="hidden" id="patientId">
+              <div class="panel-header">
+                <h3 id="formTitle">New patient</h3>
+                <button class="ghost" type="button" id="clearFormButton">Clear</button>
+              </div>
+
+              <div class="form-grid">
+                <label>
+                  <span>Name</span>
+                  <input id="nameInput" autocomplete="name" required>
+                </label>
+                <label>
+                  <span>Age</span>
+                  <input id="ageInput" type="number" min="0" max="120" required>
+                </label>
+                <label>
+                  <span>Sex</span>
+                  <select id="sexInput" required>
+                    <option value="">Select</option>
+                    <option>Female</option>
+                    <option>Male</option>
+                    <option>Other</option>
+                  </select>
+                </label>
+                <label>
+                  <span>Healthplix ref no.</span>
+                  <input id="referenceInput" required>
+                </label>
+                <label>
+                  <span>Phone</span>
+                  <input id="phoneInput" inputmode="tel">
+                </label>
+                <label>
+                  <span>Visit date</span>
+                  <input id="visitDateInput" type="date">
+                </label>
+                <label>
+                  <span>Diagnosis category</span>
+                  <input id="categoryInput" list="categoryOptions" required>
+                  <datalist id="categoryOptions"></datalist>
+                </label>
+                <label>
+                  <span>Subtype</span>
+                  <input id="subcategoryInput" list="subcategoryOptions" required>
+                  <datalist id="subcategoryOptions"></datalist>
+                </label>
+              </div>
+
+              <label class="full">
+                <span>Notes</span>
+                <textarea id="notesInput" rows="4"></textarea>
+              </label>
+
+              <div class="history-block">
+                <div class="field-heading">
+                  <span>Essential history</span>
+                  <div class="inline-actions">
+                    <button class="secondary compact" type="button" id="dictateButton">Dictate</button>
+                  </div>
+                </div>
+                <textarea id="historyNotesInput" rows="5" placeholder="Dictate or type the key points worth preserving for this patient."></textarea>
+              </div>
+
+              <section class="attachments-panel">
+                <div class="field-heading">
+                  <span>Scans and history media</span>
+                  <button class="secondary compact" type="button" id="uploadMediaButton">Upload photo/video</button>
+                </div>
+                <input id="mediaInput" type="file" accept="image/*,video/*,application/pdf" multiple hidden>
+                <div class="attachment-help" id="attachmentHelp">Save or select a patient before uploading files.</div>
+                <div class="attachment-list" id="attachmentList"></div>
+              </section>
+
+              <div class="form-actions">
+                <button class="primary" type="submit">Save patient</button>
+                <button class="danger ghost" type="button" id="deletePatientButton" hidden>Delete</button>
+              </div>
+            </form>
+
+            <section class="registry-panel">
+              <div class="toolbar">
+                <label class="search-field">
+                  <span>Search</span>
+                  <div class="search-control">
+                    <input id="searchInput" placeholder="Name, ref no., diagnosis">
+                    <button class="secondary compact" type="button" id="clearSearchButton">Clear</button>
+                  </div>
+                </label>
+                <label>
+                  <span>Category</span>
+                  <select id="categoryFilter"></select>
+                </label>
+                <label>
+                  <span>Subtype</span>
+                  <select id="subcategoryFilter"></select>
+                </label>
+              </div>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Age</th>
+                      <th>Ref no.</th>
+                      <th>Category</th>
+                      <th>Subtype</th>
+                      <th>Visit</th>
+                    </tr>
+                  </thead>
+                  <tbody id="patientsTable"></tbody>
+                </table>
+              </div>
+            </section>
+          </section>
+        </section>
+
+        <section class="view" id="taxonomyView">
+          <header class="topbar">
+            <div>
+              <h2>Diagnosis</h2>
+              <p>Two-level diagnostic categories</p>
+            </div>
+          </header>
+
+          <section class="workspace taxonomy-layout">
+            <form class="entry-panel" id="taxonomyForm">
+              <div class="panel-header">
+                <h3>Add diagnosis type</h3>
+              </div>
+              <label>
+                <span>Category</span>
+                <input id="taxonomyCategoryInput" list="categoryOptions" required>
+              </label>
+              <label>
+                <span>Subtype</span>
+                <input id="taxonomySubcategoryInput" required>
+              </label>
+              <button class="primary" type="submit">Add type</button>
+            </form>
+
+            <section class="taxonomy-list" id="taxonomyList"></section>
+          </section>
+        </section>
+
+        <section class="view" id="dataView">
+          <header class="topbar">
+            <div>
+              <h2>Data</h2>
+              <p>Local SQLite database</p>
+            </div>
+          </header>
+
+          <section class="workspace data-layout">
+            <div class="entry-panel">
+              <div class="panel-header">
+                <h3>Export</h3>
+              </div>
+              <div class="stacked-actions">
+                <button class="secondary" type="button" id="exportJsonButton">Export JSON</button>
+                <button class="secondary" type="button" id="exportCsvButton">Export CSV</button>
+              </div>
+            </div>
+
+            <form class="entry-panel" id="importForm">
+              <div class="panel-header">
+                <h3>Import JSON</h3>
+              </div>
+              <input id="importFileInput" type="file" accept="application/json">
+              <button class="primary" type="submit">Import</button>
+            </form>
+
+            <section class="schema-panel">
+              <h3>SQLite-ready schema</h3>
+              <pre><code>patients(id, name, age, sex, healthplix_ref, phone, visit_date, category, subcategory, notes, history_notes, created_at, updated_at)
+diagnosis_types(id, category, subcategory, created_at)
+patient_files(id, patient_id, original_name, stored_path, mime_type, size_bytes, kind, created_at)</code></pre>
+            </section>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
