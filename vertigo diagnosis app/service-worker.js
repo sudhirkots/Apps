@@ -1,9 +1,9 @@
-const CACHE_NAME = "vertigo-intake-v1";
+const CACHE_NAME = "vertigo-intake-v18";
 const ASSETS = [
   "./",
   "index.html",
-  "styles.css",
-  "app.js",
+  "styles.css?v=18",
+  "app.js?v=18",
   "manifest.webmanifest",
   "icon.svg"
 ];

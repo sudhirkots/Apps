@@ -4,27 +4,38 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#0c7c7c">
-    <title>Vertigo Diagnosis Intake</title>
+    <title>Patient Intake</title>
     <link rel="manifest" href="manifest.webmanifest">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=18">
   </head>
   <body>
-    <header class="app-header">
-      <div>
-        <p class="eyebrow">Vestibular intake</p>
-        <h1>Vertigo Diagnosis Intake</h1>
-      </div>
-      <div class="status-badge" id="syncStatus">Starting</div>
-    </header>
+    <header class="app-header"></header>
 
-    <nav class="role-tabs" aria-label="App role">
-      <button class="tab-button active" type="button" data-tab="patient">Patient</button>
+    <div class="role-tabs hidden" role="tablist">
+      <button class="tab-button" type="button" data-tab="patient">Patient</button>
       <button class="tab-button" type="button" data-tab="doctor">Doctor</button>
-      <button class="tab-button" type="button" data-tab="admin">Admin</button>
-    </nav>
+    </div>
 
-    <main id="app" class="app-shell" tabindex="-1"></main>
+    <main id="app" class="app-shell" tabindex="-1">
+      <div class="role-selection-wrapper">
+        <section class="panel role-choice-panel">
+          <h1 class="role-choice-title">Choose your role</h1>
+          <p class="role-choice-subtitle">Use Doctor to review submissions, or Patient to complete the form.</p>
+          <div class="role-choice-grid">
+            <button class="role-choice-card" type="button" disabled>
+              <span class="role-icon">👨‍⚕️</span>
+              <span>Doctor</span>
+            </button>
+            <button class="role-choice-card" type="button" disabled>
+              <span class="role-icon">🧑</span>
+              <span>Patient</span>
+            </button>
+          </div>
+          <p class="muted">If this page remains static, refresh the browser to load the interactive app.</p>
+        </section>
+      </div>
+    </main>
 
-    <script src="app.js"></script>
+    <script src="app.js?v=18"></script>
   </body>
 </html>

@@ -8,7 +8,7 @@
     pin: "vertigoIntake.pin"
   };
 
-  const SEEDED_CONTENT_VERSION = "first-time-attack-v1";
+  const SEEDED_CONTENT_VERSION = "draft-branch-questions-v5";
   const SEEDED_FIRST_TIME_QUESTIONS = [
     {
       id: "ft_started_when",
@@ -49,35 +49,46 @@
       categoryId: "first_time",
       type: "single",
       required: true,
-      text: "Since it started, what has happened?",
-      help: "This helps separate a continuous attack from short spells.",
-      doctorNote: "Key timing pattern for acute vestibular syndrome versus episodic presentations.",
+      text: "Since it started, which best describes your dizziness?",
+      help: "Choose the one that fits best — this is the most important question.",
+      doctorNote: "Primary branch: continuous (AVS/neuritis territory), positional-stops (BPPV — auto-redirects to triggered category), brief spontaneous (migraine/TIA range).",
       showIf: null,
       options: [
-        { id: "continuous_present", text: "It is continuously present, even when I keep still" },
-        { id: "single_attack_better", text: "It was one attack and is now much better" },
-        { id: "repeated_attacks_same_day", text: "It comes as repeated attacks in the same day" },
-        { id: "intermittent_comes_goes", text: "It comes and goes, with normal periods in between" },
+        { id: "continuous_present", text: "It has been continuously present since it started — it never fully stops, even when I am completely still. It may feel better or worse in some positions, but it is always there." },
+        { id: "positional_stops", text: "It is clearly related to head position — it comes on with certain movements, or it stops completely when the head is in a certain position." },
+        { id: "brief_spells", text: "It comes in brief spells that stop on their own after a few minutes — not clearly caused by or stopped by head position." },
+        { id: "not_sure", text: "I am not sure." }
+      ]
+    },
+    {
+      id: "ft_movement_effect",
+      categoryId: "first_time",
+      type: "single",
+      required: true,
+      text: "When you move your head, turn, sit up, or lie down — is there any change in the dizziness?",
+      help: "Think about what happens during the movement itself.",
+      doctorNote: "Distinguishes pure acute vestibular syndrome (dizziness present at rest, worsened by movement) from a positional component.",
+      showIf: { questionId: "ft_current_pattern", optionId: "continuous_present" },
+      options: [
+        { id: "no_change", text: "No change — it stays exactly the same" },
+        { id: "gets_less", text: "It gets less, but does not stop" },
+        { id: "gets_worse", text: "It gets worse, but does not stop" },
         { id: "not_sure", text: "I am not sure" }
       ]
     },
     {
-      id: "ft_attack_duration",
+      id: "ft_brief_spell_duration",
       categoryId: "first_time",
       type: "single",
       required: true,
-      text: "How long did the strongest spell last at one time?",
-      help: "If it has never fully stopped, choose the continuous option.",
-      doctorNote: "Duration supports later rule scoring for positional, migraine, inner-ear, vascular, and other patterns.",
-      showIf: null,
+      text: "How long does each spell last before it stops on its own?",
+      help: "Choose the closest answer.",
+      doctorNote: "Duration of brief spontaneous spells. Under 20 minutes points to migraine-range or TIA-type episodes.",
+      showIf: { questionId: "ft_current_pattern", optionId: "brief_spells" },
       options: [
-        { id: "seconds", text: "Only seconds" },
-        { id: "under_one_minute", text: "Less than 1 minute" },
-        { id: "one_to_twenty_minutes", text: "1 to 20 minutes" },
-        { id: "twenty_minutes_to_twelve_hours", text: "20 minutes to 12 hours" },
-        { id: "twelve_to_twenty_four_hours", text: "12 to 24 hours" },
-        { id: "more_than_twenty_four_hours", text: "More than 24 hours" },
-        { id: "continuous_still_present", text: "It has not fully stopped" },
+        { id: "under_1_min", text: "Under 1 minute" },
+        { id: "one_to_twenty_min", text: "1 to 20 minutes" },
+        { id: "over_20_min", text: "More than 20 minutes" },
         { id: "not_sure", text: "I am not sure" }
       ]
     },
@@ -107,12 +118,11 @@
       text: "If you keep your head completely still, what happens?",
       help: "Choose what usually happens within the next minute or two.",
       doctorNote: "Helps distinguish brief triggered positional vertigo from persistent dizziness worsened by movement.",
-      showIf: null,
+      showIf: { questionId: "ft_current_pattern", optionId: "continuous_present" },
       options: [
         { id: "stops_under_minute", text: "It stops quickly, usually within 1 minute" },
         { id: "improves_but_continues", text: "It improves but does not fully stop" },
         { id: "continues_same", text: "It continues about the same" },
-        { id: "not_applicable", text: "This does not apply to my dizziness" },
         { id: "not_sure", text: "I am not sure" }
       ]
     },
@@ -253,6 +263,270 @@
         { id: "diagnosed_before", text: "Yes, I was diagnosed or treated before" },
         { id: "not_sure", text: "I am not sure" }
       ]
+  }
+  ];
+
+  const SEEDED_DRAFT_BRANCH_QUESTIONS = [
+    {
+      id: "rt_attack_trigger",
+      categoryId: "recurrent_triggered",
+      type: "multi",
+      required: true,
+      text: "Which movements usually trigger the attacks?",
+      help: "Select all that reliably bring on the dizziness.",
+      doctorNote: "Draft recurrent-triggered step. Edit wording and options after clinical review.",
+      showIf: null,
+      options: [
+        { id: "turning_in_bed", text: "Turning over in bed" },
+        { id: "lying_down_sitting_up", text: "Lying down or sitting up from bed" },
+        { id: "looking_up", text: "Looking up" },
+        { id: "bending_forward", text: "Bending forward" },
+        { id: "quick_head_turn", text: "Quick head turn while upright" },
+        { id: "not_sure", text: "I am not sure" }
+      ]
+    },
+    {
+      id: "rt_attack_duration",
+      categoryId: "recurrent_triggered",
+      type: "single",
+      required: true,
+      text: "After the triggering movement, how long does the spinning or dizziness usually last?",
+      help: "Choose the usual duration of the strongest part.",
+      doctorNote: "Draft recurrent-triggered step for duration pattern.",
+      showIf: null,
+      options: [
+        { id: "under_one_minute", text: "Less than 1 minute" },
+        { id: "one_to_five_minutes", text: "1 to 5 minutes" },
+        { id: "five_to_twenty_minutes", text: "5 to 20 minutes" },
+        { id: "more_than_twenty_minutes", text: "More than 20 minutes" },
+        { id: "varies", text: "It varies a lot" }
+      ]
+    },
+    {
+      id: "rt_between_attacks",
+      categoryId: "recurrent_triggered",
+      type: "single",
+      required: true,
+      text: "How do you feel between triggered attacks?",
+      help: "This asks about the time after the spell settles.",
+      doctorNote: "Draft recurrent-triggered step for residual imbalance or persistent symptoms.",
+      showIf: null,
+      options: [
+        { id: "normal_between", text: "Normal or almost normal" },
+        { id: "mild_unsteady", text: "Mildly unsteady or cautious" },
+        { id: "dizzy_most_time", text: "Dizzy or unsteady most of the time" },
+        { id: "not_sure", text: "I am not sure" }
+      ]
+    },
+    {
+      id: "rt_side_pattern",
+      categoryId: "recurrent_triggered",
+      type: "single",
+      required: false,
+      text: "Is one side or direction more likely to trigger it?",
+      help: "For example, turning to the right side in bed.",
+      doctorNote: "Draft recurrent-triggered step that may support positional testing planning.",
+      showIf: null,
+      options: [
+        { id: "right_side", text: "Right side" },
+        { id: "left_side", text: "Left side" },
+        { id: "both_sides", text: "Both sides" },
+        { id: "no_clear_side", text: "No clear side" },
+        { id: "not_sure", text: "I am not sure" }
+      ]
+    },
+    {
+      id: "rt_ear_neuro_symptoms",
+      categoryId: "recurrent_triggered",
+      type: "multi",
+      required: true,
+      text: "During these triggered attacks, do any of these happen?",
+      help: "Select all that apply.",
+      doctorNote: "Draft step to capture atypical symptoms alongside triggered attacks.",
+      showIf: null,
+      options: [
+        { id: "new_hearing_change", text: "New hearing change" },
+        { id: "new_tinnitus", text: "New ringing or buzzing" },
+        { id: "headache", text: "Headache" },
+        { id: "double_vision_speech_weakness", text: "Double vision, speech trouble, or weakness" },
+        { id: "none", text: "None of these" }
+      ]
+    },
+    {
+      id: "rs_attack_frequency",
+      categoryId: "recurrent_spontaneous",
+      type: "single",
+      required: true,
+      text: "How often do the untriggered attacks happen?",
+      help: "Choose the closest pattern.",
+      doctorNote: "Draft recurrent-spontaneous step for episode frequency.",
+      showIf: null,
+      options: [
+        { id: "daily", text: "Daily or almost daily" },
+        { id: "weekly", text: "Weekly" },
+        { id: "monthly", text: "Monthly" },
+        { id: "few_per_year", text: "A few times per year" },
+        { id: "first_few_attacks", text: "Only a few attacks so far" }
+      ]
+    },
+    {
+      id: "rs_attack_duration",
+      categoryId: "recurrent_spontaneous",
+      type: "single",
+      required: true,
+      text: "How long do these untriggered attacks usually last?",
+      help: "Choose the usual duration.",
+      doctorNote: "Draft recurrent-spontaneous step for differentiating short, migraine-range, and longer attacks.",
+      showIf: null,
+      options: [
+        { id: "seconds_minutes", text: "Seconds to a few minutes" },
+        { id: "five_minutes_to_one_hour", text: "5 minutes to 1 hour" },
+        { id: "one_to_twelve_hours", text: "1 to 12 hours" },
+        { id: "twelve_to_twenty_four_hours", text: "12 to 24 hours" },
+        { id: "more_than_twenty_four_hours", text: "More than 24 hours" },
+        { id: "not_sure", text: "I am not sure" }
+      ]
+    },
+    {
+      id: "rs_migraine_features",
+      categoryId: "recurrent_spontaneous",
+      type: "multi",
+      required: true,
+      text: "Do attacks come with headache or migraine-type symptoms?",
+      help: "Select all that apply.",
+      doctorNote: "Draft recurrent-spontaneous step for vestibular migraine feature review.",
+      showIf: null,
+      options: [
+        { id: "headache", text: "Headache" },
+        { id: "light_sensitivity", text: "Light sensitivity" },
+        { id: "sound_sensitivity", text: "Sound sensitivity" },
+        { id: "visual_aura", text: "Visual aura" },
+        { id: "migraine_history", text: "Past migraine diagnosis or migraine-like headaches" },
+        { id: "none", text: "None of these" }
+      ]
+    },
+    {
+      id: "rs_ear_features",
+      categoryId: "recurrent_spontaneous",
+      type: "multi",
+      required: true,
+      text: "Do attacks come with ear or hearing symptoms?",
+      help: "Select symptoms that happen during or near the attacks.",
+      doctorNote: "Draft recurrent-spontaneous step for fluctuating auditory symptom pattern.",
+      showIf: null,
+      options: [
+        { id: "hearing_reduces", text: "Hearing reduces or feels muffled" },
+        { id: "tinnitus", text: "Ringing or buzzing" },
+        { id: "ear_fullness", text: "Ear fullness or pressure" },
+        { id: "one_ear", text: "Mostly one ear" },
+        { id: "both_ears", text: "Both ears" },
+        { id: "none", text: "None of these" }
+      ]
+    },
+    {
+      id: "rs_vascular_context",
+      categoryId: "recurrent_spontaneous",
+      type: "multi",
+      required: true,
+      text: "During an attack, have you had any temporary neurologic symptoms?",
+      help: "Select all that apply, even if they went away.",
+      doctorNote: "Draft recurrent-spontaneous step for urgent clinician review.",
+      showIf: null,
+      options: [
+        { id: "double_vision", text: "Double vision" },
+        { id: "speech_or_swallowing", text: "Speech or swallowing trouble" },
+        { id: "face_arm_leg_weakness", text: "Face, arm, or leg weakness or numbness" },
+        { id: "new_severe_imbalance", text: "New severe imbalance or falling" },
+        { id: "none", text: "None of these" }
+      ]
+    },
+    {
+      id: "pu_duration",
+      categoryId: "persistent_unsteady",
+      type: "single",
+      required: true,
+      text: "How long have you felt dizzy or unsteady most days?",
+      help: "Choose the closest answer.",
+      doctorNote: "Draft persistent-unsteady step for duration pattern.",
+      showIf: null,
+      options: [
+        { id: "under_one_week", text: "Less than 1 week" },
+        { id: "one_to_four_weeks", text: "1 to 4 weeks" },
+        { id: "one_to_three_months", text: "1 to 3 months" },
+        { id: "more_than_three_months", text: "More than 3 months" },
+        { id: "not_sure", text: "I am not sure" }
+      ]
+    },
+    {
+      id: "pu_worse_context",
+      categoryId: "persistent_unsteady",
+      type: "multi",
+      required: true,
+      text: "What tends to make the persistent dizziness or unsteadiness worse?",
+      help: "Select all that apply.",
+      doctorNote: "Draft persistent-unsteady step for motion, visual, upright, and walking sensitivity.",
+      showIf: null,
+      options: [
+        { id: "standing_walking", text: "Standing or walking" },
+        { id: "busy_visual_places", text: "Busy visual places like markets or traffic" },
+        { id: "screens_reading", text: "Screens or reading" },
+        { id: "head_movement", text: "Head movement" },
+        { id: "dark_uneven_ground", text: "Darkness or uneven ground" },
+        { id: "none_clear", text: "No clear pattern" }
+      ]
+    },
+    {
+      id: "pu_onset_context",
+      categoryId: "persistent_unsteady",
+      type: "multi",
+      required: true,
+      text: "What was happening around the time this persistent problem started?",
+      help: "Select all that apply.",
+      doctorNote: "Draft persistent-unsteady step for trigger context.",
+      showIf: null,
+      options: [
+        { id: "after_vertigo_attack", text: "After a vertigo attack" },
+        { id: "after_illness", text: "After an illness or infection" },
+        { id: "after_fall_injury", text: "After a fall, head injury, or surgery" },
+        { id: "new_medicine", text: "After a new medicine or dose change" },
+        { id: "stress_anxiety", text: "During high stress or anxiety" },
+        { id: "no_clear_start", text: "No clear start" }
+      ]
+    },
+    {
+      id: "pu_falls_walking",
+      categoryId: "persistent_unsteady",
+      type: "single",
+      required: true,
+      text: "How has this affected walking or falls?",
+      help: "Choose the safest answer.",
+      doctorNote: "Draft persistent-unsteady step for fall risk and functional impact.",
+      showIf: null,
+      options: [
+        { id: "walks_normally", text: "I walk normally" },
+        { id: "cautious_no_falls", text: "I am cautious but have not fallen" },
+        { id: "near_falls", text: "I have had near-falls" },
+        { id: "fallen", text: "I have fallen" },
+        { id: "needs_support", text: "I need support to walk safely" }
+      ]
+    },
+    {
+      id: "pu_associated_symptoms",
+      categoryId: "persistent_unsteady",
+      type: "multi",
+      required: true,
+      text: "Which symptoms are present with the persistent dizziness or unsteadiness?",
+      help: "Select all that apply.",
+      doctorNote: "Draft persistent-unsteady step for associated symptom review.",
+      showIf: null,
+      options: [
+        { id: "hearing_loss", text: "Hearing loss" },
+        { id: "tinnitus", text: "Tinnitus" },
+        { id: "numb_feet", text: "Numbness or reduced feeling in the feet" },
+        { id: "neck_pain", text: "Neck pain" },
+        { id: "faint_lightheaded", text: "Lightheaded or faint feeling" },
+        { id: "none", text: "None of these" }
+      ]
     }
   ];
 
@@ -293,6 +567,12 @@
         label: "Persistent dizziness or unsteadiness",
         patientLabel: "I do not get clear attacks; I feel dizzy or unsteady most of the time, especially while walking",
         doctorSummary: "Persistent dizziness or unsteadiness without discrete attacks."
+      },
+      {
+        id: "recurrent_unclear",
+        label: "Recurrent vertigo, positional clarity uncertain",
+        patientLabel: "I have recurrent vertigo, but I am not sure whether it is positional",
+        doctorSummary: "Recurrent vertigo requiring clarification of positional versus non-positional pattern."
       }
     ],
     baseQuestions: [
@@ -311,27 +591,213 @@
         ]
       }
     ],
-    branchQuestions: SEEDED_FIRST_TIME_QUESTIONS,
+    branchQuestions: SEEDED_FIRST_TIME_QUESTIONS.concat(SEEDED_DRAFT_BRANCH_QUESTIONS),
     diagnoses: [],
     rules: []
   };
 
+  const INITIAL_CLASSIFICATION_OPTIONS = [
+    { id: "attack", label: "This is an attack of dizziness or vertigo.", title: "An attack", description: "A sudden spell of dizziness or vertigo that comes on and may go away", categoryId: "", icon: "spark" },
+    { id: "constant", label: "I don't have any attack, but there is constant dizziness or constant imbalance whenever I try to walk.", title: "Constant dizziness or imbalance", description: "Dizziness or imbalance that is present most of the time, not in separate spells", categoryId: "persistent_unsteady", icon: "balance" }
+  ];
+
+  const ATTACK_PATTERN_OPTIONS = [
+    { id: "first_attack", label: "This is the first time I am feeling dizzy or unsteady in life.", title: "First attack ever", description: "I have never had dizziness or vertigo like this before in my life", categoryId: "first_time", icon: "spark" },
+    { id: "recurrent", label: "I keep getting spells of dizziness or vertigo or imbalance off and on.", title: "Recurrent attacks", description: "I have had similar spells of dizziness or vertigo before", categoryId: "", icon: "rotate" }
+  ];
+
+  const RECURRENT_POSITION_OPTIONS = [
+    { id: "positional", label: "Positional vertigo", categoryId: "recurrent_triggered" },
+    { id: "non_positional", label: "Non-positional recurrent vertigo", categoryId: "recurrent_spontaneous" },
+    { id: "unclear", label: "Unclear", categoryId: "recurrent_unclear" }
+  ];
+
+  const NEXT_LEVEL_OPTIONS = {
+    first_time: [
+      "Acute vestibular syndrome",
+      "Posterior circulation stroke/TIA",
+      "Vestibular neuritis",
+      "Labyrinthitis",
+      "First episode vestibular migraine",
+      "Medical/systemic cause"
+    ],
+    recurrent_triggered: [
+      "Posterior canal BPPV",
+      "Horizontal canal BPPV",
+      "Anterior canal BPPV",
+      "Cupulolithiasis",
+      "Positional central vertigo",
+      "Vestibular migraine mimicking BPPV"
+    ],
+    recurrent_spontaneous: [
+      "Vestibular migraine",
+      "Meniere's disease",
+      "Vestibular paroxysmia",
+      "TIA",
+      "Panic/anxiety-related episodes",
+      "Epileptic vertigo"
+    ],
+    recurrent_unclear: [
+      "Posterior canal BPPV",
+      "Horizontal canal BPPV",
+      "Positional central vertigo",
+      "Vestibular migraine",
+      "Meniere's disease",
+      "TIA"
+    ],
+    persistent_unsteady: [
+      "PPPD",
+      "Bilateral vestibulopathy",
+      "Cerebellar ataxia",
+      "Sensory ataxia/peripheral neuropathy",
+      "Parkinsonism",
+      "Functional dizziness",
+      "Drug-induced dizziness"
+    ]
+  };
+
+  const SIMPLE_PATIENT_QUESTIONS = [
+    {
+      id: "feeling",
+      text: "What does the dizziness feel like?",
+      help: "Choose the word that fits best.",
+      type: "single",
+      options: [
+        { id: "spinning", text: "Spinning", desc: "The room or I seem to be rotating or spinning around" },
+        { id: "lightheaded", text: "Lightheaded", desc: "Faint, woozy, or about to pass out" },
+        { id: "unsteady", text: "Unsteady", desc: "Off-balance, mainly when walking or standing" },
+        { id: "not_sure", text: "Not sure", desc: "Hard to put into words" }
+      ]
+    },
+    {
+      id: "pattern",
+      text: "Has this happened before?",
+      type: "single",
+      options: [
+        { id: "first_time", text: "This is the first time", desc: "I have never felt this before" },
+        { id: "repeated", text: "I keep getting attacks", desc: "Episodes that come and go" },
+        { id: "constant", text: "It has been there constantly", desc: "Present most of the time for days" }
+      ]
+    },
+    {
+      id: "stops_still",
+      text: "When you hold your head completely still, does the dizziness stop?",
+      type: "single",
+      options: [
+        { id: "yes", text: "Yes, it stops" },
+        { id: "no", text: "No, it continues" },
+        { id: "not_sure", text: "Not sure" }
+      ]
+    },
+    {
+      id: "duration",
+      text: "How long does each episode last?",
+      type: "single",
+      options: [
+        { id: "seconds", text: "Seconds" },
+        { id: "minutes", text: "Minutes (under 20)" },
+        { id: "hours", text: "Hours" },
+        { id: "nonstop", text: "It has not stopped" }
+      ]
+    },
+    {
+      id: "urgent",
+      text: "Do you have any of these right now?",
+      help: "Select all that apply.",
+      type: "multi",
+      urgent: true,
+      options: [
+        { id: "double_vision", text: "Double vision" },
+        { id: "slurred_speech", text: "Slurred speech or trouble speaking" },
+        { id: "severe_headache", text: "Sudden severe headache" },
+        { id: "weakness", text: "Weakness or numbness in arm, leg, or face" },
+        { id: "none", text: "None of these" }
+      ]
+    },
+    {
+      id: "ear",
+      text: "Any ear symptoms with the dizziness?",
+      help: "Select all that apply.",
+      type: "multi",
+      options: [
+        { id: "ringing", text: "Ringing or buzzing in one ear" },
+        { id: "hearing_loss", text: "Reduced hearing in one ear" },
+        { id: "fullness", text: "Fullness or pressure in one ear" },
+        { id: "none", text: "None" }
+      ]
+    },
+    {
+      id: "headache",
+      text: "Is there a headache along with the dizziness?",
+      type: "single",
+      options: [
+        { id: "yes_severe", text: "Yes, a severe headache" },
+        { id: "yes_mild", text: "Yes, a mild headache" },
+        { id: "no", text: "No headache" }
+      ]
+    }
+  ];
+
+  const EXAMINATION_POINTERS = {
+    first_time_continuous: [
+      "HINTs exam — Head Impulse test, Nystagmus direction, Test of Skew",
+      "Spontaneous nystagmus: direction-fixed suggests peripheral; direction-changing suggests central",
+      "Romberg test and tandem gait",
+      "Finger-nose coordination (cerebellar screen)"
+    ],
+    first_time_brief: [
+      "Orthostatic blood pressure (lying, sitting, standing)",
+      "Audiometry or tuning fork — Rinne and Weber",
+      "Migraine history and current headache screen",
+      "Basic cranial nerve and cerebellar exam"
+    ],
+    recurrent_triggered: [
+      "Dix-Hallpike test — right side first, then left",
+      "Supine roll test (for horizontal canal BPPV)",
+      "Note nystagmus direction, latency, and fatigability",
+      "Romberg with eyes closed"
+    ],
+    recurrent_spontaneous: [
+      "Audiometry — pure tone and speech discrimination",
+      "Orthostatic blood pressure",
+      "Migraine feature screen and headache diary review",
+      "Basic neurological exam — cranial nerves, cerebellar signs"
+    ],
+    recurrent_unclear: [
+      "Dix-Hallpike test (right and left)",
+      "Supine roll test",
+      "Audiometry",
+      "Orthostatic blood pressure"
+    ],
+    persistent_unsteady: [
+      "Romberg test — eyes open versus eyes closed",
+      "Tandem gait",
+      "Orthostatic blood pressure",
+      "Peripheral neuropathy screen — vibration sense, ankle reflexes"
+    ]
+  };
+
   const state = {
-    tab: "patient",
+    tab: "",
+    role: "",
     cloud: false,
-    status: "Local mode",
+    status: "",
     config: normalizeConfig(loadLocalConfig()),
     patient: freshPatientState(),
     submitted: null,
+    simplePatient: freshSimplePatientState(),
     doctorUnlocked: false,
     adminUnlocked: false,
     clinicianPin: localStorage.getItem(STORAGE.pin) || "",
     submissions: loadLocalSubmissions(),
-    selectedSubmissionId: null
+    selectedSubmissionId: null,
+    editingQuestionId: null,
+    pendingFinalDiagnosis: null
   };
 
   const app = document.getElementById("app");
   const syncStatus = document.getElementById("syncStatus");
+  const roleTabs = document.querySelector(".role-tabs");
   const tabs = Array.from(document.querySelectorAll("[data-tab]"));
 
   document.addEventListener("DOMContentLoaded", init);
@@ -348,20 +814,61 @@
   async function init() {
     await loadRemotePublicConfig();
     registerServiceWorker();
+    attachHeaderTapGate();
     render();
   }
 
-  function setTab(tab) {
-    state.tab = tab;
-    tabs.forEach(function (button) {
-      button.classList.toggle("active", button.dataset.tab === tab);
+  function attachHeaderTapGate() {
+    const header = document.querySelector(".app-header");
+    if (!header) return;
+    let taps = 0;
+    let timer = null;
+    header.addEventListener("click", function () {
+      taps++;
+      clearTimeout(timer);
+      if (taps >= 7) {
+        taps = 0;
+        setTab("admin");
+      } else {
+        timer = setTimeout(function () { taps = 0; }, 3000);
+      }
     });
+  }
+
+  function setTab(tab) {
+    if (tab !== "patient" && tab !== "doctor" && tab !== "admin") return;
+    state.tab = tab;
     render();
     app.focus();
   }
 
   function render() {
-    syncStatus.textContent = state.status;
+    document.title = "Vertigo Guide";
+    if (syncStatus) {
+      syncStatus.textContent = state.status || "";
+      syncStatus.style.display = state.status ? "" : "none";
+    }
+    if (roleTabs) {
+      roleTabs.classList.toggle("hidden", state.tab !== "doctor" && state.tab !== "admin");
+      tabs.forEach(function (button) {
+        button.classList.toggle("active", button.dataset.tab === state.tab);
+      });
+    }
+
+    if (!state.role) {
+      renderLanding();
+      return;
+    }
+
+    if (state.role === "patient_simple") {
+      renderSimplePatient();
+      return;
+    }
+
+    if (state.role === "doctor_guidance") {
+      renderDoctorGuidance();
+      return;
+    }
 
     if (state.tab === "patient") {
       renderPatient();
@@ -373,7 +880,40 @@
       return;
     }
 
-    renderAdmin();
+    if (state.tab === "admin") {
+      renderAdmin();
+      return;
+    }
+
+    renderLanding();
+  }
+
+  function renderLanding() {
+    app.innerHTML = [
+      '<div class="landing-wrapper">',
+      '<div class="landing-hero">',
+      dizzyPersonSvg(),
+      '<h1 class="landing-title">Vertigo Guide</h1>',
+      '<p class="landing-subtitle">Understanding and assessing dizziness and vertigo</p>',
+      '</div>',
+      '<div class="landing-roles">',
+      '<button class="landing-role-card" type="button" data-action="choose-role" data-role="patient_simple">',
+      '<div class="landing-role-icon patient-icon">' + iconSvg("head") + '</div>',
+      '<div class="landing-role-body">',
+      '<div class="landing-role-title">I am a patient</div>',
+      '<div class="landing-role-desc">Help me describe my dizziness to my doctor</div>',
+      '</div>',
+      '</button>',
+      '<button class="landing-role-card" type="button" data-action="choose-role" data-role="doctor_examining">',
+      '<div class="landing-role-icon doctor-icon">' + iconSvg("clipboard") + '</div>',
+      '<div class="landing-role-body">',
+      '<div class="landing-role-title">I am a doctor</div>',
+      '<div class="landing-role-desc">Clinical intake questionnaire, diagnostic support, and decision guidance</div>',
+      '</div>',
+      '</button>',
+      '</div>',
+      '</div>'
+    ].join("");
   }
 
   function renderPatient() {
@@ -382,46 +922,170 @@
       return;
     }
 
-    const config = state.config;
     const answers = state.patient.answers;
-    const topQuestion = config.baseQuestions[0];
+
+    if (!hasInitialClassification(answers)) {
+      renderPatientStep(answers);
+      return;
+    }
+
+    if (!state.patient.safetyDone) {
+      if (state.patient.safetyWarningShown) {
+        renderSafetyWarning();
+      } else {
+        renderSafetyScreen();
+      }
+      return;
+    }
+
+    const config = state.config;
     const categoryId = getCurrentCategoryId(answers, config);
-    const category = findCategory(categoryId, config);
-    const branchQuestions = getVisibleBranchQuestions(categoryId, answers, config);
+
+    if (categoryId === "recurrent_triggered" && answers.ft_current_pattern && answers.ft_current_pattern.value === "positional_stops" && !state.patient.positionalRedirectAcknowledged) {
+      renderPositionalRedirectNotice();
+      return;
+    }
+
+    const visibleQuestions = getVisibleBranchQuestions(categoryId, answers, config);
+    const step = Math.min(state.patient.questionStep, visibleQuestions.length);
+
+    if (step < visibleQuestions.length) {
+      renderBranchQuestionStep(visibleQuestions[step], step, visibleQuestions.length);
+      return;
+    }
+    renderSubmitScreen(categoryId, config);
+  }
+
+  function renderPatientStep(answers) {
+    const initialValue = answers.initial_pathway && answers.initial_pathway.value ? answers.initial_pathway.value : "";
+    const attackValue = answers.attack_pattern && answers.attack_pattern.value ? answers.attack_pattern.value : "";
+
+    let question, options, gridClass, backAction;
+
+    if (!initialValue) {
+      question = "Is it an attack, or is there constant dizziness or a constant feeling of imbalance?";
+      options = INITIAL_CLASSIFICATION_OPTIONS.map(function (option) {
+        return [
+          '<label class="classification-card">',
+          '<input class="sr-only" type="radio" name="initial_pathway" data-initial-pathway="' + escapeHtml(option.id) + '">',
+          '<span class="pattern-art ' + escapeHtml(option.categoryId || option.id) + '">' + iconSvg(option.icon) + '</span>',
+          '<div class="classification-card-body">',
+          '<div class="classification-card-title">' + escapeHtml(option.title || option.label) + '</div>',
+          '<div class="classification-card-desc">' + escapeHtml(option.description || "") + '</div>',
+          '</div>',
+          '</label>'
+        ].join("");
+      });
+      gridClass = "two-col";
+      backAction = "go-home";
+    } else if (initialValue === "attack") {
+      question = "Is this the first time you have had dizziness, or do you keep getting attacks?";
+      options = ATTACK_PATTERN_OPTIONS.map(function (option) {
+        return [
+          '<label class="classification-card">',
+          '<input class="sr-only" type="radio" name="attack_pattern" data-attack-pattern="' + escapeHtml(option.id) + '">',
+          '<div class="classification-card-body">',
+          '<div class="classification-card-title">' + escapeHtml(option.title || option.label) + '</div>',
+          '<div class="classification-card-desc">' + escapeHtml(option.description || "") + '</div>',
+          '</div>',
+          '</label>'
+        ].join("");
+      });
+      gridClass = "two-col";
+      backAction = "back-step";
+    } else {
+      question = "Are the attacks clearly positional?";
+      options = RECURRENT_POSITION_OPTIONS.map(function (option) {
+        return [
+          '<label class="classification-card">',
+          '<input class="sr-only" type="radio" name="recurrent_position" data-recurrent-position="' + escapeHtml(option.id) + '">',
+          '<span class="pattern-label">' + escapeHtml(option.label) + '</span>',
+          '</label>'
+        ].join("");
+      });
+      gridClass = "compact";
+      backAction = "back-step";
+    }
 
     app.innerHTML = [
-      '<section class="panel">',
-      '<div class="flow-header">',
-      '<h2>Patient dizziness intake</h2>',
-      '<p class="muted">Please answer the questions as clearly as possible. The doctor will review the answers before making the final diagnosis.</p>',
-      '</div>',
-      '<div class="field-grid">',
-      '<div class="field">',
-      '<label for="clinicId">Clinic ID</label>',
-      '<input id="clinicId" autocomplete="off" value="' + escapeHtml(state.patient.clinicId) + '" placeholder="Enter clinic ID">',
+      '<div class="role-selection-wrapper">',
+      '<section class="panel patient-classification-panel">',
+      '<button class="back-button" type="button" data-action="' + backAction + '">' + iconSvg("back") + ' Back</button>',
+      '<div class="classification-panel">',
+      '<p class="classification-question-heading">' + escapeHtml(question) + '</p>',
+      '<div class="classification-grid ' + gridClass + '">',
+      options.join(""),
       '</div>',
       '</div>',
       '</section>',
+      '</div>'
+    ].join("");
+  }
 
-      '<section class="panel">',
-      '<h2>Safety screen</h2>',
-      '<p class="muted">Select any warning feature that is present now.</p>',
-      '<div class="red-flag-grid">',
-      config.redFlags.map(renderRedFlag).join(""),
+  function renderSafetyScreen() {
+    const config = state.config;
+    const noneChecked = state.patient.safetyNoneSelected;
+    app.innerHTML = [
+      '<div class="role-selection-wrapper">',
+      '<section class="panel patient-classification-panel">',
+      '<button class="back-button" type="button" data-action="back-step">' + iconSvg("back") + ' Back</button>',
+      safetyPicture(),
+      '<h2 class="safety-title">Safety Check</h2>',
+      '<p class="safety-subtitle">Do you have any of these warning symptoms right now? Select all that apply.</p>',
+      '<div class="safety-two-col">',
+      '<div class="safety-flags-col">',
+      '<div class="safety-col-label safety-col-label-red">' + iconSvg("alert") + ' Red flag symptoms</div>',
+      '<div class="safety-flag-list">',
+      config.redFlags.map(function (flag) {
+        const checked = state.patient.redFlags.includes(flag.id) ? " checked" : "";
+        return [
+          '<label class="safety-flag-item">',
+          '<input type="checkbox" data-red-flag="' + escapeHtml(flag.id) + '"' + checked + '>',
+          '<span class="safety-flag-icon">' + iconSvg(iconForRedFlag(flag.id)) + '</span>',
+          '<span>' + escapeHtml(flag.text) + '</span>',
+          '</label>'
+        ].join("");
+      }).join(""),
       '</div>',
+      '</div>',
+      '<div class="safety-none-col">',
+      '<div class="safety-col-label safety-col-label-green">' + iconSvg("ok") + ' All clear</div>',
+      '<label class="safety-none-item">',
+      '<div class="safety-none-big-icon">' + iconSvg("ok") + '</div>',
+      '<input type="checkbox" data-safety-none' + (noneChecked ? " checked" : "") + '>',
+      '<span>None of these apply to me</span>',
+      '</label>',
+      '</div>',
+      '</div>',
+      state.patient.redFlags.length > 0 ? '<div class="actions"><button class="button" type="button" data-action="safety-continue">Done — symptoms noted</button></div>' : "",
       '</section>',
+      '</div>'
+    ].join("");
+  }
 
-      '<section class="panel">',
-      renderQuestion(topQuestion, answers[topQuestion.id]),
-      category ? '<div class="category-banner"><strong>Current category:</strong> ' + escapeHtml(category.label) + '<br><span class="muted">' + escapeHtml(category.doctorSummary) + '</span></div>' : "",
-      branchQuestions.length ? branchQuestions.map(function (question) {
-        return renderQuestion(question, answers[question.id]);
-      }).join("") : '<div class="empty-state">No extra questions have been added for this category yet. The doctor can add them in Admin.</div>',
+  function renderSafetyWarning() {
+    const flagTexts = state.patient.redFlags.map(function (id) {
+      const flag = state.config.redFlags.find(function (f) { return f.id === id; });
+      return flag ? flag.text : id;
+    });
+    app.innerHTML = [
+      '<div class="role-selection-wrapper">',
+      '<section class="panel patient-classification-panel safety-warning-panel">',
+      '<button class="back-button" type="button" data-action="safety-back">' + iconSvg("back") + ' Back</button>',
+      '<div class="safety-warning-icon">' + iconSvg("alert") + '</div>',
+      '<h2 class="safety-warning-title">Seek urgent medical attention</h2>',
+      '<p class="safety-warning-text">You have reported one or more urgent warning symptoms. Please <strong>contact your doctor immediately</strong> or go to the nearest <strong>hospital emergency department</strong> now.</p>',
+      '<div class="safety-warning-flags">',
+      flagTexts.map(function (text) {
+        return '<div class="safety-warning-flag-item">' + iconSvg("alert") + '<span>' + escapeHtml(text) + '</span></div>';
+      }).join(""),
+      '</div>',
+      '<p class="safety-warning-note">You may still complete the intake form so your doctor has your full history.</p>',
       '<div class="actions">',
-      '<button class="button" type="button" data-action="submit-patient">Submit answers</button>',
-      '<button class="button secondary" type="button" data-action="reset-patient">Clear form</button>',
+      '<button class="button danger" type="button" data-action="safety-acknowledge">I understand — continue to form</button>',
       '</div>',
-      '</section>'
+      '</section>',
+      '</div>'
     ].join("");
   }
 
@@ -432,6 +1096,7 @@
 
     app.innerHTML = [
       '<section class="panel">',
+      '<button class="back-button" type="button" data-action="go-home">' + iconSvg("back") + ' Back</button>',
       '<div class="notice success">',
       '<h2>Answers saved</h2>',
       '<p>Your answers have been saved for doctor review. No diagnosis is shown here because the doctor will compare your answers with the clinical examination.</p>',
@@ -442,6 +1107,292 @@
       '<button class="button" type="button" data-action="new-patient">Start another intake</button>',
       '</div>',
       '</section>'
+    ].join("");
+  }
+
+  function renderPositionalRedirectNotice() {
+    app.innerHTML = [
+      '<div class="role-selection-wrapper">',
+      '<section class="panel patient-classification-panel">',
+      '<button class="back-button" type="button" data-action="back-positional-redirect">' + iconSvg("back") + ' Back</button>',
+      '<div class="classification-panel">',
+      '<div class="submit-check-icon">' + iconSvg("rotate") + '</div>',
+      '<p class="classification-question-heading">Your dizziness sounds positional</p>',
+      '<p class="q-help">Because the dizziness stops in certain head positions, this most commonly points to a condition called BPPV — displaced crystals in the inner ear. The next questions are designed for positional vertigo and will give your doctor the most useful information.</p>',
+      '<p class="q-help">Please answer as accurately as you can. Your doctor will confirm the pattern during the examination.</p>',
+      '<div class="actions">',
+      '<button class="button" type="button" data-action="accept-positional-redirect">Continue</button>',
+      '</div>',
+      '</div>',
+      '</section>',
+      '</div>'
+    ].join("");
+  }
+
+  function renderSimplePatient() {
+    if (state.simplePatient.done) {
+      renderSimpleSummary();
+      return;
+    }
+    if (state.simplePatient.urgentWarning) {
+      renderSimpleUrgentWarning();
+      return;
+    }
+    const step = state.simplePatient.step;
+    const question = SIMPLE_PATIENT_QUESTIONS[step];
+    if (!question) {
+      state.simplePatient.done = true;
+      renderSimpleSummary();
+      return;
+    }
+    renderSimpleQuestion(question, step);
+  }
+
+  function renderSimpleQuestion(question, stepIndex) {
+    const total = SIMPLE_PATIENT_QUESTIONS.length;
+    const answer = state.simplePatient.answers[question.id];
+    const currentValues = Array.isArray(answer) ? answer : (answer ? [answer] : []);
+    const isMulti = question.type === "multi";
+    const hasAnswer = currentValues.length > 0;
+
+    const options = (question.options || []).map(function (opt) {
+      const selected = currentValues.includes(opt.id);
+      if (isMulti) {
+        return [
+          '<label class="simple-option' + (selected ? " selected" : "") + '">',
+          '<input class="sr-only" type="checkbox" data-simple-qid="' + escapeHtml(question.id) + '" data-simple-oid="' + escapeHtml(opt.id) + '"' + (selected ? " checked" : "") + '>',
+          '<span class="sp-ind sp-ind-check' + (selected ? " sp-ind-selected" : "") + '"></span>',
+          '<span class="simple-option-text">' + escapeHtml(opt.text) + '</span>',
+          '</label>'
+        ].join("");
+      }
+      return [
+        '<button class="simple-option' + (selected ? " selected" : "") + '" type="button"',
+        ' data-action="simple-answer" data-qid="' + escapeHtml(question.id) + '" data-oid="' + escapeHtml(opt.id) + '">',
+        '<span class="sp-ind sp-ind-radio' + (selected ? " sp-ind-selected" : "") + '"></span>',
+        '<span class="sp-body">',
+        '<span class="simple-option-text">' + escapeHtml(opt.text) + '</span>',
+        opt.desc ? '<span class="simple-option-desc">' + escapeHtml(opt.desc) + '</span>' : "",
+        '</span>',
+        '</button>'
+      ].join("");
+    }).join("");
+
+    app.innerHTML = [
+      '<div class="simple-wrapper">',
+      stepIndex > 0 ? '<button class="back-button" type="button" data-action="simple-back">' + iconSvg("back") + ' Back</button>' : "",
+      '<div class="simple-dots">',
+      SIMPLE_PATIENT_QUESTIONS.map(function (_, i) {
+        return '<span class="sdot' + (i === stepIndex ? " active" : i < stepIndex ? " done" : "") + '"></span>';
+      }).join(""),
+      '</div>',
+      '<div class="simple-card">',
+      '<p class="simple-q">' + escapeHtml(question.text) + '</p>',
+      question.help ? '<p class="simple-help">' + escapeHtml(question.help) + '</p>' : "",
+      '<div class="simple-options' + (isMulti ? " multi" : "") + '">',
+      options,
+      '</div>',
+      isMulti ? '<div class="actions"><button class="button" type="button" data-action="simple-next"' + (!hasAnswer ? " disabled" : "") + '>Done</button></div>' : "",
+      '</div>',
+      '</div>'
+    ].join("");
+  }
+
+  function renderSimpleUrgentWarning() {
+    const urgentValues = Array.isArray(state.simplePatient.answers.urgent) ? state.simplePatient.answers.urgent.filter(function (v) { return v !== "none"; }) : [];
+    const urgentQ = SIMPLE_PATIENT_QUESTIONS.find(function (q) { return q.id === "urgent"; });
+    const labels = urgentValues.map(function (v) {
+      const opt = urgentQ ? urgentQ.options.find(function (o) { return o.id === v; }) : null;
+      return opt ? opt.text : v;
+    });
+
+    app.innerHTML = [
+      '<div class="simple-wrapper">',
+      '<section class="panel patient-classification-panel safety-warning-panel">',
+      '<div class="safety-warning-icon">' + iconSvg("alert") + '</div>',
+      '<h2 class="safety-warning-title">Please seek urgent medical attention</h2>',
+      '<p class="safety-warning-text">You have reported one or more urgent warning signs. Please <strong>tell the clinic staff immediately</strong> or go to the <strong>nearest emergency department</strong> now.</p>',
+      '<div class="safety-warning-flags">',
+      labels.map(function (text) {
+        return '<div class="safety-warning-flag-item">' + iconSvg("alert") + '<span>' + escapeHtml(text) + '</span></div>';
+      }).join(""),
+      '</div>',
+      '<p class="safety-warning-note">You may still continue to build a summary for your doctor.</p>',
+      '<div class="actions">',
+      '<button class="button danger" type="button" data-action="simple-urgent-continue">I understand — continue anyway</button>',
+      '</div>',
+      '</section>',
+      '</div>'
+    ].join("");
+  }
+
+  function renderSimpleSummary() {
+    const sp = state.simplePatient;
+    const a = sp.answers;
+    const urgentItems = Array.isArray(a.urgent) ? a.urgent.filter(function (v) { return v !== "none"; }) : [];
+    const earItems = Array.isArray(a.ear) ? a.ear.filter(function (v) { return v !== "none"; }) : [];
+    const hasUrgent = urgentItems.length > 0;
+    const possibilities = computeSimplePossibilities(a);
+
+    const rows = [
+      ["Dizziness type", getSimpleLabel("feeling", a.feeling)],
+      ["Pattern", getSimpleLabel("pattern", a.pattern)],
+      ["Stops when still", getSimpleLabel("stops_still", a.stops_still)],
+      ["Duration", getSimpleLabel("duration", a.duration)],
+      ["Urgent signs", hasUrgent ? urgentItems.map(function (id) { return getSimpleOptionText("urgent", id); }).join(", ") : "None"],
+      ["Ear symptoms", earItems.length ? earItems.map(function (id) { return getSimpleOptionText("ear", id); }).join(", ") : "None"],
+      ["Headache", getSimpleLabel("headache", a.headache)]
+    ].filter(function (row) { return row[1]; });
+
+    app.innerHTML = [
+      '<div class="simple-summary-outer">',
+      '<div class="simple-summary-card" id="printArea">',
+      '<div class="summary-brand">',
+      dizzyPersonSmallSvg(),
+      '<div>',
+      '<h2 class="summary-brand-title">Your dizziness — for your doctor</h2>',
+      '<p class="muted" style="margin:0">Date: ' + escapeHtml(new Date().toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })) + '</p>',
+      '</div>',
+      '</div>',
+      hasUrgent ? '<div class="notice danger"><strong>Urgent warning signs reported.</strong> Please tell the doctor immediately.</div>' : "",
+      '<table class="summary-table"><tbody>',
+      rows.map(function (row) {
+        return '<tr><td class="summary-lbl">' + escapeHtml(row[0]) + '</td><td>' + escapeHtml(row[1]) + '</td></tr>';
+      }).join(""),
+      '</tbody></table>',
+      '<div class="poss-section">',
+      '<h3>Possible explanations to discuss with your doctor</h3>',
+      '<p class="muted" style="font-size:0.88rem;margin-bottom:10px">This is not a diagnosis. Your doctor will determine the cause after examination.</p>',
+      '<div class="poss-list">',
+      possibilities.map(function (p) {
+        return '<div class="poss-item"><strong>' + escapeHtml(p.name) + '</strong><p>' + escapeHtml(p.plain) + '</p></div>';
+      }).join(""),
+      '</div>',
+      '</div>',
+      '</div>',
+      '<div class="summary-actions no-print">',
+      '<button class="button" type="button" onclick="window.print()">Print / Save as PDF</button>',
+      '<button class="button secondary" type="button" data-action="go-home">Start again</button>',
+      '</div>',
+      '</div>'
+    ].join("");
+  }
+
+  function renderDoctorGuidance() {
+    app.innerHTML = [
+      '<div class="role-selection-wrapper">',
+      '<section class="panel">',
+      '<button class="back-button" type="button" data-action="go-home">' + iconSvg("back") + ' Back</button>',
+      '<h2>Doctor guidance — decision tree</h2>',
+      '<p class="muted">This section will contain a step-by-step clinical decision tree for vertigo assessment. Coming soon.</p>',
+      '<div class="notice">',
+      '<strong>Categories covered:</strong> Continuous first-time vertigo, Positional (BPPV), Recurrent spontaneous, Persistent unsteadiness.',
+      '</div>',
+      '</section>',
+      '</div>'
+    ].join("");
+  }
+
+  function renderExaminationPointers(pointers) {
+    if (!pointers || !pointers.length) return "";
+    return [
+      '<div class="exam-pointers">',
+      '<ul class="exam-pointer-list">',
+      pointers.map(function (p) { return '<li>' + escapeHtml(p) + '</li>'; }).join(""),
+      '</ul>',
+      '</div>'
+    ].join("");
+  }
+
+  function renderBranchQuestionStep(question, stepIndex, totalSteps) {
+    const answer = state.patient.answers[question.id];
+    const isRadio = question.type !== "multi" && question.type !== "text";
+    const isText = question.type === "text";
+    const inputType = question.type === "multi" ? "checkbox" : "radio";
+    const name = "q-" + question.id;
+    const values = answer ? normalizeAnswerValues(answer) : [];
+    const textValue = answer && typeof answer.value === "string" ? answer.value : "";
+
+    let body;
+    if (isText) {
+      body = [
+        '<div class="field">',
+        '<label class="sr-only" for="bq-answer">' + escapeHtml(question.text) + '</label>',
+        '<textarea id="bq-answer" data-text-answer="' + escapeHtml(question.id) + '" rows="4">' + escapeHtml(textValue) + '</textarea>',
+        '</div>'
+      ].join("");
+    } else {
+      body = [
+        '<div class="bq-option-list">',
+        (function () {
+          var lastGroup = null;
+          return (question.options || []).map(function (option) {
+            var header = "";
+            var g = option.group || null;
+            if (g && g !== lastGroup) {
+              header = '<div class="bq-option-group-label">' + escapeHtml(g) + '</div>';
+            }
+            lastGroup = g;
+            const checked = values.includes(option.id) ? " checked" : "";
+            return header + [
+              '<label class="bq-option' + (g ? " bq-option-grouped" : "") + (values.includes(option.id) ? " selected" : "") + '">',
+              '<input class="sr-only" type="' + inputType + '" name="' + escapeHtml(name) + '" data-question-id="' + escapeHtml(question.id) + '" data-option-id="' + escapeHtml(option.id) + '"' + checked + '>',
+              '<span class="bq-ind ' + (question.type === "multi" ? "bq-ind-check" : "bq-ind-radio") + '"></span>',
+              '<span>' + escapeHtml(option.text) + '</span>',
+              '</label>'
+            ].join("");
+          }).join("");
+        })(),
+        '</div>'
+      ].join("");
+    }
+
+    const showNext = isText || question.type === "multi";
+    const answered = hasAnswer(answer);
+    const canContinue = !question.required || answered;
+    const progress = totalSteps > 1
+      ? '<div class="q-progress">Question ' + (stepIndex + 1) + ' of ' + totalSteps + '</div>'
+      : "";
+
+    app.innerHTML = [
+      '<div class="role-selection-wrapper">',
+      '<section class="panel patient-classification-panel">',
+      '<button class="back-button" type="button" data-action="back-question">' + iconSvg("back") + ' Back</button>',
+      progress,
+      '<div class="classification-panel">',
+      question.header ? '<p class="bq-context-header">' + escapeHtml(question.header) + '</p>' : "",
+      '<p class="classification-question-heading">' + escapeHtml(question.text) + '</p>',
+      question.help ? '<p class="q-help">' + escapeHtml(question.help) + '</p>' : "",
+      body,
+      (!canContinue ? '<p class="q-help q-help-warning">Please answer this question before continuing.</p>' : ""),
+      showNext ? '<div class="actions"><button class="button" type="button" data-action="next-question"' + (canContinue ? "" : " disabled") + '>Done</button></div>' : "",
+      '</div>',
+      '</section>',
+      '</div>'
+    ].join("");
+  }
+
+  function renderSubmitScreen(categoryId, config) {
+    const category = findCategory(categoryId, config);
+    app.innerHTML = [
+      '<div class="role-selection-wrapper">',
+      '<section class="panel patient-classification-panel">',
+      '<button class="back-button" type="button" data-action="back-question">' + iconSvg("back") + ' Back</button>',
+      '<div class="classification-panel">',
+      '<div class="submit-check-icon">' + iconSvg("ok") + '</div>',
+      '<p class="classification-question-heading">Ready to submit</p>',
+      '<p class="q-help">All questions answered. Please enter your clinic ID and submit your answers for doctor review.</p>',
+      '<div class="field" style="margin-bottom:16px">',
+      '<label for="clinicId">Clinic ID</label>',
+      '<input id="clinicId" autocomplete="off" value="' + escapeHtml(state.patient.clinicId) + '" placeholder="Enter clinic ID (optional)">',
+      '</div>',
+      category ? '<div class="category-banner" style="margin-bottom:16px"><strong>Your pattern:</strong> ' + escapeHtml(category.label) + '</div>' : "",
+      '<div class="actions">',
+      '<button class="button" type="button" data-action="submit-patient">Submit answers</button>',
+      '</div>',
+      '</div>',
+      '</section>',
+      '</div>'
     ].join("");
   }
 
@@ -459,6 +1410,7 @@
 
     app.innerHTML = [
       '<section class="panel">',
+      '<button class="back-button" type="button" data-action="go-home">' + iconSvg("back") + ' Back</button>',
       '<div class="row">',
       '<div>',
       '<h2>Doctor review</h2>',
@@ -516,6 +1468,7 @@
     const title = kind === "admin" ? "Admin access" : "Doctor access";
     app.innerHTML = [
       '<section class="panel">',
+      '<button class="back-button" type="button" data-action="go-home">' + iconSvg("back") + ' Back</button>',
       '<h2>' + title + '</h2>',
       '<p class="muted">Enter the clinic PIN. In Cloudflare, this is enforced by the Worker. In local demo mode, the default PIN is 1234.</p>',
       '<div class="field-grid">',
@@ -533,19 +1486,137 @@
 
   function renderRedFlag(flag) {
     const checked = state.patient.redFlags.includes(flag.id) ? " checked" : "";
-    return '<label class="choice red-flag"><input type="checkbox" data-red-flag="' + escapeHtml(flag.id) + '"' + checked + '><span>' + escapeHtml(flag.text) + '</span></label>';
+    return [
+      '<label class="choice red-flag">',
+      '<input type="checkbox" data-red-flag="' + escapeHtml(flag.id) + '"' + checked + '>',
+      '<span class="choice-content"><span class="choice-icon danger">' + iconSvg(iconForRedFlag(flag.id)) + '</span><span>' + escapeHtml(flag.text) + '</span></span>',
+      '</label>'
+    ].join("");
+  }
+
+  function renderInitialClassification(answers, categoryId) {
+    const initialValue = answers.initial_pathway && answers.initial_pathway.value ? answers.initial_pathway.value : "";
+    const attackValue = answers.attack_pattern && answers.attack_pattern.value ? answers.attack_pattern.value : "";
+    const recurrentValue = answers.recurrent_position && answers.recurrent_position.value ? answers.recurrent_position.value : "";
+
+    return [
+      '<div class="classification-panel">',
+      '<p class="classification-question-heading">Is it an attack, or is there constant dizziness or a constant feeling of imbalance?</p>',
+      '<div class="classification-grid two-col">',
+      INITIAL_CLASSIFICATION_OPTIONS.map(function (option) {
+        const checked = initialValue === option.id ? " checked" : "";
+        return [
+          '<label class="classification-card">',
+          '<input class="sr-only" type="radio" name="initial_pathway" data-initial-pathway="' + escapeHtml(option.id) + '"' + checked + '>',
+          '<span class="pattern-art ' + escapeHtml(option.categoryId || option.id) + '">' + iconSvg(option.icon) + '</span>',
+          '<div class="classification-card-body">',
+          '<div class="classification-card-title">' + escapeHtml(option.title || option.label) + '</div>',
+          '<div class="classification-card-desc">' + escapeHtml(option.description || "") + '</div>',
+          '</div>',
+          '</label>'
+        ].join("");
+      }).join(""),
+      '</div>',
+      initialValue === "attack" ? renderAttackPatternQuestion(attackValue) : "",
+      attackValue === "recurrent" ? renderRecurrentPositionQuestion(recurrentValue) : "",
+      '</div>'
+    ].join("");
+  }
+
+  function renderAttackPatternQuestion(value) {
+    return [
+      '<div class="recurrent-step">',
+      '<p class="classification-question-heading">Is this the first time you have had dizziness, or do you keep getting attacks?</p>',
+      '<div class="classification-grid two-col">',
+      ATTACK_PATTERN_OPTIONS.map(function (option) {
+        const checked = value === option.id ? " checked" : "";
+        return [
+          '<label class="classification-card small">',
+          '<input class="sr-only" type="radio" name="attack_pattern" data-attack-pattern="' + escapeHtml(option.id) + '"' + checked + '>',
+          '<div class="classification-card-body">',
+          '<div class="classification-card-title">' + escapeHtml(option.title || option.label) + '</div>',
+          '<div class="classification-card-desc">' + escapeHtml(option.description || "") + '</div>',
+          '</div>',
+          '</label>'
+        ].join("");
+      }).join(""),
+      '</div>',
+      '</div>'
+    ].join("");
+  }
+
+  function renderRecurrentPositionQuestion(value) {
+    return [
+      '<div class="recurrent-step">',
+      '<h3>Are the attacks clearly positional?</h3>',
+      '<div class="classification-grid compact">',
+      RECURRENT_POSITION_OPTIONS.map(function (option) {
+        const checked = value === option.id ? " checked" : "";
+        return [
+          '<label class="classification-card small">',
+          '<input class="sr-only" type="radio" name="recurrent_position" data-recurrent-position="' + escapeHtml(option.id) + '"' + checked + '>',
+          '<span class="pattern-label">' + escapeHtml(option.label) + '</span>',
+          '</label>'
+        ].join("");
+      }).join(""),
+      '</div>',
+      '</div>'
+    ].join("");
+  }
+
+  function renderNextLevelOptions(categoryId, answers) {
+    const options = NEXT_LEVEL_OPTIONS[categoryId] || [];
+    const selected = answers.detailed_option && answers.detailed_option.value ? answers.detailed_option.value : "";
+    if (!options.length) return "";
+
+    return [
+      '<div class="next-level-block">',
+      '<div class="question-title"><span class="question-icon">' + iconSvg("pathway") + '</span><div><h2>Detailed diagnostic options</h2><p class="muted">Tap the closest option if one fits. The doctor will make the final diagnosis.</p></div></div>',
+      '<div class="link-option-list">',
+      options.map(function (label) {
+        const id = slug("detail", label);
+        const active = selected === id ? " active" : "";
+        return '<button class="link-option' + active + '" type="button" data-action="choose-detail-option" data-id="' + escapeHtml(id) + '" data-label="' + escapeHtml(label) + '">' + escapeHtml(label) + '</button>';
+      }).join(""),
+      '</div>',
+      '</div>'
+    ].join("");
+  }
+
+  function renderPatternQuestion(question, answer) {
+    const value = answer && answer.value ? answer.value : "";
+    const cards = (question.options || []).map(function (option) {
+      const checked = value === option.id ? " checked" : "";
+      const categoryId = option.categoryId || option.id;
+      return [
+        '<label class="pattern-card">',
+        '<input class="sr-only" type="radio" name="' + escapeHtml(question.id) + '" data-question-id="' + escapeHtml(question.id) + '" data-option-id="' + escapeHtml(option.id) + '"' + checked + '>',
+        '<span class="pattern-art ' + escapeHtml(categoryId) + '">' + iconSvg(iconForCategory(categoryId)) + '</span>',
+        '<span class="pattern-label">' + escapeHtml(option.text) + '</span>',
+        '</label>'
+      ].join("");
+    }).join("");
+
+    return [
+      '<div class="question-block pattern-question">',
+      '<div class="question-title"><span class="question-icon">' + iconSvg("pathway") + '</span><div><h2>' + escapeHtml(question.text) + ' <span class="badge">Required</span></h2><p class="muted">' + escapeHtml(question.help || "") + '</p></div></div>',
+      '<div class="pattern-grid">',
+      cards,
+      '</div>',
+      '</div>'
+    ].join("");
   }
 
   function renderQuestion(question, answer) {
     const note = question.help ? '<p class="muted">' + escapeHtml(question.help) + '</p>' : "";
     const required = question.required ? ' <span class="badge">Required</span>' : "";
+    const title = '<div class="question-title"><span class="question-icon">' + iconSvg(iconForQuestion(question)) + '</span><div><h2>' + escapeHtml(question.text) + required + '</h2>' + note + '</div></div>';
 
     if (question.type === "text") {
       const value = answer && typeof answer.value === "string" ? answer.value : "";
       return [
         '<div class="question-block">',
-        '<h2>' + escapeHtml(question.text) + required + '</h2>',
-        note,
+        title,
         '<div class="field">',
         '<label class="sr-only" for="answer-' + escapeHtml(question.id) + '">' + escapeHtml(question.text) + '</label>',
         '<textarea id="answer-' + escapeHtml(question.id) + '" data-text-answer="' + escapeHtml(question.id) + '">' + escapeHtml(value) + '</textarea>',
@@ -564,8 +1635,7 @@
 
     return [
       '<div class="question-block">',
-      '<h2>' + escapeHtml(question.text) + required + '</h2>',
-      note,
+      title,
       '<div class="choice-list">',
       options,
       '</div>',
@@ -582,7 +1652,79 @@
       '<div class="metric"><span class="muted">Top-1 match</span><strong>' + analytics.top1Rate + '</strong></div>',
       '<div class="metric"><span class="muted">Top-3 match</span><strong>' + analytics.top3Rate + '</strong></div>',
       '</div>',
+      '<div class="chart-grid">',
+      renderCategoryBars(analytics.categoryCounts),
+      renderRedFlagBars(analytics.redFlagCounts),
+      '</div>',
+      analytics.perDiagnosis.length ? renderDiagnosisBars(analytics.perDiagnosis) : "",
       analytics.perDiagnosis.length ? '<div class="table-wrap" style="margin-top:12px">' + renderDiagnosisMetricsTable(analytics.perDiagnosis) + '</div>' : ""
+    ].join("");
+  }
+
+  function renderCategoryBars(rows) {
+    if (!rows.length) return '<div class="chart-panel"><h3>Intake patterns</h3><div class="empty-state">No patient pattern data yet.</div></div>';
+    const max = Math.max.apply(null, rows.map(function (row) { return row.count; }));
+    return [
+      '<div class="chart-panel">',
+      '<h3>Intake patterns</h3>',
+      '<div class="bar-list">',
+      rows.map(function (row) {
+        return renderBar(row.label, row.count, max, iconForCategory(row.id));
+      }).join(""),
+      '</div>',
+      '</div>'
+    ].join("");
+  }
+
+  function renderRedFlagBars(rows) {
+    if (!rows.length) return '<div class="chart-panel"><h3>Red flags</h3><div class="empty-state">No red flags selected yet.</div></div>';
+    const max = Math.max.apply(null, rows.map(function (row) { return row.count; }));
+    return [
+      '<div class="chart-panel">',
+      '<h3>Red flags</h3>',
+      '<div class="bar-list">',
+      rows.map(function (row) {
+        return renderBar(row.label, row.count, max, iconForRedFlag(row.id));
+      }).join(""),
+      '</div>',
+      '</div>'
+    ].join("");
+  }
+
+  function renderDiagnosisBars(rows) {
+    const max = Math.max.apply(null, rows.map(function (row) {
+      return Math.max(row.finalCount, row.predictedCount);
+    }));
+    return [
+      '<div class="chart-panel wide">',
+      '<h3>Diagnosis review</h3>',
+      '<div class="dual-bar-list">',
+      rows.map(function (row) {
+        const finalWidth = barWidth(row.finalCount, max);
+        const predictedWidth = barWidth(row.predictedCount, max);
+        return [
+          '<div class="dual-bar-row">',
+          '<div class="bar-label">' + escapeHtml(row.name) + '</div>',
+          '<div class="dual-bars">',
+          '<div class="dual-bar-line"><span class="bar-key final"></span><span class="bar-track"><span class="bar-fill final" style="width:' + finalWidth + '%"></span></span><strong>' + row.finalCount + '</strong></div>',
+          '<div class="dual-bar-line"><span class="bar-key predicted"></span><span class="bar-track"><span class="bar-fill predicted" style="width:' + predictedWidth + '%"></span></span><strong>' + row.predictedCount + '</strong></div>',
+          '</div>',
+          '</div>'
+        ].join("");
+      }).join(""),
+      '<div class="chart-legend"><span><span class="bar-key final"></span>Final</span><span><span class="bar-key predicted"></span>Predicted</span></div>',
+      '</div>',
+      '</div>'
+    ].join("");
+  }
+
+  function renderBar(label, count, max, icon) {
+    return [
+      '<div class="bar-row">',
+      '<div class="bar-label"><span class="bar-icon">' + iconSvg(icon) + '</span><span>' + escapeHtml(label) + '</span></div>',
+      '<div class="bar-track"><span class="bar-fill" style="width:' + barWidth(count, max) + '%"></span></div>',
+      '<strong>' + count + '</strong>',
+      '</div>'
     ].join("");
   }
 
@@ -644,6 +1786,8 @@
       '</div>',
       '<div class="category-banner"><strong>App category:</strong> ' + escapeHtml(category ? category.label : submission.categoryId) + '</div>',
       redFlags.length ? '<div class="notice danger"><strong>Red flags selected</strong><br>' + redFlags.map(escapeHtml).join("<br>") + '</div>' : '<div class="notice success">No red flags selected.</div>',
+      '<h3>Examination focus</h3>',
+      renderExaminationPointers(getExaminationPointers(submission)),
       '<h3>Possible diagnoses</h3>',
       renderPredictions(submission.predictions),
       '<h3>Answer summary</h3>',
@@ -676,14 +1820,18 @@
   }
 
   function renderFinalDiagnosisForm(submission) {
-    const diagnosisOptions = state.config.diagnoses.map(function (diagnosis) {
-      const selected = diagnosis.id === submission.finalDiagnosisId ? " selected" : "";
-      return '<option value="' + escapeHtml(diagnosis.id) + '"' + selected + '>' + escapeHtml(diagnosis.name) + '</option>';
-    }).join("");
+    const activeDiagnosisId = state.pendingFinalDiagnosis !== null ? state.pendingFinalDiagnosis : (submission.finalDiagnosisId || "");
     const categoryOptions = state.config.categories.map(function (category) {
       const selected = category.id === submission.finalCategoryId ? " selected" : "";
       return '<option value="' + escapeHtml(category.id) + '"' + selected + '>' + escapeHtml(category.label) + '</option>';
     }).join("");
+
+    const diagButtons = state.config.diagnoses.length
+      ? '<div class="diag-quick-list">' + state.config.diagnoses.map(function (diagnosis) {
+          const active = diagnosis.id === activeDiagnosisId ? " active" : "";
+          return '<button class="diag-quick-btn' + active + '" type="button" data-action="quick-final-diagnosis" data-diagnosis-id="' + escapeHtml(diagnosis.id) + '">' + escapeHtml(diagnosis.name) + '</button>';
+        }).join("") + '</div>'
+      : '<p class="muted" style="margin:4px 0 8px">No diagnoses configured yet. Add them in Admin, or use the free-text field below.</p>';
 
     return [
       '<div class="field-grid">',
@@ -691,17 +1839,17 @@
       '<label for="finalCategory">Final category</label>',
       '<select id="finalCategory"><option value="">Not selected</option>' + categoryOptions + '</select>',
       '</div>',
-      '<div class="field">',
-      '<label for="finalDiagnosis">Final diagnosis</label>',
-      '<select id="finalDiagnosis"><option value="">Not selected</option>' + diagnosisOptions + '</select>',
       '</div>',
-      '<div class="field">',
-      '<label for="finalDiagnosisText">Final diagnosis text</label>',
-      '<input id="finalDiagnosisText" value="' + escapeHtml(submission.finalDiagnosisText || "") + '" placeholder="Use this if the diagnosis is not in the list">',
+      '<div class="field" style="margin-bottom:12px">',
+      '<label>Final diagnosis</label>',
+      diagButtons,
       '</div>',
+      '<div class="field" style="margin-bottom:16px">',
+      '<label for="finalDiagnosisText">Free-text diagnosis</label>',
+      '<input id="finalDiagnosisText" value="' + escapeHtml(submission.finalDiagnosisText || "") + '" placeholder="Type if not in the list above">',
       '</div>',
       '<div class="actions">',
-      '<button class="button" type="button" data-action="save-final" data-id="' + escapeHtml(submission.id) + '">Save final diagnosis</button>',
+      '<button class="button" type="button" data-action="save-final" data-id="' + escapeHtml(submission.id) + '">Save</button>',
       '</div>'
     ].join("");
   }
@@ -718,7 +1866,7 @@
       '<div class="field"><label for="newQuestionText">Question text</label><input id="newQuestionText" placeholder="Patient-friendly wording"></div>',
       '<div class="field"><label for="newQuestionHelp">Help text</label><input id="newQuestionHelp" placeholder="Optional"></div>',
       '<div class="field"><label for="newQuestionOptions">Options</label><textarea id="newQuestionOptions" placeholder="One option per line"></textarea></div>',
-      '<div class="field"><label for="newQuestionShowIf">Visible after answer</label><select id="newQuestionShowIf"><option value="">Always show in selected category</option>' + renderRuleTargetOptions() + '</select></div>',
+      '<div class="field"><label for="newQuestionShowIf">Visible after answer</label><select id="newQuestionShowIf"><option value="">Always show in selected category</option>' + renderRuleTargetOptions("") + '</select></div>',
       '<div class="field"><label for="newQuestionNote">Doctor-only note</label><textarea id="newQuestionNote" placeholder="Optional note for clinical review"></textarea></div>',
       '<label class="choice"><input type="checkbox" id="newQuestionRequired" checked><span>Required question</span></label>',
       '</div>',
@@ -738,8 +1886,42 @@
       '<div class="list">',
       state.config.branchQuestions.map(function (question) {
         const category = findCategory(question.categoryId, state.config);
-        return '<div class="list-item"><div class="row"><strong>' + escapeHtml(question.text) + '</strong><button class="button secondary small" type="button" data-action="delete-question" data-id="' + escapeHtml(question.id) + '">Delete</button></div><div class="muted">' + escapeHtml(category ? category.label : question.categoryId) + ' | ' + escapeHtml(question.type) + ' | ID: ' + escapeHtml(question.id) + '</div></div>';
+        if (state.editingQuestionId === question.id) return renderQuestionEditForm(question);
+        return [
+          '<div class="list-item">',
+          '<div class="row"><strong>' + escapeHtml(question.text) + '</strong><div class="actions compact">',
+          '<button class="button secondary small" type="button" data-action="edit-question" data-id="' + escapeHtml(question.id) + '">Edit</button>',
+          '<button class="button secondary small" type="button" data-action="delete-question" data-id="' + escapeHtml(question.id) + '">Delete</button>',
+          '</div></div>',
+          '<div class="muted">' + escapeHtml(category ? category.label : question.categoryId) + ' | ' + escapeHtml(question.type) + ' | ID: ' + escapeHtml(question.id) + '</div>',
+          '</div>'
+        ].join("");
       }).join(""),
+      '</div>',
+      '</div>'
+    ].join("");
+  }
+
+  function renderQuestionEditForm(question) {
+    const showIfValue = question.showIf ? question.showIf.questionId + "|" + question.showIf.optionId : "";
+    return [
+      '<div class="list-item edit-item">',
+      '<div class="row"><strong>Edit question</strong><span class="badge">' + escapeHtml(question.id) + '</span></div>',
+      '<div class="field-grid">',
+      '<div class="field"><label for="editQuestionCategory">Category</label><select id="editQuestionCategory">' + state.config.categories.map(function (category) {
+        return '<option value="' + escapeHtml(category.id) + '"' + selectedAttr(category.id, question.categoryId) + '>' + escapeHtml(category.label) + '</option>';
+      }).join("") + '</select></div>',
+      '<div class="field"><label for="editQuestionType">Type</label><select id="editQuestionType"><option value="single"' + selectedAttr("single", question.type) + '>Single choice</option><option value="multi"' + selectedAttr("multi", question.type) + '>Multiple choice</option><option value="text"' + selectedAttr("text", question.type) + '>Free text</option></select></div>',
+      '<div class="field"><label for="editQuestionText">Question text</label><input id="editQuestionText" value="' + escapeHtml(question.text || "") + '"></div>',
+      '<div class="field"><label for="editQuestionHelp">Help text</label><input id="editQuestionHelp" value="' + escapeHtml(question.help || "") + '"></div>',
+      '<div class="field"><label for="editQuestionOptions">Options</label><textarea id="editQuestionOptions" placeholder="One option per line">' + escapeHtml(questionOptionsText(question)) + '</textarea></div>',
+      '<div class="field"><label for="editQuestionShowIf">Visible after answer</label><select id="editQuestionShowIf"><option value="">Always show in selected category</option>' + renderRuleTargetOptions(showIfValue) + '</select></div>',
+      '<div class="field"><label for="editQuestionNote">Doctor-only note</label><textarea id="editQuestionNote">' + escapeHtml(question.doctorNote || "") + '</textarea></div>',
+      '<label class="choice"><input type="checkbox" id="editQuestionRequired"' + checkedAttr(question.required) + '><span>Required question</span></label>',
+      '</div>',
+      '<div class="actions">',
+      '<button class="button" type="button" data-action="update-question" data-id="' + escapeHtml(question.id) + '">Save question</button>',
+      '<button class="button secondary" type="button" data-action="cancel-edit-question">Cancel</button>',
       '</div>',
       '</div>'
     ].join("");
@@ -767,7 +1949,7 @@
     return [
       '<div>',
       '<h3>Scoring rules</h3>',
-      '<div class="field"><label for="newRuleTarget">Answer that triggers score</label><select id="newRuleTarget">' + renderRuleTargetOptions() + '</select></div>',
+      '<div class="field"><label for="newRuleTarget">Answer that triggers score</label><select id="newRuleTarget">' + renderRuleTargetOptions("") + '</select></div>',
       '<div class="field"><label for="newRuleDiagnosis">Diagnosis</label><select id="newRuleDiagnosis">' + diagnosisOptions + '</select></div>',
       '<div class="field"><label for="newRuleWeight">Weight</label><input id="newRuleWeight" type="number" step="1" value="1"></div>',
       '<div class="field"><label for="newRuleExplanation">Explanation</label><input id="newRuleExplanation" placeholder="Why this answer supports the diagnosis"></div>',
@@ -798,9 +1980,10 @@
     ].join("");
   }
 
-  function renderRuleTargetOptions() {
+  function renderRuleTargetOptions(selectedValue) {
     return getChoiceTargets(state.config).map(function (target) {
-      return '<option value="' + escapeHtml(target.questionId + "|" + target.optionId) + '">' + escapeHtml(target.label) + '</option>';
+      const value = target.questionId + "|" + target.optionId;
+      return '<option value="' + escapeHtml(value) + '"' + selectedAttr(value, selectedValue) + '>' + escapeHtml(target.label) + '</option>';
     }).join("");
   }
 
@@ -826,12 +2009,108 @@
 
     if (target.dataset.redFlag) {
       toggleArrayValue(state.patient.redFlags, target.dataset.redFlag, target.checked);
+      if (target.checked) {
+        state.patient.safetyNoneSelected = false;
+      }
+      renderSafetyScreen();
+      return;
+    }
+    if ("safetyNone" in target.dataset) {
+      if (target.checked) {
+        state.patient.redFlags = [];
+        state.patient.safetyNoneSelected = true;
+        state.patient.safetyDone = true;
+        renderPatient();
+      } else {
+        state.patient.safetyNoneSelected = false;
+        renderSafetyScreen();
+      }
+      return;
+    }
+
+    if (target.dataset.simpleQid) {
+      var sqId = target.dataset.simpleQid;
+      var soId = target.dataset.simpleOid;
+      var existing = Array.isArray(state.simplePatient.answers[sqId]) ? state.simplePatient.answers[sqId].slice() : [];
+      if (soId === "none" && target.checked) {
+        existing = ["none"];
+      } else {
+        existing = existing.filter(function (v) { return v !== "none"; });
+        toggleArrayValue(existing, soId, target.checked);
+      }
+      state.simplePatient.answers[sqId] = existing;
+      var nextBtn = app.querySelector('[data-action="simple-next"]');
+      if (nextBtn) nextBtn.disabled = existing.length === 0;
+      document.querySelectorAll('[data-simple-qid="' + sqId + '"]').forEach(function (cb) {
+        var lbl = cb.closest(".simple-option");
+        if (lbl) lbl.classList.toggle("selected", existing.includes(cb.dataset.simpleOid));
+        if (soId === "none" && target.checked && cb.dataset.simpleOid !== "none") cb.checked = false;
+        if (soId !== "none" && target.checked && cb.dataset.simpleOid === "none") cb.checked = false;
+      });
+      return;
+    }
+
+    if (target.dataset.initialPathway) {
+      setInitialPathway(target.dataset.initialPathway);
+      renderPatient();
+      return;
+    }
+
+    if (target.dataset.attackPattern) {
+      setAttackPattern(target.dataset.attackPattern);
+      renderPatient();
+      return;
+    }
+
+    if (target.dataset.recurrentPosition) {
+      setRecurrentPosition(target.dataset.recurrentPosition);
+      renderPatient();
       return;
     }
 
     if (target.dataset.questionId && target.dataset.optionId) {
-      setChoiceAnswer(target.dataset.questionId, target.dataset.optionId, target.checked, target.type);
-      if (target.dataset.questionId === "top_pattern" || hasDependentQuestions(target.dataset.questionId)) {
+      const qId = target.dataset.questionId;
+      const optId = target.dataset.optionId;
+      setChoiceAnswer(qId, optId, target.checked, target.type);
+
+      if (state.patient.safetyDone && target.type === "radio") {
+        removeHiddenAnswers();
+        state.patient.questionStep++;
+        renderPatient();
+        return;
+      }
+
+      if (target.type === "checkbox" && target.checked && state.patient.safetyDone) {
+        const isTerminal = optId === "none" || optId === "not_sure";
+        if (isTerminal) {
+          const question = findQuestion(qId, state.config);
+          const option = question && question.options ? question.options.find(function (o) { return o.id === optId; }) : null;
+          state.patient.answers[qId] = { type: "multi", values: [optId], labels: [option ? option.text : optId] };
+          removeHiddenAnswers();
+          state.patient.questionStep++;
+          renderPatient();
+          return;
+        }
+        const answer = state.patient.answers[qId];
+        if (answer && Array.isArray(answer.values)) {
+          const hadTerminal = answer.values.some(function (v) { return v === "none" || v === "not_sure"; });
+          if (hadTerminal) {
+            const question = findQuestion(qId, state.config);
+            answer.values = answer.values.filter(function (v) { return v !== "none" && v !== "not_sure"; });
+            if (question) {
+              answer.labels = answer.values.map(function (v) {
+                const opt = question.options.find(function (o) { return o.id === v; });
+                return opt ? opt.text : v;
+              });
+            }
+            if (qId === "top_pattern" || hasDependentQuestions(qId)) removeHiddenAnswers();
+            renderPatient();
+            return;
+          }
+        }
+      }
+
+      if (qId === "top_pattern" || hasDependentQuestions(qId)) {
         removeHiddenAnswers();
         renderPatient();
       }
@@ -843,7 +2122,133 @@
     if (!actionTarget) return;
 
     const action = actionTarget.dataset.action;
+    if (action === "go-home") { state.role = ""; state.tab = ""; state.patient = freshPatientState(); state.simplePatient = freshSimplePatientState(); state.submitted = null; render(); }
+    if (action === "back-step") {
+      const a = state.patient.answers;
+      if (a.recurrent_position) delete a.recurrent_position;
+      else if (a.attack_pattern) delete a.attack_pattern;
+      else delete a.initial_pathway;
+      state.patient.safetyDone = false;
+      state.patient.safetyWarningShown = false;
+      state.patient.safetyNoneSelected = false;
+      state.patient.questionStep = 0;
+      removeHiddenAnswers();
+      renderPatient();
+    }
+    if (action === "next-question") {
+      const clinicInput = document.getElementById("clinicId");
+      if (clinicInput) state.patient.clinicId = clinicInput.value;
+      const config = state.config;
+      const answers = state.patient.answers;
+      const categoryId = getCurrentCategoryId(answers, config);
+      const visibleQuestions = getVisibleBranchQuestions(categoryId, answers, config);
+      const question = visibleQuestions[state.patient.questionStep];
+      if (question && question.required && !hasAnswer(answers[question.id])) {
+        return;
+      }
+      if (state.patient.questionStep < visibleQuestions.length) {
+        state.patient.questionStep++;
+      }
+      renderPatient();
+    }
+    if (action === "back-question") {
+      if (state.patient.questionStep > 0) {
+        state.patient.questionStep--;
+      } else {
+        state.patient.safetyDone = false;
+        state.patient.safetyWarningShown = false;
+      }
+      renderPatient();
+    }
+    if (action === "safety-continue") {
+      if (state.patient.redFlags.length > 0) {
+        state.patient.safetyWarningShown = true;
+      } else if (state.patient.safetyNoneSelected) {
+        state.patient.safetyDone = true;
+      } else {
+        alert("Please select any warning symptoms, or choose None of these apply to me.");
+      }
+      renderPatient();
+    }
+    if (action === "safety-acknowledge") {
+      state.patient.safetyDone = true;
+      state.patient.safetyWarningShown = false;
+      renderPatient();
+    }
+    if (action === "safety-back") {
+      state.patient.safetyWarningShown = false;
+      renderPatient();
+    }
+    if (action === "simple-answer") {
+      var sqid = actionTarget.dataset.qid;
+      var soid = actionTarget.dataset.oid;
+      state.simplePatient.answers[sqid] = soid;
+      var sq = SIMPLE_PATIENT_QUESTIONS[state.simplePatient.step];
+      if (sq && sq.urgent && soid !== "none") {
+        state.simplePatient.urgentWarning = true;
+        renderSimplePatient();
+        return;
+      }
+      state.simplePatient.step++;
+      if (state.simplePatient.step >= SIMPLE_PATIENT_QUESTIONS.length) state.simplePatient.done = true;
+      renderSimplePatient();
+    }
+    if (action === "simple-next") {
+      var sqid2 = SIMPLE_PATIENT_QUESTIONS[state.simplePatient.step] && SIMPLE_PATIENT_QUESTIONS[state.simplePatient.step].id;
+      var sqVal = sqid2 ? state.simplePatient.answers[sqid2] : null;
+      var isUrgentQ = SIMPLE_PATIENT_QUESTIONS[state.simplePatient.step] && SIMPLE_PATIENT_QUESTIONS[state.simplePatient.step].urgent;
+      var urgentSelected = isUrgentQ && Array.isArray(sqVal) && sqVal.some(function (v) { return v !== "none"; });
+      if (urgentSelected) {
+        state.simplePatient.urgentWarning = true;
+        renderSimplePatient();
+        return;
+      }
+      state.simplePatient.step++;
+      if (state.simplePatient.step >= SIMPLE_PATIENT_QUESTIONS.length) state.simplePatient.done = true;
+      renderSimplePatient();
+    }
+    if (action === "simple-back") {
+      if (state.simplePatient.step > 0) state.simplePatient.step--;
+      renderSimplePatient();
+    }
+    if (action === "simple-urgent-continue") {
+      state.simplePatient.urgentWarning = false;
+      state.simplePatient.step++;
+      if (state.simplePatient.step >= SIMPLE_PATIENT_QUESTIONS.length) state.simplePatient.done = true;
+      renderSimplePatient();
+    }
+    if (action === "accept-positional-redirect") {
+      state.patient.positionalRedirectAcknowledged = true;
+      state.patient.questionStep = 0;
+      renderPatient();
+    }
+    if (action === "back-positional-redirect") {
+      delete state.patient.answers.ft_current_pattern;
+      state.patient.positionalRedirectAcknowledged = false;
+      removeHiddenAnswers();
+      renderPatient();
+    }
+    if (action === "choose-role") {
+      var chosenRole = actionTarget.dataset.role;
+      if (chosenRole === "patient_simple") {
+        state.role = "patient_simple";
+        state.simplePatient = freshSimplePatientState();
+      } else if (chosenRole === "doctor_examining") {
+        state.role = "doctor_examining";
+        state.tab = "patient";
+        state.patient = freshPatientState();
+        state.submitted = null;
+      } else if (chosenRole === "doctor_guidance") {
+        state.role = "doctor_guidance";
+      } else {
+        state.role = "doctor_examining";
+        state.tab = chosenRole;
+      }
+      render();
+      app.focus();
+    }
     if (action === "submit-patient") await submitPatient();
+    if (action === "choose-detail-option") chooseDetailOption(actionTarget.dataset.id, actionTarget.dataset.label);
     if (action === "reset-patient") resetPatientForm();
     if (action === "new-patient") startNewPatient();
     if (action === "unlock-doctor") await unlockClinician("doctor");
@@ -851,10 +2256,27 @@
     if (action === "refresh-doctor") await refreshDoctorData();
     if (action === "select-submission") {
       state.selectedSubmissionId = actionTarget.dataset.id;
+      state.pendingFinalDiagnosis = null;
+      renderDoctor();
+    }
+    if (action === "quick-final-diagnosis") {
+      const newId = actionTarget.dataset.diagnosisId;
+      const submission = state.submissions.find(function (s) { return s.id === state.selectedSubmissionId; });
+      const currentId = state.pendingFinalDiagnosis !== null ? state.pendingFinalDiagnosis : (submission ? submission.finalDiagnosisId : "");
+      state.pendingFinalDiagnosis = newId === currentId ? "" : newId;
       renderDoctor();
     }
     if (action === "save-final") await saveFinalDiagnosis(actionTarget.dataset.id);
     if (action === "add-question") await addQuestion();
+    if (action === "edit-question") {
+      state.editingQuestionId = actionTarget.dataset.id;
+      renderAdmin();
+    }
+    if (action === "cancel-edit-question") {
+      state.editingQuestionId = null;
+      renderAdmin();
+    }
+    if (action === "update-question") await updateQuestion(actionTarget.dataset.id);
     if (action === "delete-question") await deleteQuestion(actionTarget.dataset.id);
     if (action === "add-diagnosis") await addDiagnosis();
     if (action === "delete-diagnosis") await deleteDiagnosis(actionTarget.dataset.id);
@@ -867,6 +2289,8 @@
   }
 
   async function submitPatient() {
+    const clinicInput = document.getElementById("clinicId");
+    if (clinicInput) state.patient.clinicId = clinicInput.value;
     const validation = validatePatient();
     if (!validation.ok) {
       alert(validation.message);
@@ -900,8 +2324,8 @@
   }
 
   function validatePatient() {
-    if (!state.patient.clinicId.trim()) {
-      return { ok: false, message: "Please enter the clinic ID." };
+    if (!hasInitialClassification(state.patient.answers)) {
+      return { ok: false, message: "Please complete the Initial Classification first." };
     }
 
     const categoryId = getCurrentCategoryId(state.patient.answers, state.config);
@@ -1002,7 +2426,7 @@
     if (!submission) return;
 
     const finalCategoryId = valueOf("finalCategory");
-    const finalDiagnosisId = valueOf("finalDiagnosis");
+    const finalDiagnosisId = state.pendingFinalDiagnosis !== null ? state.pendingFinalDiagnosis : (submission.finalDiagnosisId || "");
     const finalDiagnosisText = valueOf("finalDiagnosisText").trim();
     const reviewedAt = new Date().toISOString();
 
@@ -1010,6 +2434,7 @@
     submission.finalDiagnosisId = finalDiagnosisId;
     submission.finalDiagnosisText = finalDiagnosisText;
     submission.reviewedAt = reviewedAt;
+    state.pendingFinalDiagnosis = null;
 
     try {
       await apiFetch("/api/doctor/submissions/" + encodeURIComponent(id) + "/final", {
@@ -1057,6 +2482,41 @@
     };
 
     state.config.branchQuestions.push(question);
+    await saveConfig();
+    renderAdmin();
+  }
+
+  async function updateQuestion(id) {
+    const question = state.config.branchQuestions.find(function (item) {
+      return item.id === id;
+    });
+    if (!question) return;
+
+    const text = valueOf("editQuestionText").trim();
+    const type = valueOf("editQuestionType");
+    const options = parseEditedQuestionOptions(question, "editQuestionOptions");
+
+    if (!text) {
+      alert("Enter the question text.");
+      return;
+    }
+    if (type !== "text" && !options.length) {
+      alert("Choice questions need at least one option.");
+      return;
+    }
+
+    const showIfValue = valueOf("editQuestionShowIf");
+    const showIfParts = showIfValue ? showIfValue.split("|") : [];
+    question.categoryId = valueOf("editQuestionCategory");
+    question.type = type;
+    question.required = document.getElementById("editQuestionRequired").checked;
+    question.text = text;
+    question.help = valueOf("editQuestionHelp").trim();
+    question.doctorNote = valueOf("editQuestionNote").trim();
+    question.showIf = showIfParts.length === 2 ? { questionId: showIfParts[0], optionId: showIfParts[1] } : null;
+    question.options = type === "text" ? [] : options;
+
+    state.editingQuestionId = null;
     await saveConfig();
     renderAdmin();
   }
@@ -1218,6 +2678,23 @@
   }
 
   function getCurrentCategoryId(answers, config) {
+    const initial = answers.initial_pathway && answers.initial_pathway.value ? answers.initial_pathway.value : "";
+    if (initial === "constant") return "persistent_unsteady";
+    if (initial === "attack") {
+      const attack = answers.attack_pattern && answers.attack_pattern.value ? answers.attack_pattern.value : "";
+      if (attack === "first_attack") {
+        const pattern = answers.ft_current_pattern && answers.ft_current_pattern.value ? answers.ft_current_pattern.value : "";
+        if (pattern === "positional_stops") return "recurrent_triggered";
+        return "first_time";
+      }
+      if (attack !== "recurrent") return "";
+      const recurrent = answers.recurrent_position && answers.recurrent_position.value ? answers.recurrent_position.value : "";
+      if (recurrent === "positional") return "recurrent_triggered";
+      if (recurrent === "non_positional") return "recurrent_spontaneous";
+      if (recurrent === "unclear") return "recurrent_unclear";
+      return "";
+    }
+
     const answer = answers.top_pattern;
     if (!answer || !answer.value) return "";
     const option = config.baseQuestions[0].options.find(function (item) {
@@ -1230,15 +2707,17 @@
     if (!categoryId) return [];
     return config.branchQuestions.filter(function (question) {
       if (question.categoryId !== categoryId) return false;
-      if (!question.showIf || !question.showIf.questionId || !question.showIf.optionId) return true;
+      if (!question.showIf || !question.showIf.questionId) return true;
       const answer = answers[question.showIf.questionId];
-      return normalizeAnswerValues(answer).includes(question.showIf.optionId);
+      const vals = normalizeAnswerValues(answer);
+      if (question.showIf.noneOf) return !vals.some(function (v) { return question.showIf.noneOf.includes(v); });
+      return vals.includes(question.showIf.optionId);
     });
   }
 
   function removeHiddenAnswers() {
     const categoryId = getCurrentCategoryId(state.patient.answers, state.config);
-    const visibleIds = new Set(["top_pattern"].concat(getVisibleBranchQuestions(categoryId, state.patient.answers, state.config).map(function (question) {
+    const visibleIds = new Set(["initial_pathway", "attack_pattern", "recurrent_position", "detailed_option", "top_pattern", "ft_current_pattern"].concat(getVisibleBranchQuestions(categoryId, state.patient.answers, state.config).map(function (question) {
       return question.id;
     })));
 
@@ -1272,6 +2751,86 @@
         const match = question.options.find(function (item) { return item.id === id; });
         return match ? match.text : id;
       })
+    };
+  }
+
+  function setInitialPathway(optionId) {
+    const option = INITIAL_CLASSIFICATION_OPTIONS.find(function (item) { return item.id === optionId; });
+    if (!option) return;
+
+    state.patient.answers.initial_pathway = {
+      type: "single",
+      value: option.id,
+      label: option.label
+    };
+    delete state.patient.answers.recurrent_position;
+    delete state.patient.answers.attack_pattern;
+    delete state.patient.answers.detailed_option;
+    syncTopPatternAnswer();
+    removeHiddenAnswers();
+  }
+
+  function setAttackPattern(optionId) {
+    const option = ATTACK_PATTERN_OPTIONS.find(function (item) { return item.id === optionId; });
+    if (!option) return;
+
+    state.patient.answers.attack_pattern = {
+      type: "single",
+      value: option.id,
+      label: option.label
+    };
+    delete state.patient.answers.recurrent_position;
+    delete state.patient.answers.detailed_option;
+    syncTopPatternAnswer();
+    removeHiddenAnswers();
+  }
+
+  function setRecurrentPosition(optionId) {
+    const option = RECURRENT_POSITION_OPTIONS.find(function (item) { return item.id === optionId; });
+    if (!option) return;
+
+    state.patient.answers.recurrent_position = {
+      type: "single",
+      value: option.id,
+      label: option.label
+    };
+    delete state.patient.answers.detailed_option;
+    syncTopPatternAnswer();
+    removeHiddenAnswers();
+  }
+
+  function chooseDetailOption(id, label) {
+    state.patient.answers.detailed_option = {
+      type: "single",
+      value: id,
+      label: label || id
+    };
+    renderPatient();
+  }
+
+  function hasInitialClassification(answers) {
+    const initial = answers.initial_pathway && answers.initial_pathway.value;
+    if (!initial) return false;
+    if (initial === "attack") {
+      const attack = answers.attack_pattern && answers.attack_pattern.value;
+      if (!attack) return false;
+      if (attack === "recurrent") return Boolean(answers.recurrent_position && answers.recurrent_position.value);
+    }
+    return true;
+  }
+
+  function syncTopPatternAnswer() {
+    const categoryId = getCurrentCategoryId(state.patient.answers, state.config);
+    const category = findCategory(categoryId, state.config);
+    if (!category || !["first_time", "recurrent_triggered", "recurrent_spontaneous", "persistent_unsteady"].includes(categoryId)) {
+      delete state.patient.answers.top_pattern;
+      return;
+    }
+
+    state.patient.answers.top_pattern = {
+      type: "single",
+      value: categoryId,
+      label: category.patientLabel || category.label
     };
   }
 
@@ -1375,6 +2934,30 @@
       return b.count - a.count || a.appCategory.localeCompare(b.appCategory);
     });
 
+    const categoryCounts = config.categories.map(function (category) {
+      return {
+        id: category.id,
+        label: category.label,
+        count: submissions.filter(function (item) { return item.categoryId === category.id; }).length
+      };
+    }).filter(function (row) {
+      return row.count > 0;
+    });
+
+    const redFlagCounts = config.redFlags.map(function (flag) {
+      return {
+        id: flag.id,
+        label: flag.text,
+        count: submissions.filter(function (item) {
+          return item.redFlags.includes(flag.id);
+        }).length
+      };
+    }).filter(function (row) {
+      return row.count > 0;
+    }).sort(function (a, b) {
+      return b.count - a.count || a.label.localeCompare(b.label);
+    });
+
     return {
       total: submissions.length,
       reviewed: reviewed.length,
@@ -1382,7 +2965,9 @@
       top1Rate: diagnosisReviewed.length ? Math.round((top1 / diagnosisReviewed.length) * 100) + "%" : "n/a",
       top3Rate: diagnosisReviewed.length ? Math.round((top3 / diagnosisReviewed.length) * 100) + "%" : "n/a",
       perDiagnosis,
-      categoryMatrix
+      categoryMatrix,
+      categoryCounts,
+      redFlagCounts
     };
   }
 
@@ -1390,6 +2975,19 @@
     return state.config.branchQuestions.some(function (question) {
       return question.showIf && question.showIf.questionId === questionId;
     });
+  }
+
+  function mergeSeededBranchQuestions(branchQuestions) {
+    const existing = branchQuestions.slice();
+    const existingIds = new Set(existing.map(function (question) {
+      return question.id;
+    }));
+
+    DEFAULT_CONFIG.branchQuestions.forEach(function (question) {
+      if (!existingIds.has(question.id)) existing.push(clone(question));
+    });
+
+    return existing;
   }
 
   function normalizeConfig(input) {
@@ -1401,6 +2999,10 @@
     source.categories = clone(DEFAULT_CONFIG.categories);
     source.baseQuestions = clone(DEFAULT_CONFIG.baseQuestions);
     source.branchQuestions = Array.isArray(source.branchQuestions) ? source.branchQuestions : [];
+    if (source.seededContentVersion !== SEEDED_CONTENT_VERSION) {
+      source.branchQuestions = mergeSeededBranchQuestions(source.branchQuestions);
+    }
+    source.seededContentVersion = SEEDED_CONTENT_VERSION;
     source.diagnoses = Array.isArray(source.diagnoses) ? source.diagnoses : [];
     source.rules = Array.isArray(source.rules) ? source.rules : [];
     return source;
@@ -1456,9 +3058,18 @@
   }
 
   function findCategory(categoryId, config) {
-    return (config.categories || []).find(function (category) {
+    const category = (config.categories || []).find(function (category) {
       return category.id === categoryId;
     });
+    if (category) return category;
+    if (categoryId === "recurrent_unclear") {
+      return {
+        id: "recurrent_unclear",
+        label: "Recurrent vertigo, positional clarity uncertain",
+        doctorSummary: "Recurrent vertigo requiring clarification of positional versus non-positional pattern."
+      };
+    }
+    return null;
   }
 
   function getChoiceTargets(config) {
@@ -1504,8 +3115,86 @@
     return {
       clinicId: "",
       redFlags: [],
-      answers: {}
+      answers: {},
+      safetyNoneSelected: false,
+      safetyDone: false,
+      safetyWarningShown: false,
+      questionStep: 0,
+      positionalRedirectAcknowledged: false
     };
+  }
+
+  function freshSimplePatientState() {
+    return {
+      step: 0,
+      answers: {},
+      done: false,
+      urgentWarning: false
+    };
+  }
+
+  function computeSimplePossibilities(a) {
+    const isSpinning = a.feeling === "spinning";
+    const stopsStill = a.stops_still === "yes";
+    const isBrief = a.duration === "seconds" || a.duration === "minutes";
+    const isFirstOrConstant = a.pattern === "first_time" || a.pattern === "constant" || a.duration === "nonstop";
+
+    var all = [
+      {
+        name: "Inner ear crystals",
+        plain: "Small crystals in the inner ear shift to the wrong canal, causing brief spinning that changes with head position.",
+        match: stopsStill && isBrief && isSpinning
+      },
+      {
+        name: "BPPV (Benign Paroxysmal Positional Vertigo)",
+        plain: "The most common cause of brief positional spinning. Crystals in the inner ear move to the wrong place.",
+        match: stopsStill && isBrief && isSpinning
+      },
+      {
+        name: "Balance nerve problem",
+        plain: "The nerve connecting the inner ear to the brain can become inflamed, causing continuous dizziness.",
+        match: isFirstOrConstant && isSpinning && !stopsStill
+      },
+      {
+        name: "Vestibular neuritis",
+        plain: "Inflammation of the balance nerve, often triggered by a viral illness. Causes days of spinning that is always present.",
+        match: isFirstOrConstant && isSpinning && !stopsStill
+      }
+    ];
+
+    var matched = all.filter(function (p) { return p.match; });
+    return matched.length ? matched : all;
+  }
+
+  function getSimpleLabel(questionId, value) {
+    if (!value) return "";
+    var q = SIMPLE_PATIENT_QUESTIONS.find(function (item) { return item.id === questionId; });
+    if (!q) return value;
+    var opt = q.options.find(function (item) { return item.id === value; });
+    return opt ? opt.text : value;
+  }
+
+  function getSimpleOptionText(questionId, optionId) {
+    var q = SIMPLE_PATIENT_QUESTIONS.find(function (item) { return item.id === questionId; });
+    if (!q) return optionId;
+    var opt = q.options.find(function (item) { return item.id === optionId; });
+    return opt ? opt.text : optionId;
+  }
+
+  function getExaminationPointers(submission) {
+    var categoryId = submission.categoryId;
+    var answers = submission.answers || {};
+    var pattern = answers.ft_current_pattern && answers.ft_current_pattern.value ? answers.ft_current_pattern.value : "";
+    var hasRedFlags = submission.redFlags && submission.redFlags.length > 0;
+
+    var pointers = [];
+    if (hasRedFlags) pointers = ["Full neurological examination", "Urgent imaging — consider CT or MRI", "Neurology or ENT referral"];
+    else if (categoryId === "first_time") pointers = pattern === "brief_spells" ? EXAMINATION_POINTERS.first_time_brief : EXAMINATION_POINTERS.first_time_continuous;
+    else if (categoryId === "recurrent_triggered") pointers = EXAMINATION_POINTERS.recurrent_triggered;
+    else if (categoryId === "recurrent_spontaneous") pointers = EXAMINATION_POINTERS.recurrent_spontaneous;
+    else if (categoryId === "recurrent_unclear") pointers = EXAMINATION_POINTERS.recurrent_unclear;
+    else if (categoryId === "persistent_unsteady") pointers = EXAMINATION_POINTERS.persistent_unsteady;
+    return pointers;
   }
 
   function valueOf(id) {
@@ -1517,6 +3206,165 @@
     return valueOf(id).split(/\r?\n/).map(function (line) {
       return line.trim();
     }).filter(Boolean);
+  }
+
+  function questionOptionsText(question) {
+    return (question.options || []).map(function (option) {
+      return option.text || "";
+    }).join("\n");
+  }
+
+  function parseEditedQuestionOptions(question, fieldId) {
+    return linesOf(fieldId).map(function (line, index) {
+      const existing = question.options && question.options[index];
+      return {
+        id: existing && existing.id ? existing.id : slug("opt", line),
+        text: line
+      };
+    });
+  }
+
+  function selectedAttr(value, selectedValue) {
+    return value === selectedValue ? " selected" : "";
+  }
+
+  function checkedAttr(value) {
+    return value ? " checked" : "";
+  }
+
+  function barWidth(count, max) {
+    if (!max) return 0;
+    return Math.max(6, Math.round((count / max) * 100));
+  }
+
+  function iconForCategory(categoryId) {
+    if (categoryId === "first_time") return "spark";
+    if (categoryId === "recurrent_triggered") return "rotate";
+    if (categoryId === "recurrent_spontaneous") return "wave";
+    if (categoryId === "persistent_unsteady") return "balance";
+    return "pathway";
+  }
+
+  function iconForRedFlag(flagId) {
+    if (flagId.includes("vision")) return "eye";
+    if (flagId.includes("walk")) return "balance";
+    if (flagId.includes("headache")) return "head";
+    if (flagId.includes("speech")) return "speech";
+    if (flagId.includes("chest") || flagId.includes("faint")) return "pulse";
+    return "alert";
+  }
+
+  function iconForQuestion(question) {
+    const text = (question.id + " " + question.text).toLowerCase();
+    if (text.includes("hearing") || text.includes("ear") || text.includes("tinnitus")) return "ear";
+    if (text.includes("headache") || text.includes("migraine")) return "head";
+    if (text.includes("walking") || text.includes("fall") || text.includes("unsteady")) return "balance";
+    if (text.includes("duration") || text.includes("long") || text.includes("when")) return "clock";
+    if (text.includes("trigger") || text.includes("movement") || text.includes("position")) return "rotate";
+    if (text.includes("medicine") || text.includes("injury") || text.includes("context")) return "clipboard";
+    return "question";
+  }
+
+  function iconSvg(name) {
+    const paths = {
+      alert: '<path d="M12 3l9 16H3L12 3z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path>',
+      back: '<path d="M19 12H5"></path><path d="M12 19l-7-7 7-7"></path>',
+      ok: '<path d="M20 6L9 17l-5-5"></path>',
+      balance: '<path d="M12 4v16"></path><path d="M7 8h10"></path><path d="M8 8l-4 7h8L8 8z"></path><path d="M16 8l-4 7h8l-4-7z"></path>',
+      clipboard: '<path d="M8 5h8"></path><path d="M9 3h6v4H9z"></path><path d="M6 5H5v16h14V5h-1"></path><path d="M8 12h8"></path><path d="M8 16h6"></path>',
+      clock: '<circle cx="12" cy="12" r="8"></circle><path d="M12 8v5l3 2"></path>',
+      ear: '<path d="M8 11a4 4 0 1 1 7 3c-1 1-2 2-2 4"></path><path d="M6 11a6 6 0 1 1 10 5"></path><path d="M12 20c-2 0-3-1-3-3"></path>',
+      eye: '<path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle>',
+      head: '<path d="M8 18v-2H6v-4a6 6 0 1 1 10 4v2"></path><path d="M10 22h6"></path><path d="M10 10h.01"></path><path d="M14 10h.01"></path>',
+      pathway: '<path d="M5 19c2-5 12-1 14-8"></path><circle cx="5" cy="19" r="2"></circle><circle cx="19" cy="11" r="2"></circle><path d="M7 5h10"></path>',
+      pulse: '<path d="M3 12h4l2-5 4 10 2-5h6"></path>',
+      question: '<circle cx="12" cy="12" r="8"></circle><path d="M10 10a2 2 0 1 1 3 2c-1 1-1 1-1 3"></path><path d="M12 18h.01"></path>',
+      rotate: '<path d="M7 7h7a5 5 0 1 1-4 8"></path><path d="M7 7v5"></path><path d="M7 7h5"></path>',
+      spark: '<path d="M12 3l1.5 5.5L19 10l-5.5 1.5L12 17l-1.5-5.5L5 10l5.5-1.5L12 3z"></path><path d="M19 15l.6 2.4L22 18l-2.4.6L19 21l-.6-2.4L16 18l2.4-.6L19 15z"></path>',
+      speech: '<path d="M5 6h14v10H9l-4 4V6z"></path><path d="M8 10h8"></path><path d="M8 13h5"></path>',
+      wave: '<path d="M3 12c2-4 4-4 6 0s4 4 6 0 4-4 6 0"></path><path d="M3 17c2-3 4-3 6 0s4 3 6 0 4-3 6 0"></path>'
+    };
+    return '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">' + (paths[name] || paths.question) + '</svg>';
+  }
+
+  function dizzyPersonSvg() {
+    return [
+      '<svg class="dizzy-hero-svg" viewBox="0 0 220 220" aria-hidden="true">',
+      '<defs><radialGradient id="bggrad" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#d4eef8"/><stop offset="100%" stop-color="#eaf5fb"/></radialGradient></defs>',
+      '<circle cx="110" cy="110" r="106" fill="url(#bggrad)"/>',
+      '<circle cx="110" cy="110" r="88" fill="none" stroke="#b0d8ee" stroke-width="1.5" stroke-dasharray="6 4"/>',
+      '<circle cx="110" cy="110" r="68" fill="none" stroke="#c0e2f2" stroke-width="1.5" stroke-dasharray="5 5"/>',
+      '<circle cx="110" cy="110" r="48" fill="none" stroke="#cceaf6" stroke-width="1.5" stroke-dasharray="4 6"/>',
+      '<ellipse cx="110" cy="170" rx="32" ry="34" fill="#4a90a4"/>',
+      '<circle cx="110" cy="104" r="26" fill="#f5c8a0"/>',
+      '<path d="M84 99 Q86 76 110 74 Q134 76 136 99" fill="#3d2b1f"/>',
+      '<path d="M98 107 Q101 104 104 107" stroke="#5a3a1a" stroke-width="2" fill="none" stroke-linecap="round"/>',
+      '<path d="M116 107 Q119 104 122 107" stroke="#5a3a1a" stroke-width="2" fill="none" stroke-linecap="round"/>',
+      '<path d="M103 118 Q110 114 117 118" stroke="#5a3a1a" stroke-width="2" fill="none" stroke-linecap="round"/>',
+      '<path d="M84 99 Q68 88 75 104 Q80 114 88 108" stroke="#f5c8a0" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+      '<path d="M136 99 Q152 88 145 104 Q140 114 132 108" stroke="#f5c8a0" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+      '<text x="58" y="78" font-size="18" fill="#f0c030">★</text>',
+      '<text x="146" y="74" font-size="15" fill="#f0c030">★</text>',
+      '<text x="105" y="62" font-size="13" fill="#f0c030">★</text>',
+      '<text x="154" y="100" font-size="13" fill="#e8a020">★</text>',
+      '<text x="50" y="104" font-size="12" fill="#e8a020">★</text>',
+      '<path d="M62 130 Q70 126 78 130 Q86 134 94 130" stroke="#6ab4d4" stroke-width="2" fill="none" opacity="0.7" stroke-linecap="round"/>',
+      '<path d="M126 130 Q134 126 142 130 Q150 134 158 130" stroke="#6ab4d4" stroke-width="2" fill="none" opacity="0.7" stroke-linecap="round"/>',
+      '</svg>'
+    ].join("");
+  }
+
+  function dizzyPersonSmallSvg() {
+    return [
+      '<svg class="summary-dizzy-icon" viewBox="0 0 56 56" aria-hidden="true">',
+      '<circle cx="28" cy="28" r="26" fill="#eaf5fb"/>',
+      '<circle cx="28" cy="26" r="10" fill="#f5c8a0"/>',
+      '<path d="M18 24 Q19 16 28 15 Q37 16 38 24" fill="#3d2b1f"/>',
+      '<text x="10" y="18" font-size="8" fill="#f0c030">★</text>',
+      '<text x="38" y="16" font-size="7" fill="#f0c030">★</text>',
+      '<text x="24" y="11" font-size="6" fill="#f0c030">★</text>',
+      '<ellipse cx="28" cy="44" rx="10" ry="10" fill="#4a90a4"/>',
+      '</svg>'
+    ].join("");
+  }
+
+  function safetyPicture() {
+    return [
+      '<svg class="safety-picture" viewBox="0 0 160 120" aria-hidden="true">',
+      '<rect x="20" y="16" width="120" height="88" rx="14" fill="#fff0f0"/>',
+      '<rect x="63" y="22" width="6" height="76" rx="3" fill="#8b2020"/>',
+      '<path d="M69 24 L124 36 L69 56 Z" fill="#b63a3a"/>',
+      '<rect x="85" y="29" width="4" height="11" rx="2" fill="white"/>',
+      '<circle cx="87" cy="47" r="2.5" fill="white"/>',
+      '</svg>'
+    ].join("");
+  }
+
+  function rolePicture(kind) {
+    if (kind === "doctor") {
+      return [
+        '<svg class="role-picture" viewBox="0 0 160 120" aria-hidden="true">',
+        '<rect x="20" y="16" width="120" height="88" rx="14" fill="#eef6f5"></rect>',
+        '<circle cx="80" cy="42" r="20" fill="#f4c7a1"></circle>',
+        '<path d="M54 96V78c0-16 52-16 52 0v18" fill="#ffffff" stroke="#0c7c7c" stroke-width="5"></path>',
+        '<path d="M62 73l18 18 18-18" fill="none" stroke="#0c7c7c" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path>',
+        '<path d="M66 34c7-18 36-18 44 0" fill="none" stroke="#1d2528" stroke-width="8" stroke-linecap="round"></path>',
+        '<circle cx="58" cy="90" r="5" fill="#6f4a8e"></circle>',
+        '<path d="M102 82v10a12 12 0 0 1-24 0" fill="none" stroke="#6f4a8e" stroke-width="4" stroke-linecap="round"></path>',
+        '</svg>'
+      ].join("");
+    }
+
+    return [
+      '<svg class="role-picture" viewBox="0 0 160 120" aria-hidden="true">',
+      '<rect x="20" y="16" width="120" height="88" rx="14" fill="#eef6f5"></rect>',
+      '<circle cx="80" cy="42" r="20" fill="#d7a77d"></circle>',
+      '<path d="M50 100V82c0-18 60-18 60 0v18" fill="#0c7c7c"></path>',
+      '<path d="M62 31c9-16 35-15 43 2" fill="none" stroke="#1d2528" stroke-width="8" stroke-linecap="round"></path>',
+      '<path d="M58 64c10 10 34 10 44 0" fill="none" stroke="#1d2528" stroke-width="4" stroke-linecap="round"></path>',
+      '<path d="M104 30c12 8 18 20 14 36" fill="none" stroke="#337a4d" stroke-width="5" stroke-linecap="round"></path>',
+      '</svg>'
+    ].join("");
   }
 
   function safeJson(raw, fallback) {
@@ -1577,6 +3425,14 @@
 
   function registerServiceWorker() {
     if (!("serviceWorker" in navigator) || location.protocol === "file:") return;
+    if (location.hostname === "127.0.0.1" || location.hostname === "localhost") {
+      navigator.serviceWorker.getRegistrations().then(function (registrations) {
+        registrations.forEach(function (registration) {
+          registration.unregister();
+        });
+      });
+      return;
+    }
     navigator.serviceWorker.register("service-worker.js").catch(function () {
       return null;
     });
