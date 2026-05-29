@@ -656,17 +656,53 @@
     ]
   };
 
+  const SIMPLE_POSITIONAL_QUESTIONS = [
+    {
+      id: "pos_trigger",
+      text: "Which movement usually brings on the dizziness?",
+      help: "Select all that apply.",
+      type: "multi",
+      options: [
+        { id: "turning_in_bed", text: "Turning over in bed" },
+        { id: "lying_down_sitting_up", text: "Lying down or sitting up from bed" },
+        { id: "looking_up", text: "Looking up" },
+        { id: "bending_forward", text: "Bending forward" },
+        { id: "not_sure", text: "Not sure" }
+      ]
+    },
+    {
+      id: "pos_duration",
+      text: "How long does each dizzy spell last once it starts?",
+      type: "single",
+      options: [
+        { id: "under_one_min", text: "It settles on its own within about a minute", desc: "Brief spinning that fades quickly — classic BPPV pattern" },
+        { id: "one_to_five_min", text: "1 to 5 minutes" },
+        { id: "over_five_min", text: "More than 5 minutes each time" }
+      ]
+    },
+    {
+      id: "pos_side",
+      text: "Is one side worse than the other?",
+      type: "single",
+      options: [
+        { id: "right", text: "Right side — worse when turning right or lying on the right", desc: "" },
+        { id: "left", text: "Left side — worse when turning left or lying on the left", desc: "" },
+        { id: "both", text: "Both sides seem equally bad" },
+        { id: "not_sure", text: "Not sure" }
+      ]
+    }
+  ];
+
   const SIMPLE_PATIENT_QUESTIONS = [
     {
       id: "feeling",
-      text: "What does the dizziness feel like?",
-      help: "Choose the word that fits best.",
+      text: "Are you getting an attack of dizziness, or is it a constant feeling of dizziness?",
       type: "single",
       options: [
-        { id: "spinning", text: "Spinning", desc: "The room or I seem to be rotating or spinning around" },
-        { id: "lightheaded", text: "Lightheaded", desc: "Faint, woozy, or about to pass out" },
-        { id: "unsteady", text: "Unsteady", desc: "Off-balance, mainly when walking or standing" },
-        { id: "not_sure", text: "Not sure", desc: "Hard to put into words" }
+        { id: "brief_resolved", text: "A brief attack that has now gone", desc: "It lasted only a few seconds or minutes and has gone away completely now" },
+        { id: "single_attack", text: "A single attack", desc: "This is the first time I am feeling dizzy or having vertigo" },
+        { id: "repeated_attacks", text: "Repeated attacks", desc: "I keep getting episodes that come and go away on their own" },
+        { id: "constant", text: "Constant dizziness or giddiness", desc: "I have been feeling dizzy or unsteady all or most of the time — there are no attacks as such" }
       ]
     },
     {
@@ -681,12 +717,11 @@
     },
     {
       id: "stops_still",
-      text: "When you hold your head completely still, does the dizziness stop?",
+      text: "Does the dizziness stop on holding your head still or lying in one particular position?",
       type: "single",
       options: [
-        { id: "yes", text: "Yes, it stops" },
-        { id: "no", text: "No, it continues" },
-        { id: "not_sure", text: "Not sure" }
+        { id: "yes_returns", text: "Yes — it stops in one position, but comes back when I move" },
+        { id: "no", text: "No — it continues, or gets a little less, but it does not stop" }
       ]
     },
     {
@@ -703,14 +738,57 @@
     {
       id: "urgent",
       text: "Do you have any of these right now?",
+      type: "single",
+      urgent: true,
+      list: [
+        "Double vision",
+        "Tingling or numbness on one side of the body",
+        "Slurred speech or trouble speaking",
+        "Weakness on one side of the body",
+        "Unable to walk or stand without support",
+        "Sudden severe headache or neck pain"
+      ],
+      options: [
+        { id: "yes", text: "Yes — I have one or more of these" },
+        { id: "none", text: "None of these" }
+      ]
+    },
+    {
+      id: "brief_risk_factors",
+      text: "Do you have any of these?",
       help: "Select all that apply.",
       type: "multi",
-      urgent: true,
       options: [
-        { id: "double_vision", text: "Double vision" },
-        { id: "slurred_speech", text: "Slurred speech or trouble speaking" },
-        { id: "severe_headache", text: "Sudden severe headache" },
-        { id: "weakness", text: "Weakness or numbness in arm, leg, or face" },
+        { id: "age_over_60", text: "Age over 60" },
+        { id: "hypertension", text: "High blood pressure (hypertension)" },
+        { id: "diabetes", text: "Diabetes" },
+        { id: "heart_disease", text: "Heart disease or irregular heart rhythm" },
+        { id: "none", text: "None of these" }
+      ]
+    },
+    {
+      id: "brief_circumstances",
+      text: "Which of these best describes what happened?",
+      type: "single",
+      options: [
+        { id: "night_urination", text: "It happened at night when getting up to pass urine", desc: "Woke up during the night, stood up to go to the toilet, and felt dizzy" },
+        { id: "stood_up_bp_med", text: "I stood up suddenly and felt dizzy — and I take blood pressure or prostate medicine", desc: "Felt dizzy on standing up, and I am on BP or prostate tablets" },
+        { id: "migraine_preceded", text: "I have a history of migraine and this was preceded by a typical migraine-like headache", desc: "I get migraines, and this episode came on just like one" },
+        { id: "none", text: "None of these — I am not sure what caused it", desc: "Cannot identify a clear cause from the above" }
+      ]
+    },
+    {
+      id: "single_red_flags",
+      text: "Does your current attack involve any of the following?",
+      type: "single",
+      list: [
+        "Any dizziness or unsteadiness in the days or weeks before this attack",
+        "Double vision, tingling on one side, slurred speech, or weakness",
+        "Age over 60, high blood pressure, diabetes, or heart disease",
+        "New ringing in the ears (tinnitus) or reduced hearing in one ear"
+      ],
+      options: [
+        { id: "yes", text: "Yes — one or more of these apply" },
         { id: "none", text: "None of these" }
       ]
     },
@@ -1129,6 +1207,24 @@
     ].join("");
   }
 
+  function shouldSkipSimpleQuestion(question, answers) {
+    var feeling = answers.feeling;
+    if (question.id === "pattern" && (feeling === "single_attack" || feeling === "brief_resolved")) return true;
+    if (question.id === "stops_still" && feeling === "brief_resolved") return true;
+    if (question.id === "duration" && (feeling === "brief_resolved" || feeling === "single_attack")) return true;
+    if (question.id === "urgent" && feeling === "single_attack") return true;
+    if (question.id === "brief_risk_factors" && feeling !== "brief_resolved") return true;
+    if (question.id === "brief_circumstances") {
+      if (feeling !== "brief_resolved") return true;
+      var rfs = Array.isArray(answers.brief_risk_factors) ? answers.brief_risk_factors : [];
+      if (rfs.some(function (v) { return v !== "none"; })) return true;
+    }
+    if (question.id === "single_red_flags" && feeling !== "single_attack") return true;
+    if (feeling === "brief_resolved" && (question.id === "ear" || question.id === "headache")) return true;
+    if (feeling === "single_attack" && (question.id === "ear" || question.id === "headache")) return true;
+    return false;
+  }
+
   function renderSimplePatient() {
     if (state.simplePatient.done) {
       renderSimpleSummary();
@@ -1137,6 +1233,22 @@
     if (state.simplePatient.urgentWarning) {
       renderSimpleUrgentWarning();
       return;
+    }
+    if (state.simplePatient.positionalRedirect) {
+      renderSimplePositionalRedirect();
+      return;
+    }
+    if (state.simplePatient.positionalFlow) {
+      if (state.simplePatient.positionalDone) {
+        renderSimplePositionalSummary();
+      } else {
+        renderSimplePositionalQuestion(SIMPLE_POSITIONAL_QUESTIONS[state.simplePatient.positionalStep], state.simplePatient.positionalStep);
+      }
+      return;
+    }
+    while (state.simplePatient.step < SIMPLE_PATIENT_QUESTIONS.length &&
+           shouldSkipSimpleQuestion(SIMPLE_PATIENT_QUESTIONS[state.simplePatient.step], state.simplePatient.answers)) {
+      state.simplePatient.step++;
     }
     const step = state.simplePatient.step;
     const question = SIMPLE_PATIENT_QUESTIONS[step];
@@ -1189,34 +1301,38 @@
       '<div class="simple-card">',
       '<p class="simple-q">' + escapeHtml(question.text) + '</p>',
       question.help ? '<p class="simple-help">' + escapeHtml(question.help) + '</p>' : "",
-      '<div class="simple-options' + (isMulti ? " multi" : "") + '">',
-      options,
-      '</div>',
-      isMulti ? '<div class="actions"><button class="button" type="button" data-action="simple-next"' + (!hasAnswer ? " disabled" : "") + '>Done</button></div>' : "",
+      question.list ? (function () {
+        var yesOpt = question.options[0];
+        var noneOpt = question.options[1];
+        var yesSelected = currentValues.includes(yesOpt.id);
+        var noneSelected = currentValues.includes(noneOpt.id);
+        return [
+          '<button class="flag-card flag-card-red' + (yesSelected ? " selected" : "") + '" type="button"',
+          ' data-action="simple-answer" data-qid="' + escapeHtml(question.id) + '" data-oid="' + escapeHtml(yesOpt.id) + '">',
+          '<div class="flag-card-header"><span class="flag-dot red"></span>Red flags present</div>',
+          '<ul class="flag-card-list">',
+          question.list.map(function (item) { return '<li>' + escapeHtml(item) + '</li>'; }).join(""),
+          '</ul>',
+          '</button>',
+          '<button class="flag-card flag-card-green' + (noneSelected ? " selected" : "") + '" type="button"',
+          ' data-action="simple-answer" data-qid="' + escapeHtml(question.id) + '" data-oid="' + escapeHtml(noneOpt.id) + '">',
+          '<div class="flag-card-header"><span class="flag-dot green"></span>Red flags absent — none of these apply</div>',
+          '</button>'
+        ].join("");
+      })() : '<div class="simple-options' + (isMulti ? " multi" : "") + '">' + options + '</div>',
+      !question.list && isMulti ? '<div class="actions"><button class="button" type="button" data-action="simple-next"' + (!hasAnswer ? " disabled" : "") + '>Done</button></div>' : "",
       '</div>',
       '</div>'
     ].join("");
   }
 
   function renderSimpleUrgentWarning() {
-    const urgentValues = Array.isArray(state.simplePatient.answers.urgent) ? state.simplePatient.answers.urgent.filter(function (v) { return v !== "none"; }) : [];
-    const urgentQ = SIMPLE_PATIENT_QUESTIONS.find(function (q) { return q.id === "urgent"; });
-    const labels = urgentValues.map(function (v) {
-      const opt = urgentQ ? urgentQ.options.find(function (o) { return o.id === v; }) : null;
-      return opt ? opt.text : v;
-    });
-
     app.innerHTML = [
       '<div class="simple-wrapper">',
       '<section class="panel patient-classification-panel safety-warning-panel">',
       '<div class="safety-warning-icon">' + iconSvg("alert") + '</div>',
       '<h2 class="safety-warning-title">Please seek urgent medical attention</h2>',
       '<p class="safety-warning-text">You have reported one or more urgent warning signs. Please <strong>tell the clinic staff immediately</strong> or go to the <strong>nearest emergency department</strong> now.</p>',
-      '<div class="safety-warning-flags">',
-      labels.map(function (text) {
-        return '<div class="safety-warning-flag-item">' + iconSvg("alert") + '<span>' + escapeHtml(text) + '</span></div>';
-      }).join(""),
-      '</div>',
       '<p class="safety-warning-note">You may still continue to build a summary for your doctor.</p>',
       '<div class="actions">',
       '<button class="button danger" type="button" data-action="simple-urgent-continue">I understand — continue anyway</button>',
@@ -1226,21 +1342,147 @@
     ].join("");
   }
 
+  function renderSimplePositionalQuestion(question, stepIndex) {
+    const answer = state.simplePatient.positionalAnswers[question.id];
+    const currentValues = Array.isArray(answer) ? answer : (answer ? [answer] : []);
+    const isMulti = question.type === "multi";
+    const hasAnswer = currentValues.length > 0;
+
+    const options = (question.options || []).map(function (opt) {
+      const selected = currentValues.includes(opt.id);
+      if (isMulti) {
+        return [
+          '<label class="simple-option' + (selected ? " selected" : "") + '">',
+          '<input class="sr-only" type="checkbox" data-pos-qid="' + escapeHtml(question.id) + '" data-pos-oid="' + escapeHtml(opt.id) + '"' + (selected ? " checked" : "") + '>',
+          '<span class="sp-ind sp-ind-check' + (selected ? " sp-ind-selected" : "") + '"></span>',
+          '<span class="simple-option-text">' + escapeHtml(opt.text) + '</span>',
+          '</label>'
+        ].join("");
+      }
+      return [
+        '<button class="simple-option' + (selected ? " selected" : "") + '" type="button"',
+        ' data-action="simple-positional-answer" data-qid="' + escapeHtml(question.id) + '" data-oid="' + escapeHtml(opt.id) + '">',
+        '<span class="sp-ind sp-ind-radio' + (selected ? " sp-ind-selected" : "") + '"></span>',
+        '<span class="sp-body">',
+        '<span class="simple-option-text">' + escapeHtml(opt.text) + '</span>',
+        opt.desc ? '<span class="simple-option-desc">' + escapeHtml(opt.desc) + '</span>' : "",
+        '</span>',
+        '</button>'
+      ].join("");
+    }).join("");
+
+    app.innerHTML = [
+      '<div class="simple-wrapper">',
+      '<button class="back-button" type="button" data-action="simple-positional-back">' + iconSvg("back") + ' Back</button>',
+      '<div class="simple-dots">',
+      SIMPLE_POSITIONAL_QUESTIONS.map(function (_, i) {
+        return '<span class="sdot' + (i === stepIndex ? " active" : i < stepIndex ? " done" : "") + '"></span>';
+      }).join(""),
+      '</div>',
+      '<div class="simple-card">',
+      '<p class="simple-q">' + escapeHtml(question.text) + '</p>',
+      question.help ? '<p class="simple-help">' + escapeHtml(question.help) + '</p>' : "",
+      '<div class="simple-options' + (isMulti ? " multi" : "") + '">',
+      options,
+      '</div>',
+      isMulti ? '<div class="actions"><button class="button" type="button" data-action="simple-positional-next"' + (!hasAnswer ? " disabled" : "") + '>Done</button></div>' : "",
+      '</div>',
+      '</div>'
+    ].join("");
+  }
+
+  function renderSimplePositionalSummary() {
+    const pa = state.simplePatient.positionalAnswers;
+    const triggerItems = Array.isArray(pa.pos_trigger) ? pa.pos_trigger.filter(function (v) { return v !== "not_sure"; }) : [];
+    const durationQ = SIMPLE_POSITIONAL_QUESTIONS.find(function (q) { return q.id === "pos_duration"; });
+    const sideQ = SIMPLE_POSITIONAL_QUESTIONS.find(function (q) { return q.id === "pos_side"; });
+    const triggerQ = SIMPLE_POSITIONAL_QUESTIONS.find(function (q) { return q.id === "pos_trigger"; });
+    const durationLabel = pa.pos_duration ? (durationQ && durationQ.options.find(function (o) { return o.id === pa.pos_duration; }) || {}).text || pa.pos_duration : "";
+    const sideLabel = pa.pos_side ? (sideQ && sideQ.options.find(function (o) { return o.id === pa.pos_side; }) || {}).text || pa.pos_side : "";
+    const triggerLabels = triggerItems.map(function (id) {
+      var opt = triggerQ ? triggerQ.options.find(function (o) { return o.id === id; }) : null;
+      return opt ? opt.text : id;
+    });
+    const isClassicBPPV = pa.pos_duration === "under_one_min";
+
+    const rows = [
+      ["Type", "Positional vertigo"],
+      ["Triggers", triggerLabels.length ? triggerLabels.join(", ") : "Not specified"],
+      ["Duration of each spell", durationLabel],
+      ["Worse side", sideLabel]
+    ].filter(function (r) { return r[1]; });
+
+    app.innerHTML = [
+      '<div class="simple-summary-outer">',
+      '<div class="simple-summary-card" id="printArea">',
+      '<div class="summary-brand">',
+      dizzyPersonSmallSvg(),
+      '<div>',
+      '<h2 class="summary-brand-title">Your dizziness — for your doctor</h2>',
+      '<p class="muted" style="margin:0">Date: ' + escapeHtml(new Date().toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })) + '</p>',
+      '</div>',
+      '</div>',
+      '<table class="summary-table"><tbody>',
+      rows.map(function (row) {
+        return '<tr><td class="summary-lbl">' + escapeHtml(row[0]) + '</td><td>' + escapeHtml(row[1]) + '</td></tr>';
+      }).join(""),
+      '</tbody></table>',
+      '<div class="poss-section">',
+      '<h3>Possible explanations to discuss with your doctor</h3>',
+      '<p class="muted" style="font-size:0.88rem;margin-bottom:10px">This is not a diagnosis. Your doctor will confirm the cause after examination.</p>',
+      '<div class="poss-list">',
+      '<div class="poss-item"><strong>BPPV (Benign Paroxysmal Positional Vertigo)</strong><p>The most likely cause of positional vertigo. Crystals in the inner ear shift to the wrong canal, causing brief spinning with certain head positions. ' + (isClassicBPPV ? 'The very brief duration of your spells strongly fits this pattern. ' : '') + 'Your doctor will do a Dix-Hallpike test to confirm and may treat it with a simple head repositioning manoeuvre (Epley).</p></div>',
+      '<div class="poss-item"><strong>Other positional vertigo</strong><p>Less commonly, positional vertigo can have other causes. Your doctor\'s examination will help distinguish these.</p></div>',
+      '</div>',
+      '</div>',
+      '</div>',
+      '<div class="summary-actions no-print">',
+      '<button class="button" type="button" onclick="window.print()">Print / Save as PDF</button>',
+      '<button class="button secondary" type="button" data-action="go-home">Start again</button>',
+      '</div>',
+      '</div>'
+    ].join("");
+  }
+
+  function renderSimplePositionalRedirect() {
+    app.innerHTML = [
+      '<div class="simple-wrapper">',
+      '<button class="back-button" type="button" data-action="simple-back">' + iconSvg("back") + ' Back</button>',
+      '<div class="simple-card">',
+      '<div class="submit-check-icon">' + iconSvg("rotate") + '</div>',
+      '<p class="simple-q">You possibly have positional vertigo</p>',
+      '<p class="simple-help">Because your dizziness stops in one head position and returns with movement, this could be positional vertigo. The most common cause is BPPV — displaced crystals in the inner ear — which is very treatable.</p>',
+      '<p class="simple-help">Let us check a few more things about your positional vertigo so your doctor has more detail.</p>',
+      '<div class="actions">',
+      '<button class="button" type="button" data-action="simple-positional-start">Continue ›</button>',
+      '<button class="button secondary" type="button" data-action="go-home">Start again</button>',
+      '</div>',
+      '</div>',
+      '</div>'
+    ].join("");
+  }
+
   function renderSimpleSummary() {
     const sp = state.simplePatient;
     const a = sp.answers;
-    const urgentItems = Array.isArray(a.urgent) ? a.urgent.filter(function (v) { return v !== "none"; }) : [];
+    const hasUrgent = a.urgent === "yes";
     const earItems = Array.isArray(a.ear) ? a.ear.filter(function (v) { return v !== "none"; }) : [];
-    const hasUrgent = urgentItems.length > 0;
+    const riskFactorItems = Array.isArray(a.brief_risk_factors) ? a.brief_risk_factors.filter(function (v) { return v !== "none"; }) : [];
+    const hasRiskFactors = riskFactorItems.length > 0;
+    const showRiskNotice = a.feeling === "brief_resolved" && hasRiskFactors;
+    const showSingleUrgentNotice = a.feeling === "single_attack";
     const possibilities = computeSimplePossibilities(a);
 
     const rows = [
-      ["Dizziness type", getSimpleLabel("feeling", a.feeling)],
+      ["Attack or constant", getSimpleLabel("feeling", a.feeling)],
       ["Pattern", getSimpleLabel("pattern", a.pattern)],
       ["Stops when still", getSimpleLabel("stops_still", a.stops_still)],
       ["Duration", getSimpleLabel("duration", a.duration)],
-      ["Urgent signs", hasUrgent ? urgentItems.map(function (id) { return getSimpleOptionText("urgent", id); }).join(", ") : "None"],
-      ["Ear symptoms", earItems.length ? earItems.map(function (id) { return getSimpleOptionText("ear", id); }).join(", ") : "None"],
+      ["Warning signs", a.urgent ? (hasUrgent ? "Yes — urgent warning signs reported" : "None") : ""],
+      ["Risk factors", a.brief_risk_factors ? (hasRiskFactors ? riskFactorItems.map(function (id) { return getSimpleOptionText("brief_risk_factors", id); }).join(", ") : "None") : ""],
+      ["Circumstances", getSimpleLabel("brief_circumstances", a.brief_circumstances)],
+      ["Red flags", a.single_red_flags ? (a.single_red_flags === "yes" ? "Yes — red flags present" : "None") : ""],
+      ["Ear symptoms", earItems.length ? earItems.map(function (id) { return getSimpleOptionText("ear", id); }).join(", ") : (a.ear ? "None" : "")],
       ["Headache", getSimpleLabel("headache", a.headache)]
     ].filter(function (row) { return row[1]; });
 
@@ -1255,6 +1497,8 @@
       '</div>',
       '</div>',
       hasUrgent ? '<div class="notice danger"><strong>Urgent warning signs reported.</strong> Please tell the doctor immediately.</div>' : "",
+      showRiskNotice ? '<div class="notice danger"><strong>Vascular risk factors noted.</strong> A brief dizzy episode with these risk factors needs to be reviewed by a doctor today.</div>' : "",
+      showSingleUrgentNotice ? '<div class="notice danger"><strong>See a doctor urgently today.</strong> An ongoing first attack of vertigo always needs same-day assessment to exclude a stroke, even if there are no other warning signs.</div>' : "",
       '<table class="summary-table"><tbody>',
       rows.map(function (row) {
         return '<tr><td class="summary-lbl">' + escapeHtml(row[0]) + '</td><td>' + escapeHtml(row[1]) + '</td></tr>';
@@ -2050,6 +2294,21 @@
       return;
     }
 
+    if (target.dataset.posQid) {
+      var pqId = target.dataset.posQid;
+      var poId = target.dataset.posOid;
+      var posExisting = Array.isArray(state.simplePatient.positionalAnswers[pqId]) ? state.simplePatient.positionalAnswers[pqId].slice() : [];
+      toggleArrayValue(posExisting, poId, target.checked);
+      state.simplePatient.positionalAnswers[pqId] = posExisting;
+      var posNextBtn = app.querySelector('[data-action="simple-positional-next"]');
+      if (posNextBtn) posNextBtn.disabled = posExisting.length === 0;
+      document.querySelectorAll('[data-pos-qid="' + pqId + '"]').forEach(function (cb) {
+        var lbl = cb.closest(".simple-option");
+        if (lbl) lbl.classList.toggle("selected", posExisting.includes(cb.dataset.posOid));
+      });
+      return;
+    }
+
     if (target.dataset.initialPathway) {
       setInitialPathway(target.dataset.initialPathway);
       renderPatient();
@@ -2182,7 +2441,17 @@
     if (action === "simple-answer") {
       var sqid = actionTarget.dataset.qid;
       var soid = actionTarget.dataset.oid;
+      if (soid === "restart") {
+        state.simplePatient = freshSimplePatientState();
+        renderSimplePatient();
+        return;
+      }
       state.simplePatient.answers[sqid] = soid;
+      if (sqid === "stops_still" && soid === "yes_returns") {
+        state.simplePatient.positionalRedirect = true;
+        renderSimplePatient();
+        return;
+      }
       var sq = SIMPLE_PATIENT_QUESTIONS[state.simplePatient.step];
       if (sq && sq.urgent && soid !== "none") {
         state.simplePatient.urgentWarning = true;
@@ -2208,13 +2477,56 @@
       renderSimplePatient();
     }
     if (action === "simple-back") {
-      if (state.simplePatient.step > 0) state.simplePatient.step--;
+      if (state.simplePatient.positionalRedirect) {
+        state.simplePatient.positionalRedirect = false;
+        delete state.simplePatient.answers.stops_still;
+        renderSimplePatient();
+        return;
+      }
+      if (state.simplePatient.step > 0) {
+        state.simplePatient.step--;
+        while (state.simplePatient.step > 0 &&
+               shouldSkipSimpleQuestion(SIMPLE_PATIENT_QUESTIONS[state.simplePatient.step], state.simplePatient.answers)) {
+          state.simplePatient.step--;
+        }
+      }
       renderSimplePatient();
     }
     if (action === "simple-urgent-continue") {
       state.simplePatient.urgentWarning = false;
       state.simplePatient.step++;
       if (state.simplePatient.step >= SIMPLE_PATIENT_QUESTIONS.length) state.simplePatient.done = true;
+      renderSimplePatient();
+    }
+    if (action === "simple-positional-start") {
+      state.simplePatient.positionalRedirect = false;
+      state.simplePatient.positionalFlow = true;
+      state.simplePatient.positionalStep = 0;
+      renderSimplePatient();
+    }
+    if (action === "simple-positional-answer") {
+      var pqid = actionTarget.dataset.qid;
+      var poid = actionTarget.dataset.oid;
+      state.simplePatient.positionalAnswers[pqid] = poid;
+      state.simplePatient.positionalStep++;
+      if (state.simplePatient.positionalStep >= SIMPLE_POSITIONAL_QUESTIONS.length) state.simplePatient.positionalDone = true;
+      renderSimplePatient();
+    }
+    if (action === "simple-positional-next") {
+      state.simplePatient.positionalStep++;
+      if (state.simplePatient.positionalStep >= SIMPLE_POSITIONAL_QUESTIONS.length) state.simplePatient.positionalDone = true;
+      renderSimplePatient();
+    }
+    if (action === "simple-positional-back") {
+      if (state.simplePatient.positionalDone) {
+        state.simplePatient.positionalDone = false;
+        state.simplePatient.positionalStep = SIMPLE_POSITIONAL_QUESTIONS.length - 1;
+      } else if (state.simplePatient.positionalStep > 0) {
+        state.simplePatient.positionalStep--;
+      } else {
+        state.simplePatient.positionalFlow = false;
+        state.simplePatient.positionalRedirect = true;
+      }
       renderSimplePatient();
     }
     if (action === "accept-positional-redirect") {
@@ -3129,36 +3441,102 @@
       step: 0,
       answers: {},
       done: false,
-      urgentWarning: false
+      urgentWarning: false,
+      positionalRedirect: false,
+      positionalFlow: false,
+      positionalStep: 0,
+      positionalAnswers: {},
+      positionalDone: false
     };
   }
 
   function computeSimplePossibilities(a) {
-    const isSpinning = a.feeling === "spinning";
-    const stopsStill = a.stops_still === "yes";
+    const feelingBriefResolved = a.feeling === "brief_resolved";
+    const isSingleAttack = a.feeling === "single_attack";
+    const isRepeated = a.feeling === "repeated_attacks";
+    const isConstant = a.feeling === "constant";
+    const isAttack = isSingleAttack || isRepeated || feelingBriefResolved;
+    const stopsStill = a.stops_still === "yes_returns" || a.stops_still === "yes_stays";
     const isBrief = a.duration === "seconds" || a.duration === "minutes";
-    const isFirstOrConstant = a.pattern === "first_time" || a.pattern === "constant" || a.duration === "nonstop";
+
+    const isRecurrentPositional = a.stops_still === "yes_returns";
+
+    const hasUrgentFlags = a.urgent === "yes";
+    const singleHasRedFlags = a.single_red_flags === "yes";
+    const riskFactors = Array.isArray(a.brief_risk_factors) ? a.brief_risk_factors.filter(function (v) { return v !== "none"; }) : [];
+    const hasRiskFactors = riskFactors.length > 0;
+    const circ = a.brief_circumstances;
 
     var all = [
       {
-        name: "Inner ear crystals",
-        plain: "Small crystals in the inner ear shift to the wrong canal, causing brief spinning that changes with head position.",
-        match: stopsStill && isBrief && isSpinning
+        name: "Vertebro-basilar TIA — urgent assessment needed",
+        plain: "A brief attack with neurological warning signs can be a TIA (transient ischaemic attack) affecting the brain's balance centres. This needs to be seen by a doctor today — do not wait.",
+        match: feelingBriefResolved && hasUrgentFlags
       },
       {
-        name: "BPPV (Benign Paroxysmal Positional Vertigo)",
-        plain: "The most common cause of brief positional spinning. Crystals in the inner ear move to the wrong place.",
-        match: stopsStill && isBrief && isSpinning
+        name: "Vertebro-basilar TIA — see doctor urgently (risk factors present)",
+        plain: "A brief episode of dizziness combined with vascular risk factors such as high blood pressure, diabetes, or heart disease needs urgent review. A TIA affecting the brain's balance area can present exactly this way. Please see a doctor today.",
+        match: feelingBriefResolved && !hasUrgentFlags && hasRiskFactors
       },
       {
-        name: "Balance nerve problem",
-        plain: "The nerve connecting the inner ear to the brain can become inflamed, causing continuous dizziness.",
-        match: isFirstOrConstant && isSpinning && !stopsStill
+        name: "Micturition syncope",
+        plain: "A brief drop in blood pressure that can happen when getting up at night to pass urine. Standing up combined with the act of urinating can briefly reduce blood flow to the brain, causing dizziness or near-fainting.",
+        match: feelingBriefResolved && !hasUrgentFlags && !hasRiskFactors && circ === "night_urination"
       },
       {
-        name: "Vestibular neuritis",
-        plain: "Inflammation of the balance nerve, often triggered by a viral illness. Causes days of spinning that is always present.",
-        match: isFirstOrConstant && isSpinning && !stopsStill
+        name: "Postural hypotension (low blood pressure on standing)",
+        plain: "Blood pressure that drops suddenly when you stand up. Blood pressure medicines and prostate medicines can both make this more likely. Your doctor may check your blood pressure lying, sitting, and standing.",
+        match: feelingBriefResolved && !hasUrgentFlags && !hasRiskFactors && circ === "stood_up_bp_med"
+      },
+      {
+        name: "Vestibular migraine",
+        plain: "In people with a history of migraine, a brief dizzy episode that comes on in the same way as a migraine attack is often vestibular migraine. This is very manageable once confirmed.",
+        match: feelingBriefResolved && !hasUrgentFlags && !hasRiskFactors && circ === "migraine_preceded"
+      },
+      {
+        name: "Brief resolved vertigo — cause needs confirming",
+        plain: "A brief attack that has gone away on its own, without a clearly identified cause. Your doctor will review the episode and may check blood pressure, inner ear function, and other factors to find the most likely explanation.",
+        match: feelingBriefResolved && !hasUrgentFlags && !hasRiskFactors && (!circ || circ === "none")
+      },
+      {
+        name: "Possible stroke — see doctor urgently today",
+        plain: "An ongoing first attack combined with warning signs — such as preceding dizzy episodes, neurological symptoms, vascular risk factors, or new hearing change — may indicate a stroke or TIA affecting the brain's balance area. Please see a doctor today without delay.",
+        match: isSingleAttack && singleHasRedFlags
+      },
+      {
+        name: "Vestibular neuritis — needs treatment",
+        plain: "The most likely cause of a prolonged first attack of vertigo without red flags is vestibular neuritis — inflammation of the balance nerve, often triggered by a virus. This is treatable with steroids and vestibular rehabilitation.",
+        match: isSingleAttack && !singleHasRedFlags
+      },
+      {
+        name: "Stroke still possible — do not delay",
+        plain: "Even without clear warning signs, an ongoing first attack of severe vertigo must be seen by a doctor urgently to exclude a stroke affecting the balance area of the brain. Please do not wait.",
+        match: isSingleAttack && !singleHasRedFlags
+      },
+      {
+        name: "Could also be BPPV, migraine, Menière's disease, or a panic attack",
+        plain: "Many first attacks of vertigo turn out to be benign — including a first episode of BPPV (inner ear crystals), vestibular migraine, Menière's disease, or a panic attack. Your doctor will examine you and decide which is most likely.",
+        match: isSingleAttack
+      },
+      {
+        name: "Recurrent positional vertigo (BPPV)",
+        plain: "Crystals in the inner ear shift to the wrong canal, causing brief spinning triggered by head movement or position. This is the most common cause of recurrent positional vertigo and is very treatable.",
+        match: isRecurrentPositional
+      },
+      {
+        name: "Balance nerve problem (vestibular neuritis)",
+        plain: "Inflammation of the balance nerve, often triggered by a viral illness. Causes continuous dizziness that is always present.",
+        match: isConstant && !stopsStill
+      },
+      {
+        name: "Migraine-related dizziness",
+        plain: "Dizziness that comes in attacks and may or may not come with a headache. A common and often unrecognised cause of recurrent vertigo.",
+        match: isRepeated && !stopsStill
+      },
+      {
+        name: "Low blood pressure on standing",
+        plain: "A sudden drop in blood pressure when standing or sitting up. Causes brief lightheadedness or faintness.",
+        match: isAttack && isBrief && !stopsStill && !feelingBriefResolved
       }
     ];
 

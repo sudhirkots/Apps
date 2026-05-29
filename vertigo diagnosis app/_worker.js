@@ -1,4 +1,4 @@
-const SEEDED_CONTENT_VERSION = "first-time-attack-v1";
+const SEEDED_CONTENT_VERSION = "draft-branch-questions-v2";
 const SEEDED_FIRST_TIME_QUESTIONS = [
   {
     id: "ft_started_when",
@@ -246,6 +246,270 @@ const SEEDED_FIRST_TIME_QUESTIONS = [
   }
 ];
 
+const SEEDED_DRAFT_BRANCH_QUESTIONS = [
+  {
+    id: "rt_attack_trigger",
+    categoryId: "recurrent_triggered",
+    type: "multi",
+    required: true,
+    text: "Which movements usually trigger the attacks?",
+    help: "Select all that reliably bring on the dizziness.",
+    doctorNote: "Draft recurrent-triggered step. Edit wording and options after clinical review.",
+    showIf: null,
+    options: [
+      { id: "turning_in_bed", text: "Turning over in bed" },
+      { id: "lying_down_sitting_up", text: "Lying down or sitting up from bed" },
+      { id: "looking_up", text: "Looking up" },
+      { id: "bending_forward", text: "Bending forward" },
+      { id: "quick_head_turn", text: "Quick head turn while upright" },
+      { id: "not_sure", text: "I am not sure" }
+    ]
+  },
+  {
+    id: "rt_attack_duration",
+    categoryId: "recurrent_triggered",
+    type: "single",
+    required: true,
+    text: "After the triggering movement, how long does the spinning or dizziness usually last?",
+    help: "Choose the usual duration of the strongest part.",
+    doctorNote: "Draft recurrent-triggered step for duration pattern.",
+    showIf: null,
+    options: [
+      { id: "under_one_minute", text: "Less than 1 minute" },
+      { id: "one_to_five_minutes", text: "1 to 5 minutes" },
+      { id: "five_to_twenty_minutes", text: "5 to 20 minutes" },
+      { id: "more_than_twenty_minutes", text: "More than 20 minutes" },
+      { id: "varies", text: "It varies a lot" }
+    ]
+  },
+  {
+    id: "rt_between_attacks",
+    categoryId: "recurrent_triggered",
+    type: "single",
+    required: true,
+    text: "How do you feel between triggered attacks?",
+    help: "This asks about the time after the spell settles.",
+    doctorNote: "Draft recurrent-triggered step for residual imbalance or persistent symptoms.",
+    showIf: null,
+    options: [
+      { id: "normal_between", text: "Normal or almost normal" },
+      { id: "mild_unsteady", text: "Mildly unsteady or cautious" },
+      { id: "dizzy_most_time", text: "Dizzy or unsteady most of the time" },
+      { id: "not_sure", text: "I am not sure" }
+    ]
+  },
+  {
+    id: "rt_side_pattern",
+    categoryId: "recurrent_triggered",
+    type: "single",
+    required: false,
+    text: "Is one side or direction more likely to trigger it?",
+    help: "For example, turning to the right side in bed.",
+    doctorNote: "Draft recurrent-triggered step that may support positional testing planning.",
+    showIf: null,
+    options: [
+      { id: "right_side", text: "Right side" },
+      { id: "left_side", text: "Left side" },
+      { id: "both_sides", text: "Both sides" },
+      { id: "no_clear_side", text: "No clear side" },
+      { id: "not_sure", text: "I am not sure" }
+    ]
+  },
+  {
+    id: "rt_ear_neuro_symptoms",
+    categoryId: "recurrent_triggered",
+    type: "multi",
+    required: true,
+    text: "During these triggered attacks, do any of these happen?",
+    help: "Select all that apply.",
+    doctorNote: "Draft step to capture atypical symptoms alongside triggered attacks.",
+    showIf: null,
+    options: [
+      { id: "new_hearing_change", text: "New hearing change" },
+      { id: "new_tinnitus", text: "New ringing or buzzing" },
+      { id: "headache", text: "Headache" },
+      { id: "double_vision_speech_weakness", text: "Double vision, speech trouble, or weakness" },
+      { id: "none", text: "None of these" }
+    ]
+  },
+  {
+    id: "rs_attack_frequency",
+    categoryId: "recurrent_spontaneous",
+    type: "single",
+    required: true,
+    text: "How often do the untriggered attacks happen?",
+    help: "Choose the closest pattern.",
+    doctorNote: "Draft recurrent-spontaneous step for episode frequency.",
+    showIf: null,
+    options: [
+      { id: "daily", text: "Daily or almost daily" },
+      { id: "weekly", text: "Weekly" },
+      { id: "monthly", text: "Monthly" },
+      { id: "few_per_year", text: "A few times per year" },
+      { id: "first_few_attacks", text: "Only a few attacks so far" }
+    ]
+  },
+  {
+    id: "rs_attack_duration",
+    categoryId: "recurrent_spontaneous",
+    type: "single",
+    required: true,
+    text: "How long do these untriggered attacks usually last?",
+    help: "Choose the usual duration.",
+    doctorNote: "Draft recurrent-spontaneous step for differentiating short, migraine-range, and longer attacks.",
+    showIf: null,
+    options: [
+      { id: "seconds_minutes", text: "Seconds to a few minutes" },
+      { id: "five_minutes_to_one_hour", text: "5 minutes to 1 hour" },
+      { id: "one_to_twelve_hours", text: "1 to 12 hours" },
+      { id: "twelve_to_twenty_four_hours", text: "12 to 24 hours" },
+      { id: "more_than_twenty_four_hours", text: "More than 24 hours" },
+      { id: "not_sure", text: "I am not sure" }
+    ]
+  },
+  {
+    id: "rs_migraine_features",
+    categoryId: "recurrent_spontaneous",
+    type: "multi",
+    required: true,
+    text: "Do attacks come with headache or migraine-type symptoms?",
+    help: "Select all that apply.",
+    doctorNote: "Draft recurrent-spontaneous step for vestibular migraine feature review.",
+    showIf: null,
+    options: [
+      { id: "headache", text: "Headache" },
+      { id: "light_sensitivity", text: "Light sensitivity" },
+      { id: "sound_sensitivity", text: "Sound sensitivity" },
+      { id: "visual_aura", text: "Visual aura" },
+      { id: "migraine_history", text: "Past migraine diagnosis or migraine-like headaches" },
+      { id: "none", text: "None of these" }
+    ]
+  },
+  {
+    id: "rs_ear_features",
+    categoryId: "recurrent_spontaneous",
+    type: "multi",
+    required: true,
+    text: "Do attacks come with ear or hearing symptoms?",
+    help: "Select symptoms that happen during or near the attacks.",
+    doctorNote: "Draft recurrent-spontaneous step for fluctuating auditory symptom pattern.",
+    showIf: null,
+    options: [
+      { id: "hearing_reduces", text: "Hearing reduces or feels muffled" },
+      { id: "tinnitus", text: "Ringing or buzzing" },
+      { id: "ear_fullness", text: "Ear fullness or pressure" },
+      { id: "one_ear", text: "Mostly one ear" },
+      { id: "both_ears", text: "Both ears" },
+      { id: "none", text: "None of these" }
+    ]
+  },
+  {
+    id: "rs_vascular_context",
+    categoryId: "recurrent_spontaneous",
+    type: "multi",
+    required: true,
+    text: "During an attack, have you had any temporary neurologic symptoms?",
+    help: "Select all that apply, even if they went away.",
+    doctorNote: "Draft recurrent-spontaneous step for urgent clinician review.",
+    showIf: null,
+    options: [
+      { id: "double_vision", text: "Double vision" },
+      { id: "speech_or_swallowing", text: "Speech or swallowing trouble" },
+      { id: "face_arm_leg_weakness", text: "Face, arm, or leg weakness or numbness" },
+      { id: "new_severe_imbalance", text: "New severe imbalance or falling" },
+      { id: "none", text: "None of these" }
+    ]
+  },
+  {
+    id: "pu_duration",
+    categoryId: "persistent_unsteady",
+    type: "single",
+    required: true,
+    text: "How long have you felt dizzy or unsteady most days?",
+    help: "Choose the closest answer.",
+    doctorNote: "Draft persistent-unsteady step for duration pattern.",
+    showIf: null,
+    options: [
+      { id: "under_one_week", text: "Less than 1 week" },
+      { id: "one_to_four_weeks", text: "1 to 4 weeks" },
+      { id: "one_to_three_months", text: "1 to 3 months" },
+      { id: "more_than_three_months", text: "More than 3 months" },
+      { id: "not_sure", text: "I am not sure" }
+    ]
+  },
+  {
+    id: "pu_worse_context",
+    categoryId: "persistent_unsteady",
+    type: "multi",
+    required: true,
+    text: "What tends to make the persistent dizziness or unsteadiness worse?",
+    help: "Select all that apply.",
+    doctorNote: "Draft persistent-unsteady step for motion, visual, upright, and walking sensitivity.",
+    showIf: null,
+    options: [
+      { id: "standing_walking", text: "Standing or walking" },
+      { id: "busy_visual_places", text: "Busy visual places like markets or traffic" },
+      { id: "screens_reading", text: "Screens or reading" },
+      { id: "head_movement", text: "Head movement" },
+      { id: "dark_uneven_ground", text: "Darkness or uneven ground" },
+      { id: "none_clear", text: "No clear pattern" }
+    ]
+  },
+  {
+    id: "pu_onset_context",
+    categoryId: "persistent_unsteady",
+    type: "multi",
+    required: true,
+    text: "What was happening around the time this persistent problem started?",
+    help: "Select all that apply.",
+    doctorNote: "Draft persistent-unsteady step for trigger context.",
+    showIf: null,
+    options: [
+      { id: "after_vertigo_attack", text: "After a vertigo attack" },
+      { id: "after_illness", text: "After an illness or infection" },
+      { id: "after_fall_injury", text: "After a fall, head injury, or surgery" },
+      { id: "new_medicine", text: "After a new medicine or dose change" },
+      { id: "stress_anxiety", text: "During high stress or anxiety" },
+      { id: "no_clear_start", text: "No clear start" }
+    ]
+  },
+  {
+    id: "pu_falls_walking",
+    categoryId: "persistent_unsteady",
+    type: "single",
+    required: true,
+    text: "How has this affected walking or falls?",
+    help: "Choose the safest answer.",
+    doctorNote: "Draft persistent-unsteady step for fall risk and functional impact.",
+    showIf: null,
+    options: [
+      { id: "walks_normally", text: "I walk normally" },
+      { id: "cautious_no_falls", text: "I am cautious but have not fallen" },
+      { id: "near_falls", text: "I have had near-falls" },
+      { id: "fallen", text: "I have fallen" },
+      { id: "needs_support", text: "I need support to walk safely" }
+    ]
+  },
+  {
+    id: "pu_associated_symptoms",
+    categoryId: "persistent_unsteady",
+    type: "multi",
+    required: true,
+    text: "Which symptoms are present with the persistent dizziness or unsteadiness?",
+    help: "Select all that apply.",
+    doctorNote: "Draft persistent-unsteady step for associated symptom review.",
+    showIf: null,
+    options: [
+      { id: "hearing_loss", text: "Hearing loss" },
+      { id: "tinnitus", text: "Tinnitus" },
+      { id: "numb_feet", text: "Numbness or reduced feeling in the feet" },
+      { id: "neck_pain", text: "Neck pain" },
+      { id: "faint_lightheaded", text: "Lightheaded or faint feeling" },
+      { id: "none", text: "None of these" }
+    ]
+  }
+];
+
 const DEFAULT_CONFIG = {
   version: "v1.1.0",
   ruleVersion: "rules-empty-v1",
@@ -281,7 +545,7 @@ const DEFAULT_CONFIG = {
       ]
     }
   ],
-  branchQuestions: SEEDED_FIRST_TIME_QUESTIONS,
+  branchQuestions: SEEDED_FIRST_TIME_QUESTIONS.concat(SEEDED_DRAFT_BRANCH_QUESTIONS),
   diagnoses: [],
   rules: []
 };
@@ -524,9 +788,24 @@ function normalizeConfig(input) {
   source.categories = DEFAULT_CONFIG.categories;
   source.baseQuestions = DEFAULT_CONFIG.baseQuestions;
   source.branchQuestions = Array.isArray(source.branchQuestions) ? source.branchQuestions : [];
+  if (source.seededContentVersion !== SEEDED_CONTENT_VERSION) {
+    source.branchQuestions = mergeSeededBranchQuestions(source.branchQuestions);
+  }
+  source.seededContentVersion = SEEDED_CONTENT_VERSION;
   source.diagnoses = Array.isArray(source.diagnoses) ? source.diagnoses : [];
   source.rules = Array.isArray(source.rules) ? source.rules : [];
   return source;
+}
+
+function mergeSeededBranchQuestions(branchQuestions) {
+  const existing = branchQuestions.slice();
+  const existingIds = new Set(existing.map(question => question.id));
+
+  DEFAULT_CONFIG.branchQuestions.forEach(question => {
+    if (!existingIds.has(question.id)) existing.push(JSON.parse(JSON.stringify(question)));
+  });
+
+  return existing;
 }
 
 function rowToSubmission(row) {

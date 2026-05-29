@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(wsl git -C \"/mnt/d/Downloads/Apps\" status --short -- \"vertigo diagnosis app/\")",
+      "PowerShell(wsl git -C \"/mnt/d/Downloads/Apps/vertigo diagnosis app\" log --oneline -5)",
+      "PowerShell(wsl git -C \"/mnt/d/Downloads/Apps\" log --oneline -3)",
+      "PowerShell(try { $r = Invoke-WebRequest -Uri \"http://localhost:8080\" -TimeoutSec 5 -UseBasicParsing; $r.Content } catch { \"Failed: $_\" })",
+      "Read(//d/Downloads/Apps/**)",
+      "PowerShell(wsl git -C \"/mnt/d/Downloads/Apps\" add -- \"vertigo diagnosis app/\")"
+    ]
+  }
+}

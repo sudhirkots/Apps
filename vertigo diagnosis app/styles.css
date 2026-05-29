@@ -1248,6 +1248,86 @@ tr:last-child td {
   margin-bottom: 18px;
 }
 
+.simple-symptom-list {
+  margin: 0 0 20px 0;
+  padding: 12px 16px 12px 32px;
+  background: var(--surface, #f5f5f5);
+  border-radius: 8px;
+  list-style: disc;
+  font-size: 0.95rem;
+  color: var(--ink);
+  line-height: 1.7;
+}
+
+.flag-card {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.flag-card-red {
+  border-color: #fca5a5;
+  background: #fff5f5;
+}
+
+.flag-card-red:hover,
+.flag-card-red.selected {
+  border-color: #ef4444;
+  background: #fee2e2;
+}
+
+.flag-card-green {
+  border-color: #86efac;
+  background: #f0fdf4;
+}
+
+.flag-card-green:hover,
+.flag-card-green.selected {
+  border-color: #22c55e;
+  background: #dcfce7;
+}
+
+.flag-card-header {
+  font-weight: 600;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.flag-card-green .flag-card-header {
+  margin-bottom: 0;
+}
+
+.flag-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+.flag-dot.red  { background: #ef4444; }
+.flag-dot.green { background: #22c55e; }
+
+.flag-card-list {
+  margin: 4px 0 0 18px;
+  padding: 0;
+  list-style: disc;
+  font-size: 0.88rem;
+  color: #555;
+  line-height: 1.7;
+}
+
 .simple-options {
   display: flex;
   flex-direction: column;

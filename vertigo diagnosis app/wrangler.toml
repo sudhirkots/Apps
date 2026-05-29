@@ -5,7 +5,7 @@ pages_build_output_dir = "."
 [[d1_databases]]
 binding = "DB"
 database_name = "vertigo_diagnosis"
-database_id = "replace-with-your-d1-database-id"
+database_id = "42db842e-9147-4596-b063-6a5195e67fb7"
 migrations_dir = "migrations"
 
 [[r2_buckets]]
