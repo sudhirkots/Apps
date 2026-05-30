@@ -8,7 +8,7 @@
     pin: "vertigoIntake.pin"
   };
 
-  const SEEDED_CONTENT_VERSION = "draft-branch-questions-v5";
+  const SEEDED_CONTENT_VERSION = "recurrent-flow-v6";
   const SEEDED_FIRST_TIME_QUESTIONS = [
     {
       id: "ft_started_when",
@@ -272,16 +272,16 @@
       categoryId: "recurrent_triggered",
       type: "multi",
       required: true,
-      text: "Which movements usually trigger the attacks?",
+      text: "Which positional movements trigger the attacks?",
       help: "Select all that reliably bring on the dizziness.",
-      doctorNote: "Draft recurrent-triggered step. Edit wording and options after clinical review.",
+      doctorNote: "Recurrent positional branch. Typical brief position-triggered spells support BPPV; atypical central signs should prompt central positional vertigo review.",
       showIf: null,
       options: [
-        { id: "turning_in_bed", text: "Turning over in bed" },
-        { id: "lying_down_sitting_up", text: "Lying down or sitting up from bed" },
         { id: "looking_up", text: "Looking up" },
-        { id: "bending_forward", text: "Bending forward" },
-        { id: "quick_head_turn", text: "Quick head turn while upright" },
+        { id: "looking_down", text: "Looking down or bending forward" },
+        { id: "lying_down", text: "Lying down" },
+        { id: "getting_up", text: "Getting up from lying down" },
+        { id: "rolling_in_bed", text: "Rolling over in bed" },
         { id: "not_sure", text: "I am not sure" }
       ]
     },
@@ -292,7 +292,7 @@
       required: true,
       text: "After the triggering movement, how long does the spinning or dizziness usually last?",
       help: "Choose the usual duration of the strongest part.",
-      doctorNote: "Draft recurrent-triggered step for duration pattern.",
+      doctorNote: "Brief positional spells, especially under 1 minute, support BPPV. Longer or unusual spells need central positional vertigo and migraine review.",
       showIf: null,
       options: [
         { id: "under_one_minute", text: "Less than 1 minute" },
@@ -303,140 +303,110 @@
       ]
     },
     {
-      id: "rt_between_attacks",
-      categoryId: "recurrent_triggered",
-      type: "single",
-      required: true,
-      text: "How do you feel between triggered attacks?",
-      help: "This asks about the time after the spell settles.",
-      doctorNote: "Draft recurrent-triggered step for residual imbalance or persistent symptoms.",
-      showIf: null,
-      options: [
-        { id: "normal_between", text: "Normal or almost normal" },
-        { id: "mild_unsteady", text: "Mildly unsteady or cautious" },
-        { id: "dizzy_most_time", text: "Dizzy or unsteady most of the time" },
-        { id: "not_sure", text: "I am not sure" }
-      ]
-    },
-    {
-      id: "rt_side_pattern",
-      categoryId: "recurrent_triggered",
-      type: "single",
-      required: false,
-      text: "Is one side or direction more likely to trigger it?",
-      help: "For example, turning to the right side in bed.",
-      doctorNote: "Draft recurrent-triggered step that may support positional testing planning.",
-      showIf: null,
-      options: [
-        { id: "right_side", text: "Right side" },
-        { id: "left_side", text: "Left side" },
-        { id: "both_sides", text: "Both sides" },
-        { id: "no_clear_side", text: "No clear side" },
-        { id: "not_sure", text: "I am not sure" }
-      ]
-    },
-    {
-      id: "rt_ear_neuro_symptoms",
+      id: "rt_central_features",
       categoryId: "recurrent_triggered",
       type: "multi",
       required: true,
-      text: "During these triggered attacks, do any of these happen?",
+      text: "During positional attacks, do any of these happen?",
       help: "Select all that apply.",
-      doctorNote: "Draft step to capture atypical symptoms alongside triggered attacks.",
-      showIf: null,
-      options: [
-        { id: "new_hearing_change", text: "New hearing change" },
-        { id: "new_tinnitus", text: "New ringing or buzzing" },
-        { id: "headache", text: "Headache" },
-        { id: "double_vision_speech_weakness", text: "Double vision, speech trouble, or weakness" },
-        { id: "none", text: "None of these" }
-      ]
-    },
-    {
-      id: "rs_attack_frequency",
-      categoryId: "recurrent_spontaneous",
-      type: "single",
-      required: true,
-      text: "How often do the untriggered attacks happen?",
-      help: "Choose the closest pattern.",
-      doctorNote: "Draft recurrent-spontaneous step for episode frequency.",
-      showIf: null,
-      options: [
-        { id: "daily", text: "Daily or almost daily" },
-        { id: "weekly", text: "Weekly" },
-        { id: "monthly", text: "Monthly" },
-        { id: "few_per_year", text: "A few times per year" },
-        { id: "first_few_attacks", text: "Only a few attacks so far" }
-      ]
-    },
-    {
-      id: "rs_attack_duration",
-      categoryId: "recurrent_spontaneous",
-      type: "single",
-      required: true,
-      text: "How long do these untriggered attacks usually last?",
-      help: "Choose the usual duration.",
-      doctorNote: "Draft recurrent-spontaneous step for differentiating short, migraine-range, and longer attacks.",
-      showIf: null,
-      options: [
-        { id: "seconds_minutes", text: "Seconds to a few minutes" },
-        { id: "five_minutes_to_one_hour", text: "5 minutes to 1 hour" },
-        { id: "one_to_twelve_hours", text: "1 to 12 hours" },
-        { id: "twelve_to_twenty_four_hours", text: "12 to 24 hours" },
-        { id: "more_than_twenty_four_hours", text: "More than 24 hours" },
-        { id: "not_sure", text: "I am not sure" }
-      ]
-    },
-    {
-      id: "rs_migraine_features",
-      categoryId: "recurrent_spontaneous",
-      type: "multi",
-      required: true,
-      text: "Do attacks come with headache or migraine-type symptoms?",
-      help: "Select all that apply.",
-      doctorNote: "Draft recurrent-spontaneous step for vestibular migraine feature review.",
-      showIf: null,
-      options: [
-        { id: "headache", text: "Headache" },
-        { id: "light_sensitivity", text: "Light sensitivity" },
-        { id: "sound_sensitivity", text: "Sound sensitivity" },
-        { id: "visual_aura", text: "Visual aura" },
-        { id: "migraine_history", text: "Past migraine diagnosis or migraine-like headaches" },
-        { id: "none", text: "None of these" }
-      ]
-    },
-    {
-      id: "rs_ear_features",
-      categoryId: "recurrent_spontaneous",
-      type: "multi",
-      required: true,
-      text: "Do attacks come with ear or hearing symptoms?",
-      help: "Select symptoms that happen during or near the attacks.",
-      doctorNote: "Draft recurrent-spontaneous step for fluctuating auditory symptom pattern.",
-      showIf: null,
-      options: [
-        { id: "hearing_reduces", text: "Hearing reduces or feels muffled" },
-        { id: "tinnitus", text: "Ringing or buzzing" },
-        { id: "ear_fullness", text: "Ear fullness or pressure" },
-        { id: "one_ear", text: "Mostly one ear" },
-        { id: "both_ears", text: "Both ears" },
-        { id: "none", text: "None of these" }
-      ]
-    },
-    {
-      id: "rs_vascular_context",
-      categoryId: "recurrent_spontaneous",
-      type: "multi",
-      required: true,
-      text: "During an attack, have you had any temporary neurologic symptoms?",
-      help: "Select all that apply, even if they went away.",
-      doctorNote: "Draft recurrent-spontaneous step for urgent clinician review.",
+      doctorNote: "Central positional vertigo screen alongside BPPV. Neurologic symptoms, severe headache, or marked gait impairment need urgent clinician review.",
       showIf: null,
       options: [
         { id: "double_vision", text: "Double vision" },
-        { id: "speech_or_swallowing", text: "Speech or swallowing trouble" },
-        { id: "face_arm_leg_weakness", text: "Face, arm, or leg weakness or numbness" },
-        { id: "new_severe_imbalance", text: "New severe imbalance or falling" },
+        { id: "slurred_speech", text: "Slurring of speech or difficulty speaking" },
+        { id: "one_sided_tingling_weakness", text: "Tingling, numbness, or weakness on one side of the body" },
+        { id: "cannot_walk", text: "Inability to walk during the attack" },
+        { id: "severe_headache_neck_pain", text: "Sudden severe headache or neck pain" },
+        { id: "none", text: "None of these" }
+      ]
+    },
+    {
+      id: "rs_spontaneous_pattern",
+      categoryId: "recurrent_spontaneous",
+      type: "single",
+      required: true,
+      text: "Are these attacks unrelated to looking up, looking down, lying down, getting up, or rolling in bed?",
+      help: "Choose yes if attacks can happen while sitting, standing, watching TV, using a computer, or doing other work without a head-position trigger.",
+      doctorNote: "Confirms spontaneous non-positional recurrent vertigo pattern before migraine, TIA, and Meniere feature screens.",
+      showIf: null,
+      options: [
+        { id: "yes_spontaneous", text: "Yes, they can happen without those positional triggers" },
+        { id: "sometimes_positional", text: "Sometimes there is a positional trigger" },
+        { id: "not_sure", text: "I am not sure" }
+      ]
+    },
+    {
+      id: "rs_migraine_profile",
+      categoryId: "recurrent_spontaneous",
+      type: "multi",
+      required: true,
+      text: "Do any migraine features fit these vertigo attacks?",
+      help: "Select all that apply during, before, or around the vertigo attacks.",
+      doctorNote: "Possible vestibular migraine screen: migraine history, migraine-timed headaches, travel or stress triggers, nausea, photophobia, phonophobia, and vomiting.",
+      showIf: null,
+      options: [
+        { id: "young_patient", text: "The patient is young" },
+        { id: "migraine_history", text: "History of migraine headaches" },
+        { id: "headache_before_during_after", text: "Headache occurs before, during, at the same time as, or after the vertigo attack" },
+        { id: "late_night_travel_stress", text: "Late-night travel or stress can trigger the vertigo attack" },
+        { id: "nausea", text: "Nausea during the vertigo attack" },
+        { id: "photophobia", text: "Light sensitivity during the attack" },
+        { id: "phonophobia", text: "Sound sensitivity during the attack" },
+        { id: "vomiting", text: "Vomiting during the attack" },
+        { id: "none", text: "None of these" }
+      ]
+    },
+    {
+      id: "rs_vascular_risk",
+      categoryId: "recurrent_spontaneous",
+      type: "multi",
+      required: true,
+      text: "Does the patient have vertebro-basilar TIA risk factors?",
+      help: "Select all that apply.",
+      doctorNote: "Possible vertebro-basilar TIA context: age over 60 and vascular risk factors.",
+      showIf: null,
+      options: [
+        { id: "age_over_60", text: "Age over 60" },
+        { id: "diabetes", text: "Diabetes" },
+        { id: "hypertension", text: "Hypertension" },
+        { id: "smoking", text: "Smoking" },
+        { id: "heart_disease", text: "Heart disease" },
+        { id: "none", text: "None of these" }
+      ]
+    },
+    {
+      id: "rs_vascular_warning",
+      categoryId: "recurrent_spontaneous",
+      type: "multi",
+      required: true,
+      text: "During the vertigo attack, are there any neurologic warning symptoms?",
+      help: "Select symptoms that happen during the attack, even if they go away.",
+      doctorNote: "Possible vertebro-basilar TIA screen: diplopia, dysarthria, unilateral sensory/motor symptoms, and inability to walk during attacks.",
+      showIf: null,
+      options: [
+        { id: "double_vision", text: "Double vision" },
+        { id: "slurred_speech", text: "Slurring of speech or difficulty speaking" },
+        { id: "one_sided_tingling_weakness", text: "Tingling, numbness, or weakness on one side of the body" },
+        { id: "cannot_walk", text: "Inability to walk during the attack" },
+        { id: "none", text: "None of these" }
+      ]
+    },
+    {
+      id: "rs_meniere_features",
+      categoryId: "recurrent_spontaneous",
+      type: "multi",
+      required: true,
+      text: "Do any one-ear ringing, fullness, or hearing symptoms occur with the attacks?",
+      help: "Select symptoms that happen during or before attacks.",
+      doctorNote: "Possible Meniere's disease screen: unilateral low-pitched tinnitus, ear fullness, tinnitus before vertigo, and fluctuating/progressive hearing loss. Duration over 20 minutes is required but is not sufficient by itself.",
+      showIf: null,
+      options: [
+        { id: "loud_one_ear_tinnitus", text: "Loud ringing sound in one ear" },
+        { id: "low_pitched_tinnitus", text: "The ringing is preferably low pitched" },
+        { id: "ear_fullness", text: "Fullness or heaviness in the ear during or before the attack" },
+        { id: "tinnitus_before_vertigo", text: "Ringing may precede the attack of vertigo" },
+        { id: "hearing_loss_during_attack", text: "Hearing loss during the attack" },
+        { id: "progressive_one_ear_hearing_loss", text: "Gradually progressive hearing loss in one ear" },
         { id: "none", text: "None of these" }
       ]
     },
@@ -716,6 +686,97 @@
       ]
     },
     {
+      id: "recurrent_head_trigger",
+      text: "Are your attacks triggered by sudden head movements?",
+      help: "For example: looking up, looking down, lying down, getting up from lying down, or rolling over in bed.",
+      type: "single",
+      options: [
+        { id: "yes", text: "Yes, the attacks are triggered by these head movements" },
+        { id: "no", text: "No, they are not triggered by head movement" },
+        { id: "not_sure", text: "I am not sure" }
+      ]
+    },
+    {
+      id: "spontaneous_confirm",
+      text: "Can the attacks happen while sitting still or working without head movement?",
+      help: "For example while watching television, working on a computer, or working in the kitchen.",
+      type: "single",
+      options: [
+        { id: "yes", text: "Yes, they can happen without head movement" },
+        { id: "no", text: "No, they are usually related to head movement" },
+        { id: "not_sure", text: "I am not sure" }
+      ]
+    },
+    {
+      id: "recurrent_spontaneous_duration",
+      text: "How long does each spontaneous vertigo attack usually last?",
+      help: "This helps separate short attacks from attacks where Meniere's disease can be considered.",
+      type: "single",
+      options: [
+        { id: "under_twenty_minutes", text: "Less than 20 minutes" },
+        { id: "over_twenty_minutes", text: "More than 20 minutes" },
+        { id: "not_sure", text: "I am not sure" }
+      ]
+    },
+    {
+      id: "recurrent_migraine_features",
+      text: "Do any migraine features fit these attacks?",
+      help: "Select all that apply.",
+      type: "multi",
+      options: [
+        { id: "young_patient", text: "I am young" },
+        { id: "migraine_history", text: "I have had migraine headaches in the past" },
+        { id: "headache_with_vertigo", text: "Headache happens before, during, or after the vertigo attack" },
+        { id: "late_night_travel_stress_missed_meal", text: "Late night, travel, missing a meal, or stress can trigger the attack" },
+        { id: "nausea", text: "Nausea during the attack" },
+        { id: "vomiting", text: "Vomiting during the attack" },
+        { id: "photophobia", text: "Light sensitivity during the attack" },
+        { id: "phonophobia", text: "Sound sensitivity during the attack" },
+        { id: "none", text: "None of these" }
+      ]
+    },
+    {
+      id: "recurrent_tia_risk",
+      text: "Do any stroke risk factors apply?",
+      help: "Select all that apply.",
+      type: "multi",
+      options: [
+        { id: "age_over_60", text: "Age over 60" },
+        { id: "diabetes", text: "Diabetes" },
+        { id: "hypertension", text: "Hypertension or high blood pressure" },
+        { id: "smoking", text: "Smoking" },
+        { id: "heart_disease", text: "Heart disease or irregular heart rhythm" },
+        { id: "none", text: "None of these" }
+      ]
+    },
+    {
+      id: "recurrent_tia_warnings",
+      text: "During the vertigo attacks, do any warning symptoms happen?",
+      help: "Select all that apply, even if they go away after the attack.",
+      type: "multi",
+      options: [
+        { id: "double_vision", text: "Double vision" },
+        { id: "slurred_speech", text: "Slurring of speech or difficulty speaking" },
+        { id: "one_sided_tingling_weakness", text: "Tingling, numbness, or weakness on one side of the body" },
+        { id: "cannot_walk", text: "Unable to walk during the attack" },
+        { id: "none", text: "None of these" }
+      ]
+    },
+    {
+      id: "recurrent_meniere_features",
+      text: "Do any one-ear ringing, fullness, or hearing symptoms happen before or during attacks?",
+      help: "Select all that apply. These features support Meniere's disease only when the vertigo attacks last more than 20 minutes.",
+      type: "multi",
+      options: [
+        { id: "loud_one_ear_ringing", text: "Loud ringing sound in one ear" },
+        { id: "low_pitched_machine_sound", text: "The ringing is low pitched, like a machine" },
+        { id: "ear_fullness", text: "Fullness or heaviness in one ear" },
+        { id: "fluctuating_hearing_loss", text: "Hearing worsens before or during the attack, then fluctuates" },
+        { id: "progressive_one_year_hearing_loss", text: "Hearing loss has gradually progressed over about one year" },
+        { id: "none", text: "None of these" }
+      ]
+    },
+    {
       id: "stops_still",
       text: "Does the dizziness stop on holding your head still or lying in one particular position?",
       type: "single",
@@ -790,6 +851,21 @@
       options: [
         { id: "yes", text: "Yes — one or more of these apply" },
         { id: "none", text: "None of these" }
+      ]
+    },
+    {
+      id: "single_red_flag_detail",
+      text: "Which of these apply to you?",
+      help: "Select all that apply.",
+      type: "multi",
+      options: [
+        { id: "pre_attack_dizziness", text: "Dizziness or unsteadiness in the days or weeks before this attack" },
+        { id: "double_vision", text: "Double vision" },
+        { id: "tingling_one_side", text: "Tingling or numbness on one side of the body" },
+        { id: "slurred_speech", text: "Slurred speech or difficulty speaking" },
+        { id: "weakness_one_side", text: "Weakness on one side of the body" },
+        { id: "new_ringing", text: "New ringing in the ears (tinnitus)" },
+        { id: "reduced_hearing", text: "Reduced hearing in one ear" }
       ]
     },
     {
@@ -982,7 +1058,7 @@
       '<div class="landing-role-desc">Help me describe my dizziness to my doctor</div>',
       '</div>',
       '</button>',
-      '<button class="landing-role-card" type="button" data-action="choose-role" data-role="doctor_examining">',
+      '<button class="landing-role-card landing-role-card--soon" type="button" tabindex="-1">',
       '<div class="landing-role-icon doctor-icon">' + iconSvg("clipboard") + '</div>',
       '<div class="landing-role-body">',
       '<div class="landing-role-title">I am a doctor</div>',
@@ -1209,10 +1285,23 @@
 
   function shouldSkipSimpleQuestion(question, answers) {
     var feeling = answers.feeling;
-    if (question.id === "pattern" && (feeling === "single_attack" || feeling === "brief_resolved")) return true;
+    if (question.id === "pattern" && (feeling === "single_attack" || feeling === "brief_resolved" || feeling === "repeated_attacks")) return true;
+    if (question.id === "recurrent_head_trigger" && feeling !== "repeated_attacks") return true;
+    if (question.id === "spontaneous_confirm" && !(feeling === "repeated_attacks" && answers.recurrent_head_trigger === "no")) return true;
+    if (question.id === "recurrent_spontaneous_duration") {
+      return !(feeling === "repeated_attacks" && answers.recurrent_head_trigger === "no" && answers.spontaneous_confirm === "yes");
+    }
+    if (["recurrent_migraine_features", "recurrent_tia_risk", "recurrent_tia_warnings"].includes(question.id)) {
+      return !(feeling === "repeated_attacks" && answers.recurrent_head_trigger === "no" && answers.spontaneous_confirm === "yes");
+    }
+    if (question.id === "recurrent_meniere_features") {
+      return !(feeling === "repeated_attacks" && answers.recurrent_head_trigger === "no" && answers.spontaneous_confirm === "yes" && answers.recurrent_spontaneous_duration === "over_twenty_minutes");
+    }
+    if (question.id === "stops_still" && feeling === "repeated_attacks") return true;
     if (question.id === "stops_still" && feeling === "brief_resolved") return true;
+    if (question.id === "duration" && feeling === "repeated_attacks") return true;
     if (question.id === "duration" && (feeling === "brief_resolved" || feeling === "single_attack")) return true;
-    if (question.id === "urgent" && feeling === "single_attack") return true;
+    if (question.id === "urgent" && (feeling === "single_attack" || feeling === "repeated_attacks")) return true;
     if (question.id === "brief_risk_factors" && feeling !== "brief_resolved") return true;
     if (question.id === "brief_circumstances") {
       if (feeling !== "brief_resolved") return true;
@@ -1220,8 +1309,10 @@
       if (rfs.some(function (v) { return v !== "none"; })) return true;
     }
     if (question.id === "single_red_flags" && feeling !== "single_attack") return true;
+    if (question.id === "single_red_flag_detail" && !(feeling === "single_attack" && answers.single_red_flags === "yes")) return true;
     if (feeling === "brief_resolved" && (question.id === "ear" || question.id === "headache")) return true;
     if (feeling === "single_attack" && (question.id === "ear" || question.id === "headache")) return true;
+    if (feeling === "repeated_attacks" && (question.id === "ear" || question.id === "headache")) return true;
     return false;
   }
 
@@ -1327,13 +1418,46 @@
   }
 
   function renderSimpleUrgentWarning() {
+    var VASCULAR_IDS = ["double_vision", "tingling_one_side", "slurred_speech", "weakness_one_side", "new_ringing", "reduced_hearing"];
+    var VASCULAR_LABELS = {
+      double_vision: "Double vision",
+      tingling_one_side: "Tingling or numbness on one side of the body",
+      slurred_speech: "Slurred speech or difficulty speaking",
+      weakness_one_side: "Weakness on one side of the body",
+      new_ringing: "New ringing in the ears (tinnitus)",
+      reduced_hearing: "Reduced hearing in one ear"
+    };
+    var detailFlags = Array.isArray(state.simplePatient.answers.single_red_flag_detail)
+      ? state.simplePatient.answers.single_red_flag_detail : [];
+    var vascularPresent = detailFlags.filter(function (v) { return VASCULAR_IDS.indexOf(v) !== -1; });
+    var isVascular = vascularPresent.length > 0;
+
+    var flagListHtml = isVascular
+      ? '<ul class="urgent-flag-list">' + vascularPresent.map(function (v) {
+          return '<li>' + VASCULAR_LABELS[v] + '</li>';
+        }).join("") + '</ul>'
+      : "";
+
+    var title = isVascular
+      ? "Emergency — possible stroke or TIA"
+      : "Please seek urgent medical attention";
+
+    var bodyText = isVascular
+      ? 'You have reported warning signs that can be caused by a stroke or TIA (mini-stroke) affecting the brain\'s balance area. The symptoms you selected are:'
+      : 'You have reported one or more urgent warning signs. Please <strong>tell the clinic staff immediately</strong> or go to the <strong>nearest emergency department</strong> now.';
+
+    var noteText = isVascular
+      ? 'Please <strong>call emergency services or go to the nearest emergency department immediately</strong>. Do not drive yourself.'
+      : 'You may still continue to build a summary for your doctor.';
+
     app.innerHTML = [
       '<div class="simple-wrapper">',
       '<section class="panel patient-classification-panel safety-warning-panel">',
       '<div class="safety-warning-icon">' + iconSvg("alert") + '</div>',
-      '<h2 class="safety-warning-title">Please seek urgent medical attention</h2>',
-      '<p class="safety-warning-text">You have reported one or more urgent warning signs. Please <strong>tell the clinic staff immediately</strong> or go to the <strong>nearest emergency department</strong> now.</p>',
-      '<p class="safety-warning-note">You may still continue to build a summary for your doctor.</p>',
+      '<h2 class="safety-warning-title">' + title + '</h2>',
+      '<p class="safety-warning-text">' + bodyText + '</p>',
+      flagListHtml,
+      '<p class="safety-warning-note">' + noteText + '</p>',
       '<div class="actions">',
       '<button class="button danger" type="button" data-action="simple-urgent-continue">I understand — continue anyway</button>',
       '</div>',
@@ -1451,7 +1575,7 @@
       '<div class="simple-card">',
       '<div class="submit-check-icon">' + iconSvg("rotate") + '</div>',
       '<p class="simple-q">You possibly have positional vertigo</p>',
-      '<p class="simple-help">Because your dizziness stops in one head position and returns with movement, this could be positional vertigo. The most common cause is BPPV — displaced crystals in the inner ear — which is very treatable.</p>',
+      '<p class="simple-help">Because your attacks are triggered by head position or sudden head movement, this is positional vertigo. The main possibilities to discuss with your doctor are BPPV and central positional vertigo.</p>',
       '<p class="simple-help">Let us check a few more things about your positional vertigo so your doctor has more detail.</p>',
       '<div class="actions">',
       '<button class="button" type="button" data-action="simple-positional-start">Continue ›</button>',
@@ -1468,20 +1592,36 @@
     const hasUrgent = a.urgent === "yes";
     const earItems = Array.isArray(a.ear) ? a.ear.filter(function (v) { return v !== "none"; }) : [];
     const riskFactorItems = Array.isArray(a.brief_risk_factors) ? a.brief_risk_factors.filter(function (v) { return v !== "none"; }) : [];
+    const recurrentMigraineItems = Array.isArray(a.recurrent_migraine_features) ? a.recurrent_migraine_features.filter(function (v) { return v !== "none"; }) : [];
+    const recurrentTiaRiskItems = Array.isArray(a.recurrent_tia_risk) ? a.recurrent_tia_risk.filter(function (v) { return v !== "none"; }) : [];
+    const recurrentTiaWarningItems = Array.isArray(a.recurrent_tia_warnings) ? a.recurrent_tia_warnings.filter(function (v) { return v !== "none"; }) : [];
+    const recurrentMeniereItems = Array.isArray(a.recurrent_meniere_features) ? a.recurrent_meniere_features.filter(function (v) { return v !== "none"; }) : [];
     const hasRiskFactors = riskFactorItems.length > 0;
     const showRiskNotice = a.feeling === "brief_resolved" && hasRiskFactors;
     const showSingleUrgentNotice = a.feeling === "single_attack";
+    const showRecurrentTiaNotice = recurrentTiaWarningItems.length > 0 || recurrentTiaRiskItems.length > 0;
     const possibilities = computeSimplePossibilities(a);
 
     const rows = [
       ["Attack or constant", getSimpleLabel("feeling", a.feeling)],
       ["Pattern", getSimpleLabel("pattern", a.pattern)],
+      ["Head-movement trigger", getSimpleLabel("recurrent_head_trigger", a.recurrent_head_trigger)],
+      ["Spontaneous/non-positional", getSimpleLabel("spontaneous_confirm", a.spontaneous_confirm)],
+      ["Spontaneous attack duration", getSimpleLabel("recurrent_spontaneous_duration", a.recurrent_spontaneous_duration)],
+      ["Migraine features", recurrentMigraineItems.length ? recurrentMigraineItems.map(function (id) { return getSimpleOptionText("recurrent_migraine_features", id); }).join(", ") : (a.recurrent_migraine_features ? "None" : "")],
+      ["TIA risk factors", recurrentTiaRiskItems.length ? recurrentTiaRiskItems.map(function (id) { return getSimpleOptionText("recurrent_tia_risk", id); }).join(", ") : (a.recurrent_tia_risk ? "None" : "")],
+      ["TIA warning symptoms", recurrentTiaWarningItems.length ? recurrentTiaWarningItems.map(function (id) { return getSimpleOptionText("recurrent_tia_warnings", id); }).join(", ") : (a.recurrent_tia_warnings ? "None" : "")],
+      ["Meniere-type ear features", recurrentMeniereItems.length ? recurrentMeniereItems.map(function (id) { return getSimpleOptionText("recurrent_meniere_features", id); }).join(", ") : (a.recurrent_meniere_features ? "None" : "")],
       ["Stops when still", getSimpleLabel("stops_still", a.stops_still)],
       ["Duration", getSimpleLabel("duration", a.duration)],
       ["Warning signs", a.urgent ? (hasUrgent ? "Yes — urgent warning signs reported" : "None") : ""],
       ["Risk factors", a.brief_risk_factors ? (hasRiskFactors ? riskFactorItems.map(function (id) { return getSimpleOptionText("brief_risk_factors", id); }).join(", ") : "None") : ""],
       ["Circumstances", getSimpleLabel("brief_circumstances", a.brief_circumstances)],
-      ["Red flags", a.single_red_flags ? (a.single_red_flags === "yes" ? "Yes — red flags present" : "None") : ""],
+      ["Red flags", a.single_red_flags ? (a.single_red_flags === "yes"
+        ? (Array.isArray(a.single_red_flag_detail) && a.single_red_flag_detail.length
+          ? a.single_red_flag_detail.map(function (id) { return getSimpleOptionText("single_red_flag_detail", id); }).join(", ")
+          : "Yes — red flags present")
+        : "None") : ""],
       ["Ear symptoms", earItems.length ? earItems.map(function (id) { return getSimpleOptionText("ear", id); }).join(", ") : (a.ear ? "None" : "")],
       ["Headache", getSimpleLabel("headache", a.headache)]
     ].filter(function (row) { return row[1]; });
@@ -1498,7 +1638,8 @@
       '</div>',
       hasUrgent ? '<div class="notice danger"><strong>Urgent warning signs reported.</strong> Please tell the doctor immediately.</div>' : "",
       showRiskNotice ? '<div class="notice danger"><strong>Vascular risk factors noted.</strong> A brief dizzy episode with these risk factors needs to be reviewed by a doctor today.</div>' : "",
-      showSingleUrgentNotice ? '<div class="notice danger"><strong>See a doctor urgently today.</strong> An ongoing first attack of vertigo always needs same-day assessment to exclude a stroke, even if there are no other warning signs.</div>' : "",
+      showSingleUrgentNotice ? '<div class="notice danger"><strong>See your doctor urgently today.</strong></div>' : "",
+      showRecurrentTiaNotice ? '<div class="notice danger"><strong>Possible vascular warning pattern.</strong> Recurrent non-positional vertigo with stroke risk factors or neurologic symptoms should be reviewed by a doctor urgently.</div>' : "",
       '<table class="summary-table"><tbody>',
       rows.map(function (row) {
         return '<tr><td class="summary-lbl">' + escapeHtml(row[0]) + '</td><td>' + escapeHtml(row[1]) + '</td></tr>';
@@ -1509,7 +1650,8 @@
       '<p class="muted" style="font-size:0.88rem;margin-bottom:10px">This is not a diagnosis. Your doctor will determine the cause after examination.</p>',
       '<div class="poss-list">',
       possibilities.map(function (p) {
-        return '<div class="poss-item"><strong>' + escapeHtml(p.name) + '</strong><p>' + escapeHtml(p.plain) + '</p></div>';
+        var cls = p.color ? ' poss-item--' + p.color : '';
+        return '<div class="poss-item' + cls + '"><strong>' + escapeHtml(p.name) + '</strong><p>' + escapeHtml(p.plain) + '</p></div>';
       }).join(""),
       '</div>',
       '</div>',
@@ -2447,6 +2589,11 @@
         return;
       }
       state.simplePatient.answers[sqid] = soid;
+      if (sqid === "recurrent_head_trigger" && soid === "yes") {
+        state.simplePatient.positionalRedirect = true;
+        renderSimplePatient();
+        return;
+      }
       if (sqid === "stops_still" && soid === "yes_returns") {
         state.simplePatient.positionalRedirect = true;
         renderSimplePatient();
@@ -2471,6 +2618,14 @@
         state.simplePatient.urgentWarning = true;
         renderSimplePatient();
         return;
+      }
+      if (sqid2 === "single_red_flag_detail" && Array.isArray(sqVal)) {
+        var VASCULAR_IDS = ["double_vision", "tingling_one_side", "slurred_speech", "weakness_one_side", "new_ringing", "reduced_hearing"];
+        if (sqVal.some(function (v) { return VASCULAR_IDS.indexOf(v) !== -1; })) {
+          state.simplePatient.urgentWarning = true;
+          renderSimplePatient();
+          return;
+        }
       }
       state.simplePatient.step++;
       if (state.simplePatient.step >= SIMPLE_PATIENT_QUESTIONS.length) state.simplePatient.done = true;
@@ -3290,7 +3445,30 @@
   }
 
   function mergeSeededBranchQuestions(branchQuestions) {
-    const existing = branchQuestions.slice();
+    const recurrentSeedIds = new Set([
+      "rt_attack_trigger",
+      "rt_attack_duration",
+      "rt_between_attacks",
+      "rt_side_pattern",
+      "rt_ear_neuro_symptoms",
+      "rt_central_features",
+      "rs_attack_frequency",
+      "rs_attack_duration",
+      "rs_migraine_features",
+      "rs_ear_features",
+      "rs_vascular_context",
+      "rs_spontaneous_pattern",
+      "rs_migraine_profile",
+      "rs_vascular_risk",
+      "rs_vascular_warning",
+      "rs_meniere_features"
+    ]);
+    const existing = branchQuestions.filter(function (question) {
+      if (question.categoryId === "recurrent_triggered" || question.categoryId === "recurrent_spontaneous") {
+        return !recurrentSeedIds.has(question.id);
+      }
+      return true;
+    });
     const existingIds = new Set(existing.map(function (question) {
       return question.id;
     }));
@@ -3459,10 +3637,24 @@
     const stopsStill = a.stops_still === "yes_returns" || a.stops_still === "yes_stays";
     const isBrief = a.duration === "seconds" || a.duration === "minutes";
 
-    const isRecurrentPositional = a.stops_still === "yes_returns";
+    const isRecurrentPositional = a.stops_still === "yes_returns" || (isRepeated && a.recurrent_head_trigger === "yes");
+    const isRecurrentSpontaneous = isRepeated && a.recurrent_head_trigger === "no" && a.spontaneous_confirm === "yes";
+    const recurrentMigraineItems = Array.isArray(a.recurrent_migraine_features) ? a.recurrent_migraine_features.filter(function (v) { return v !== "none"; }) : [];
+    const recurrentTiaRiskItems = Array.isArray(a.recurrent_tia_risk) ? a.recurrent_tia_risk.filter(function (v) { return v !== "none"; }) : [];
+    const recurrentTiaWarningItems = Array.isArray(a.recurrent_tia_warnings) ? a.recurrent_tia_warnings.filter(function (v) { return v !== "none"; }) : [];
+    const recurrentMeniereItems = Array.isArray(a.recurrent_meniere_features) ? a.recurrent_meniere_features.filter(function (v) { return v !== "none"; }) : [];
+    const isSpontaneousUnderTwenty = a.recurrent_spontaneous_duration === "under_twenty_minutes";
+    const isSpontaneousOverTwenty = a.recurrent_spontaneous_duration === "over_twenty_minutes";
+    const hasRecurrentMigraineFeatures = recurrentMigraineItems.length > 0;
+    const hasRecurrentTiaPattern = recurrentTiaRiskItems.length > 0 || recurrentTiaWarningItems.length > 0;
+    const hasRecurrentMenierePattern = isSpontaneousOverTwenty && recurrentMeniereItems.length > 0;
 
     const hasUrgentFlags = a.urgent === "yes";
     const singleHasRedFlags = a.single_red_flags === "yes";
+    const VASCULAR_IDS_P = ["double_vision", "tingling_one_side", "slurred_speech", "weakness_one_side", "new_ringing", "reduced_hearing"];
+    const detailFlagsP = Array.isArray(a.single_red_flag_detail) ? a.single_red_flag_detail : [];
+    const singleHasVascularFlags = detailFlagsP.some(function (v) { return VASCULAR_IDS_P.indexOf(v) !== -1; });
+    const singlePreAttackOnly = singleHasRedFlags && detailFlagsP.includes("pre_attack_dizziness") && !singleHasVascularFlags;
     const riskFactors = Array.isArray(a.brief_risk_factors) ? a.brief_risk_factors.filter(function (v) { return v !== "none"; }) : [];
     const hasRiskFactors = riskFactors.length > 0;
     const circ = a.brief_circumstances;
@@ -3499,9 +3691,22 @@
         match: feelingBriefResolved && !hasUrgentFlags && !hasRiskFactors && (!circ || circ === "none")
       },
       {
-        name: "Possible stroke — see doctor urgently today",
-        plain: "An ongoing first attack combined with warning signs — such as preceding dizzy episodes, neurological symptoms, vascular risk factors, or new hearing change — may indicate a stroke or TIA affecting the brain's balance area. Please see a doctor today without delay.",
-        match: isSingleAttack && singleHasRedFlags
+        name: "Possible stroke or TIA — seek emergency care now",
+        plain: "An ongoing first attack with neurological warning signs (double vision, tingling, slurred speech, weakness, new tinnitus, or hearing change) may indicate a stroke or TIA affecting the brain's balance area. Please seek emergency care immediately.",
+        match: isSingleAttack && singleHasVascularFlags,
+        color: "red"
+      },
+      {
+        name: "Stroke must be excluded",
+        plain: "Dizziness in the days or weeks before a sudden vertigo attack can be an early warning sign of a stroke or TIA (mini-stroke). This needs urgent same-day assessment. Your doctor will examine you and do appropriate tests to rule this out.",
+        match: isSingleAttack && singlePreAttackOnly,
+        color: "red"
+      },
+      {
+        name: "The other likely cause is vestibular neuritis",
+        plain: "Vestibular neuritis is inflammation of the balance nerve, often triggered by a viral illness. It commonly causes a sudden prolonged attack of vertigo and can be preceded by milder dizziness in the days before. It is treatable with steroids and vestibular rehabilitation exercises.",
+        match: isSingleAttack && singlePreAttackOnly,
+        color: "yellow"
       },
       {
         name: "Vestibular neuritis — needs treatment",
@@ -3516,12 +3721,44 @@
       {
         name: "Could also be BPPV, migraine, Menière's disease, or a panic attack",
         plain: "Many first attacks of vertigo turn out to be benign — including a first episode of BPPV (inner ear crystals), vestibular migraine, Menière's disease, or a panic attack. Your doctor will examine you and decide which is most likely.",
-        match: isSingleAttack
+        match: isSingleAttack && !singleHasVascularFlags,
+        color: "green"
       },
       {
-        name: "Recurrent positional vertigo (BPPV)",
-        plain: "Crystals in the inner ear shift to the wrong canal, causing brief spinning triggered by head movement or position. This is the most common cause of recurrent positional vertigo and is very treatable.",
+        name: "Positional vertigo — BPPV or central positional vertigo",
+        plain: "Because the attacks are triggered by head position or sudden head movement, this is positional vertigo. The common possibility is BPPV, but the doctor should also consider central positional vertigo when the pattern is atypical or warning signs are present.",
         match: isRecurrentPositional
+      },
+      {
+        name: "Recurrent vertigo pattern needs clarification",
+        plain: "The relationship between attacks and head movement is not clear yet. Your doctor may first separate positional vertigo from spontaneous non-positional vertigo, because the likely causes are different.",
+        match: isRepeated && !isRecurrentPositional && !isRecurrentSpontaneous
+      },
+      {
+        name: "Vestibular migraine",
+        plain: "This is the most common cause of recurrent spontaneous, non-positional vertigo. Migraine history, headache around attacks, late nights, travel, missed meals, stress, nausea, vomiting, light sensitivity, or sound sensitivity all support this possibility.",
+        match: isRecurrentSpontaneous && hasRecurrentMigraineFeatures
+      },
+      {
+        name: "Vertebrobasilar TIA — discuss urgently with your doctor",
+        plain: "Recurrent non-positional vertigo with age over 60, diabetes, hypertension, smoking, heart disease, or attack-time symptoms like double vision, slurred speech, one-sided tingling or weakness, or inability to walk can be a vertebrobasilar TIA. This is the dangerous possibility to highlight for urgent medical review.",
+        match: isRecurrentSpontaneous && hasRecurrentTiaPattern,
+        color: "red"
+      },
+      {
+        name: "Meniere's disease is possible",
+        plain: "Meniere's disease is considered only when vertigo attacks last more than 20 minutes and there are one-ear symptoms such as loud low-pitched ringing, fullness or heaviness, fluctuating hearing loss during attacks, or gradually progressive hearing loss. Duration over 20 minutes by itself is not enough.",
+        match: isRecurrentSpontaneous && hasRecurrentMenierePattern
+      },
+      {
+        name: "Other less common causes of spontaneous vertigo",
+        plain: "If the attacks are clearly not triggered by head movement and do not strongly fit migraine, TIA, or Meniere's disease, the doctor may consider other less common causes after examination.",
+        match: isRecurrentSpontaneous && !isSpontaneousUnderTwenty
+      },
+      {
+        name: "Meniere's disease is unlikely from the duration",
+        plain: "Because these spontaneous attacks last less than 20 minutes, Meniere's disease should not be the main label. The more important possibilities to discuss are vestibular migraine and vertebrobasilar TIA, depending on the migraine features, risk factors, and warning symptoms.",
+        match: isRecurrentSpontaneous && isSpontaneousUnderTwenty
       },
       {
         name: "Balance nerve problem (vestibular neuritis)",
@@ -3531,7 +3768,7 @@
       {
         name: "Migraine-related dizziness",
         plain: "Dizziness that comes in attacks and may or may not come with a headache. A common and often unrecognised cause of recurrent vertigo.",
-        match: isRepeated && !stopsStill
+        match: isRepeated && !stopsStill && !a.recurrent_head_trigger
       },
       {
         name: "Low blood pressure on standing",
