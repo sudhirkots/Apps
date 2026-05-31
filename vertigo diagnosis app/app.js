@@ -853,7 +853,6 @@
       id: "brief_urgent",
       text: "Did you have any of these with the attack of dizziness or vertigo?",
       type: "single",
-      urgent: true,
       list: [
         "Double vision",
         "Tingling or numbness on one side of the body",
@@ -865,6 +864,20 @@
       options: [
         { id: "yes", text: "Yes — I had one or more of these" },
         { id: "none", text: "None of these" }
+      ]
+    },
+    {
+      id: "brief_urgent_detail",
+      text: "Which of these did you have?",
+      help: "Select all that apply.",
+      type: "multi",
+      options: [
+        { id: "double_vision", text: "Double vision" },
+        { id: "tingling_one_side", text: "Tingling or numbness on one side of the body" },
+        { id: "slurred_speech", text: "Slurred speech or trouble speaking" },
+        { id: "weakness_one_side", text: "Weakness on one side of the body" },
+        { id: "unable_to_walk", text: "Unable to walk or stand without support" },
+        { id: "severe_headache", text: "Sudden severe headache or neck pain" }
       ]
     },
     {
@@ -1365,9 +1378,11 @@
     if (question.id === "duration" && (feeling === "brief_resolved" || feeling === "single_attack")) return true;
     if (question.id === "urgent" && (feeling === "single_attack" || feeling === "repeated_attacks")) return true;
     if (question.id === "brief_urgent" && feeling !== "brief_resolved") return true;
+    if (question.id === "brief_urgent_detail" && !(feeling === "brief_resolved" && answers.brief_urgent === "yes")) return true;
     if (question.id === "brief_risk_factors" && feeling !== "brief_resolved") return true;
     if (question.id === "brief_circumstances") {
       if (feeling !== "brief_resolved") return true;
+      if (answers.brief_urgent === "yes") return true;
       var rfs = Array.isArray(answers.brief_risk_factors) ? answers.brief_risk_factors : [];
       if (rfs.some(function (v) { return v !== "none"; })) return true;
     }
@@ -1731,10 +1746,59 @@
     ].join("");
   }
 
+  function renderBriefUrgentSummary() {
+    const a = state.simplePatient.answers;
+    const DETAIL_LABELS = {
+      double_vision: "Double vision",
+      tingling_one_side: "Tingling or numbness on one side of the body",
+      slurred_speech: "Slurred speech or trouble speaking",
+      weakness_one_side: "Weakness on one side of the body",
+      unable_to_walk: "Unable to walk or stand without support",
+      severe_headache: "Sudden severe headache or neck pain"
+    };
+    const flagItems = Array.isArray(a.brief_urgent_detail) ? a.brief_urgent_detail : [];
+    const riskItems = Array.isArray(a.brief_risk_factors) ? a.brief_risk_factors.filter(function (v) { return v !== "none"; }) : [];
+    const riskLabels = { age_over_60: "Age over 60", hypertension: "High blood pressure", diabetes: "Diabetes", heart_disease: "Heart disease or irregular heart rhythm" };
+
+    app.innerHTML = [
+      '<div class="simple-summary-outer">',
+      '<div class="simple-summary-card" id="printArea">',
+      '<div class="summary-brand">',
+      dizzyPersonSmallSvg(),
+      '<div>',
+      '<h2 class="summary-brand-title">Your dizziness — for your doctor</h2>',
+      '<p class="muted" style="margin:0">Date: ' + escapeHtml(new Date().toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })) + '</p>',
+      '</div>',
+      '</div>',
+      '<div class="notice danger" style="font-size:1.1rem;margin-top:1rem">',
+      '<strong>' + iconSvg("alert") + ' Possible stroke warning — seek urgent medical attention.</strong>',
+      '</div>',
+      '<div class="poss-section" style="margin-top:1rem">',
+      '<div class="poss-item poss-item--red">',
+      '<strong>You may have had a vertebrobasilar TIA (stroke warning)</strong>',
+      '<p>A vertebrobasilar TIA is a brief reduction in blood supply to the brainstem or cerebellum — the parts of the brain that control balance and coordination. The symptoms you reported are warning signs of this.</p>',
+      flagItems.length ? '<p><strong>Warning signs you reported:</strong></p><ul class="poss-bullets">' + flagItems.map(function (id) { return '<li>' + escapeHtml(DETAIL_LABELS[id] || id) + '</li>'; }).join("") + '</ul>' : '',
+      riskItems.length ? '<p><strong>Risk factors:</strong> ' + escapeHtml(riskItems.map(function (id) { return riskLabels[id] || id; }).join(", ")) + '</p>' : '',
+      '<p><strong>Please go urgently to the nearest hospital or see a doctor today. Do not wait.</strong></p>',
+      '</div>',
+      '</div>',
+      '</div>',
+      '<div class="summary-actions no-print">',
+      '<button class="button" type="button" onclick="window.print()">Print / Save as PDF</button>',
+      '<button class="button secondary" type="button" data-action="go-home">Start again</button>',
+      '</div>',
+      '</div>'
+    ].join("");
+  }
+
   function renderSimpleSummary() {
     const sp = state.simplePatient;
     const a = sp.answers;
     const hasUrgent = a.urgent === "yes" || a.brief_urgent === "yes";
+    if (a.feeling === "brief_resolved" && a.brief_urgent === "yes") {
+      renderBriefUrgentSummary();
+      return;
+    }
     const earItems = Array.isArray(a.ear) ? a.ear.filter(function (v) { return v !== "none"; }) : [];
     const riskFactorItems = Array.isArray(a.brief_risk_factors) ? a.brief_risk_factors.filter(function (v) { return v !== "none"; }) : [];
     const recurrentMigraineItems = Array.isArray(a.recurrent_migraine_features) ? a.recurrent_migraine_features.filter(function (v) { return v !== "none"; }) : [];
