@@ -850,25 +850,8 @@
       ]
     },
     {
-      id: "brief_urgent",
-      text: "Did you have any of these with the attack of dizziness or vertigo?",
-      type: "single",
-      list: [
-        "Double vision",
-        "Tingling or numbness on one side of the body",
-        "Slurred speech or trouble speaking",
-        "Weakness on one side of the body",
-        "Unable to walk or stand without support",
-        "Sudden severe headache or neck pain"
-      ],
-      options: [
-        { id: "yes", text: "Yes — I had one or more of these" },
-        { id: "none", text: "None of these" }
-      ]
-    },
-    {
       id: "brief_urgent_detail",
-      text: "Which of these did you have?",
+      text: "Did you have any of these with the attack of dizziness or vertigo?",
       help: "Select all that apply.",
       type: "multi",
       options: [
@@ -877,7 +860,8 @@
         { id: "slurred_speech", text: "Slurred speech or trouble speaking" },
         { id: "weakness_one_side", text: "Weakness on one side of the body" },
         { id: "unable_to_walk", text: "Unable to walk or stand without support" },
-        { id: "severe_headache", text: "Sudden severe headache or neck pain" }
+        { id: "severe_headache", text: "Sudden severe headache or neck pain" },
+        { id: "none", text: "None of these" }
       ]
     },
     {
@@ -1376,13 +1360,12 @@
     if (question.id === "stops_still" && feeling === "brief_resolved") return true;
     if (question.id === "duration" && feeling === "repeated_attacks") return true;
     if (question.id === "duration" && (feeling === "brief_resolved" || feeling === "single_attack")) return true;
-    if (question.id === "urgent" && (feeling === "single_attack" || feeling === "repeated_attacks")) return true;
-    if (question.id === "brief_urgent" && feeling !== "brief_resolved") return true;
-    if (question.id === "brief_urgent_detail" && !(feeling === "brief_resolved" && answers.brief_urgent === "yes")) return true;
+    if (question.id === "urgent" && (feeling === "single_attack" || feeling === "repeated_attacks" || feeling === "brief_resolved")) return true;
+    if (question.id === "brief_urgent_detail" && feeling !== "brief_resolved") return true;
     if (question.id === "brief_risk_factors" && feeling !== "brief_resolved") return true;
     if (question.id === "brief_circumstances") {
       if (feeling !== "brief_resolved") return true;
-      if (answers.brief_urgent === "yes") return true;
+      if (Array.isArray(answers.brief_urgent_detail) && answers.brief_urgent_detail.some(function(v){return v !== "none";})) return true;
       var rfs = Array.isArray(answers.brief_risk_factors) ? answers.brief_risk_factors : [];
       if (rfs.some(function (v) { return v !== "none"; })) return true;
     }
@@ -1470,7 +1453,7 @@
       ].join("");
     }
 
-    const isSplitNoneQuestion = question.id === "recurrent_migraine_features" || question.id === "recurrent_tia_risk" || question.id === "recurrent_tia_warnings" || question.id === "recurrent_meniere_features" || question.id === "recurrent_orthostatic_features" || question.id === "recurrent_panic_features" || question.id === "brief_risk_factors";
+    const isSplitNoneQuestion = question.id === "recurrent_migraine_features" || question.id === "recurrent_tia_risk" || question.id === "recurrent_tia_warnings" || question.id === "recurrent_meniere_features" || question.id === "recurrent_orthostatic_features" || question.id === "recurrent_panic_features" || question.id === "brief_risk_factors" || question.id === "brief_urgent_detail";
     const options = isSplitNoneQuestion
       ? [
           '<div class="simple-options split-none">',
@@ -1531,7 +1514,8 @@
       "recurrent_meniere_features",
       "recurrent_orthostatic_features",
       "recurrent_panic_features",
-      "brief_risk_factors"
+      "brief_risk_factors",
+      "brief_urgent_detail"
     ].includes(questionId);
   }
 
@@ -1794,8 +1778,8 @@
   function renderSimpleSummary() {
     const sp = state.simplePatient;
     const a = sp.answers;
-    const hasUrgent = a.urgent === "yes" || a.brief_urgent === "yes";
-    if (a.feeling === "brief_resolved" && a.brief_urgent === "yes") {
+    const hasUrgent = a.urgent === "yes" || (Array.isArray(a.brief_urgent_detail) && a.brief_urgent_detail.some(function(v){return v !== "none";}));
+    if (a.feeling === "brief_resolved" && Array.isArray(a.brief_urgent_detail) && a.brief_urgent_detail.some(function(v){return v !== "none";})) {
       renderBriefUrgentSummary();
       return;
     }
@@ -3908,7 +3892,7 @@
     const hasRecurrentOrthostaticPattern = recurrentOrthostaticItems.length > 0;
     const hasRecurrentPanicPattern = recurrentPanicItems.length > 0;
 
-    const hasUrgentFlags = a.urgent === "yes" || a.brief_urgent === "yes";
+    const hasUrgentFlags = a.urgent === "yes" || (Array.isArray(a.brief_urgent_detail) && a.brief_urgent_detail.some(function(v){return v !== "none";}));
     const singleHasRedFlags = a.single_red_flags === "yes";
     const VASCULAR_IDS_P = ["double_vision", "tingling_one_side", "slurred_speech", "weakness_one_side", "new_ringing", "reduced_hearing"];
     const detailFlagsP = Array.isArray(a.single_red_flag_detail) ? a.single_red_flag_detail : [];
