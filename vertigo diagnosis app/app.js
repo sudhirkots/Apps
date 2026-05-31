@@ -2753,13 +2753,10 @@
         renderSimplePatient();
         return;
       }
-      if ((sqid === "recurrent_head_trigger" && soid === "yes") || (sqid === "recurrent_trigger_clarify" && soid === "only_head_position")) {
-        state.simplePatient.positionalRedirect = true;
-        renderSimplePatient();
-        return;
-      }
-      if (sqid === "stops_still" && soid === "yes_returns") {
-        state.simplePatient.positionalRedirect = true;
+      if ((sqid === "recurrent_head_trigger" && soid === "yes") || (sqid === "recurrent_trigger_clarify" && soid === "only_head_position") || (sqid === "stops_still" && soid === "yes_returns")) {
+        state.simplePatient.positionalFlow = true;
+        state.simplePatient.positionalRedirect = false;
+        state.simplePatient.positionalStep = 0;
         renderSimplePatient();
         return;
       }
@@ -2854,7 +2851,7 @@
         state.simplePatient.positionalStep--;
       } else {
         state.simplePatient.positionalFlow = false;
-        state.simplePatient.positionalRedirect = true;
+        state.simplePatient.positionalRedirect = false;
       }
       renderSimplePatient();
     }
