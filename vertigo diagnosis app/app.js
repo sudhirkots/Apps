@@ -633,11 +633,11 @@
       help: "Select all that apply.",
       type: "multi",
       options: [
-        { id: "turning_in_bed", text: "Turning over in bed" },
-        { id: "lying_down_sitting_up", text: "Lying down or sitting up from bed" },
-        { id: "looking_up", text: "Looking up" },
-        { id: "bending_forward", text: "Bending forward" },
-        { id: "not_sure", text: "Not sure" }
+        { id: "turning_in_bed", text: "Only on turning over in bed" },
+        { id: "lying_down_sitting_up", text: "Only on lying down or sitting up" },
+        { id: "looking_up", text: "Only on looking up" },
+        { id: "looking_down", text: "Only on looking down or bending forward" },
+        { id: "any_all", text: "Any or all of these movements" }
       ]
     },
     {
@@ -1560,30 +1560,58 @@
     const answer = state.simplePatient.positionalAnswers[question.id];
     const currentValues = Array.isArray(answer) ? answer : (answer ? [answer] : []);
     const isMulti = question.type === "multi";
+    const isSplitAny = question.id === "pos_trigger";
+    const specificOpts = isSplitAny ? (question.options || []).filter(function (o) { return o.id !== "any_all"; }) : (question.options || []);
+    const anyAllOpt = isSplitAny ? (question.options || []).find(function (o) { return o.id === "any_all"; }) : null;
+    const isAnyAllSelected = isSplitAny && currentValues.includes("any_all");
+    const specificSelected = currentValues.filter(function (v) { return v !== "any_all"; }).length > 0;
     const hasAnswer = currentValues.length > 0;
 
-    const options = (question.options || []).map(function (opt) {
+    function renderCheckbox(opt) {
       const selected = currentValues.includes(opt.id);
-      if (isMulti) {
-        return [
-          '<label class="simple-option' + (selected ? " selected" : "") + '">',
-          '<input class="sr-only" type="checkbox" data-pos-qid="' + escapeHtml(question.id) + '" data-pos-oid="' + escapeHtml(opt.id) + '"' + (selected ? " checked" : "") + '>',
-          '<span class="sp-ind sp-ind-check' + (selected ? " sp-ind-selected" : "") + '"></span>',
-          '<span class="simple-option-text">' + escapeHtml(opt.text) + '</span>',
-          '</label>'
-        ].join("");
-      }
       return [
-        '<button class="simple-option' + (selected ? " selected" : "") + '" type="button"',
-        ' data-action="simple-positional-answer" data-qid="' + escapeHtml(question.id) + '" data-oid="' + escapeHtml(opt.id) + '">',
-        '<span class="sp-ind sp-ind-radio' + (selected ? " sp-ind-selected" : "") + '"></span>',
-        '<span class="sp-body">',
+        '<label class="simple-option' + (selected ? " selected" : "") + '">',
+        '<input class="sr-only" type="checkbox" data-pos-qid="' + escapeHtml(question.id) + '" data-pos-oid="' + escapeHtml(opt.id) + '"' + (selected ? " checked" : "") + '>',
+        '<span class="sp-ind sp-ind-check' + (selected ? " sp-ind-selected" : "") + '"></span>',
         '<span class="simple-option-text">' + escapeHtml(opt.text) + '</span>',
-        opt.desc ? '<span class="simple-option-desc">' + escapeHtml(opt.desc) + '</span>' : "",
-        '</span>',
-        '</button>'
+        '</label>'
       ].join("");
-    }).join("");
+    }
+
+    const options = isSplitAny ? [
+      '<div class="simple-options split-none multi">',
+      '<div class="simple-options-main">',
+      specificOpts.map(renderCheckbox).join(""),
+      '<div class="actions" style="margin-top:0.75rem"><button class="button" type="button" data-action="simple-positional-next"' + (!specificSelected ? " disabled" : "") + '>Done</button></div>',
+      '</div>',
+      '<div class="simple-none-separator" aria-hidden="true"></div>',
+      '<div class="simple-options-none">',
+      anyAllOpt ? [
+        '<button class="simple-option' + (isAnyAllSelected ? " selected" : "") + '" type="button"',
+        ' data-action="simple-positional-any-all">',
+        '<span class="sp-ind sp-ind-check' + (isAnyAllSelected ? " sp-ind-selected" : "") + '"></span>',
+        '<span class="simple-option-text">' + escapeHtml(anyAllOpt.text) + '</span>',
+        '</button>'
+      ].join("") : "",
+      '</div>',
+      '</div>'
+    ].join("") : (function () {
+      const opts = specificOpts.map(function (opt) {
+        const selected = currentValues.includes(opt.id);
+        if (isMulti) return renderCheckbox(opt);
+        return [
+          '<button class="simple-option' + (selected ? " selected" : "") + '" type="button"',
+          ' data-action="simple-positional-answer" data-qid="' + escapeHtml(question.id) + '" data-oid="' + escapeHtml(opt.id) + '">',
+          '<span class="sp-ind sp-ind-radio' + (selected ? " sp-ind-selected" : "") + '"></span>',
+          '<span class="sp-body">',
+          '<span class="simple-option-text">' + escapeHtml(opt.text) + '</span>',
+          opt.desc ? '<span class="simple-option-desc">' + escapeHtml(opt.desc) + '</span>' : "",
+          '</span>',
+          '</button>'
+        ].join("");
+      }).join("");
+      return '<div class="simple-options' + (isMulti ? " multi" : "") + '">' + opts + '</div>';
+    })();
 
     app.innerHTML = [
       '<div class="simple-wrapper">',
@@ -1593,13 +1621,13 @@
         return '<span class="sdot' + (i === stepIndex ? " active" : i < stepIndex ? " done" : "") + '"></span>';
       }).join(""),
       '</div>',
-      '<div class="simple-card">',
+      '<div class="simple-card' + (isSplitAny ? ' split-none-card' : '') + '">',
+      isSplitAny ? '<div class="simple-question-header">' : '',
       '<p class="simple-q">' + escapeHtml(question.text) + '</p>',
       question.help ? '<p class="simple-help">' + escapeHtml(question.help) + '</p>' : "",
-      '<div class="simple-options' + (isMulti ? " multi" : "") + '">',
+      isSplitAny ? '</div>' : '',
       options,
-      '</div>',
-      isMulti ? '<div class="actions"><button class="button" type="button" data-action="simple-positional-next"' + (!hasAnswer ? " disabled" : "") + '>Done</button></div>' : "",
+      !isSplitAny && isMulti ? '<div class="actions"><button class="button" type="button" data-action="simple-positional-next"' + (!hasAnswer ? " disabled" : "") + '>Done</button></div>' : "",
       '</div>',
       '</div>'
     ].join("");
@@ -1607,7 +1635,8 @@
 
   function renderSimplePositionalSummary() {
     const pa = state.simplePatient.positionalAnswers;
-    const triggerItems = Array.isArray(pa.pos_trigger) ? pa.pos_trigger.filter(function (v) { return v !== "not_sure"; }) : [];
+    const triggerAnyAll = Array.isArray(pa.pos_trigger) && pa.pos_trigger.includes("any_all");
+    const triggerItems = Array.isArray(pa.pos_trigger) ? pa.pos_trigger.filter(function (v) { return v !== "any_all" && v !== "not_sure"; }) : [];
     const durationQ = SIMPLE_POSITIONAL_QUESTIONS.find(function (q) { return q.id === "pos_duration"; });
     const sideQ = SIMPLE_POSITIONAL_QUESTIONS.find(function (q) { return q.id === "pos_side"; });
     const triggerQ = SIMPLE_POSITIONAL_QUESTIONS.find(function (q) { return q.id === "pos_trigger"; });
@@ -1621,7 +1650,7 @@
 
     const rows = [
       ["Type", "Positional vertigo"],
-      ["Triggers", triggerLabels.length ? triggerLabels.join(", ") : "Not specified"],
+      ["Triggers", triggerAnyAll ? "Any or all of these movements" : (triggerLabels.length ? triggerLabels.join(", ") : "Not specified")],
       ["Duration of each spell", durationLabel],
       ["Worse side", sideLabel]
     ].filter(function (r) { return r[1]; });
@@ -2567,10 +2596,13 @@
       var pqId = target.dataset.posQid;
       var poId = target.dataset.posOid;
       var posExisting = Array.isArray(state.simplePatient.positionalAnswers[pqId]) ? state.simplePatient.positionalAnswers[pqId].slice() : [];
+      // clear "any_all" if a specific option is being selected
+      var anyAllIdx = posExisting.indexOf("any_all");
+      if (anyAllIdx !== -1 && target.checked) posExisting.splice(anyAllIdx, 1);
       toggleArrayValue(posExisting, poId, target.checked);
       state.simplePatient.positionalAnswers[pqId] = posExisting;
       var posNextBtn = app.querySelector('[data-action="simple-positional-next"]');
-      if (posNextBtn) posNextBtn.disabled = posExisting.length === 0;
+      if (posNextBtn) posNextBtn.disabled = posExisting.filter(function (v) { return v !== "any_all"; }).length === 0;
       document.querySelectorAll('[data-pos-qid="' + pqId + '"]').forEach(function (cb) {
         var lbl = cb.closest(".simple-option");
         if (lbl) lbl.classList.toggle("selected", posExisting.includes(cb.dataset.posOid));
@@ -2799,6 +2831,12 @@
       var pqid = actionTarget.dataset.qid;
       var poid = actionTarget.dataset.oid;
       state.simplePatient.positionalAnswers[pqid] = poid;
+      state.simplePatient.positionalStep++;
+      if (state.simplePatient.positionalStep >= SIMPLE_POSITIONAL_QUESTIONS.length) state.simplePatient.positionalDone = true;
+      renderSimplePatient();
+    }
+    if (action === "simple-positional-any-all") {
+      state.simplePatient.positionalAnswers["pos_trigger"] = ["any_all"];
       state.simplePatient.positionalStep++;
       if (state.simplePatient.positionalStep >= SIMPLE_POSITIONAL_QUESTIONS.length) state.simplePatient.positionalDone = true;
       renderSimplePatient();
