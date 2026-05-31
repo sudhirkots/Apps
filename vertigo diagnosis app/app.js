@@ -641,15 +641,6 @@
       ]
     },
     {
-      id: "pos_duration",
-      text: "How long does each dizzy spell last once it starts?",
-      type: "single",
-      options: [
-        { id: "under_five_min", text: "Less than 5 minutes", desc: "The spinning lasts a few seconds to a minute, though a mild unsteadiness may linger for up to 3–4 minutes — but under 5 minutes in total" },
-        { id: "over_five_min", text: "More than 5 minutes each time" }
-      ]
-    },
-    {
       id: "pos_side",
       text: "Is one side worse than the other?",
       type: "single",
@@ -658,6 +649,15 @@
         { id: "left", text: "Left side — worse when turning left or lying on the left", desc: "" },
         { id: "both", text: "Both sides seem equally bad" },
         { id: "not_sure", text: "Not sure" }
+      ]
+    },
+    {
+      id: "pos_duration",
+      text: "How long does each dizzy spell last once it starts?",
+      type: "single",
+      options: [
+        { id: "under_five_min", text: "Less than 5 minutes", desc: "The spinning lasts a few seconds to a minute, though a mild unsteadiness may linger for up to 3–4 minutes — but under 5 minutes in total" },
+        { id: "over_five_min", text: "More than 5 minutes each time" }
       ]
     }
   ];
