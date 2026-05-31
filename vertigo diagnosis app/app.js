@@ -687,22 +687,33 @@
     },
     {
       id: "recurrent_head_trigger",
-      text: "Are your attacks triggered by sudden head movements?",
-      help: "For example: looking up, looking down, lying down, getting up from lying down, or rolling over in bed.",
+      text: "What triggers your attacks?",
+      help: "Choose the closest answer.",
       type: "single",
       options: [
-        { id: "yes", text: "Yes, the attacks are triggered by these head movements" },
-        { id: "no", text: "No, they are not triggered by head movement" },
-        { id: "not_sure", text: "I am not sure" }
+        { id: "yes", text: "Sudden head movement, for example looking up, looking down, lying down, getting up from bed, or rolling over in bed" },
+        { id: "no", text: "They happen without any head movement, for example when I am watching television, working on a computer, or working in a kitchen without moving my head. I suddenly get an attack of dizziness" },
+        { id: "not_sure", text: "I don't know. I am not sure if they happen with head movement. Sometimes they happen with head movement, and sometimes they happen without any head movement." }
+      ]
+    },
+    {
+      id: "recurrent_trigger_clarify",
+      text: "Please try once more: when do the attacks happen?",
+      help: "Choose the closest answer. This helps separate positional vertigo from spontaneous non-positional vertigo.",
+      type: "single",
+      options: [
+        { id: "sitting_still", text: "It can happen while I am sitting and watching television, working on a computer, or doing something without moving my head" },
+        { id: "only_head_position", text: "It happens only when I turn in bed, look up, look down, bend forward, lie down, or get up" },
+        { id: "still_not_sure", text: "I still cannot tell whether it is related to head movement" }
       ]
     },
     {
       id: "spontaneous_confirm",
-      text: "Can the attacks happen while sitting still or working without head movement?",
-      help: "For example while watching television, working on a computer, or working in the kitchen.",
+      text: "Do your attacks happen when you are sitting still, working on a computer, or watching television without any head movement?",
+      help: "Choose yes if you suddenly get spinning or dizziness even though you have not moved your head.",
       type: "single",
       options: [
-        { id: "yes", text: "Yes, they can happen without head movement" },
+        { id: "yes", text: "Yes, I get an attack of spinning or dizziness without head movement" },
         { id: "no", text: "No, they are usually related to head movement" },
         { id: "not_sure", text: "I am not sure" }
       ]
@@ -728,10 +739,8 @@
         { id: "migraine_history", text: "I have had migraine headaches in the past" },
         { id: "headache_with_vertigo", text: "Headache happens before, during, or after the vertigo attack" },
         { id: "late_night_travel_stress_missed_meal", text: "Late night, travel, missing a meal, or stress can trigger the attack" },
-        { id: "nausea", text: "Nausea during the attack" },
-        { id: "vomiting", text: "Vomiting during the attack" },
-        { id: "photophobia", text: "Light sensitivity during the attack" },
-        { id: "phonophobia", text: "Sound sensitivity during the attack" },
+        { id: "nausea_or_vomiting", text: "Nausea or vomiting during the attack" },
+        { id: "light_or_sound_sensitivity", text: "Light sensitivity or sound sensitivity during the attack" },
         { id: "none", text: "None of these" }
       ]
     },
@@ -759,7 +768,7 @@
         { id: "slurred_speech", text: "Slurring of speech or difficulty speaking" },
         { id: "one_sided_tingling_weakness", text: "Tingling, numbness, or weakness on one side of the body" },
         { id: "cannot_walk", text: "Unable to walk during the attack" },
-        { id: "none", text: "None of these" }
+        { id: "none", text: "No red flags" }
       ]
     },
     {
@@ -774,6 +783,33 @@
         { id: "fluctuating_hearing_loss", text: "Hearing worsens before or during the attack, then fluctuates" },
         { id: "progressive_one_year_hearing_loss", text: "Hearing loss has gradually progressed over about one year" },
         { id: "none", text: "None of these" }
+      ]
+    },
+    {
+      id: "recurrent_orthostatic_features",
+      text: "Could these attacks be related to standing up suddenly?",
+      help: "Select all that apply.",
+      type: "multi",
+      options: [
+        { id: "standing_from_lying", text: "I feel dizzy only when I stand up suddenly from lying down" },
+        { id: "getting_up_washroom", text: "I feel dizzy when I get up to go to the washroom" },
+        { id: "bp_medicines", text: "I am on blood pressure medicines" },
+        { id: "prostate_medicines", text: "I am on medicines for prostate enlargement" },
+        { id: "none", text: "No" }
+      ]
+    },
+    {
+      id: "recurrent_panic_features",
+      text: "Do you suddenly feel fear, palpitations, breathlessness, or chest discomfort with these attacks?",
+      help: "Select all that apply. These symptoms can point toward panic attacks or anxiety-related episodes.",
+      type: "multi",
+      options: [
+        { id: "fear", text: "Sudden fear during the attack" },
+        { id: "palpitations", text: "Palpitations or racing heartbeat" },
+        { id: "breathlessness", text: "Breathlessness" },
+        { id: "chest_discomfort", text: "Chest discomfort" },
+        { id: "impending_doom", text: "A sense of impending doom" },
+        { id: "none", text: "No" }
       ]
     },
     {
@@ -1283,19 +1319,28 @@
     ].join("");
   }
 
-  function shouldSkipSimpleQuestion(question, answers) {
+  function shouldSkipSimpleQuestion(question, answers, isBackward) {
     var feeling = answers.feeling;
+    var existingAnswer = answers[question.id];
+    if (!isBackward && shouldAutoAdvanceSimpleNone(question.id) && Array.isArray(existingAnswer) && existingAnswer.includes("none")) return true;
     if (question.id === "pattern" && (feeling === "single_attack" || feeling === "brief_resolved" || feeling === "repeated_attacks")) return true;
     if (question.id === "recurrent_head_trigger" && feeling !== "repeated_attacks") return true;
-    if (question.id === "spontaneous_confirm" && !(feeling === "repeated_attacks" && answers.recurrent_head_trigger === "no")) return true;
+    if (question.id === "recurrent_trigger_clarify" && !(feeling === "repeated_attacks" && answers.recurrent_head_trigger === "not_sure")) return true;
+    if (question.id === "spontaneous_confirm") return true;
     if (question.id === "recurrent_spontaneous_duration") {
-      return !(feeling === "repeated_attacks" && answers.recurrent_head_trigger === "no" && answers.spontaneous_confirm === "yes");
+      return !(feeling === "repeated_attacks" && (answers.recurrent_head_trigger === "no" || answers.recurrent_trigger_clarify === "sitting_still"));
     }
     if (["recurrent_migraine_features", "recurrent_tia_risk", "recurrent_tia_warnings"].includes(question.id)) {
-      return !(feeling === "repeated_attacks" && answers.recurrent_head_trigger === "no" && answers.spontaneous_confirm === "yes");
+      return !(feeling === "repeated_attacks" && (answers.recurrent_head_trigger === "no" || answers.recurrent_trigger_clarify === "sitting_still"));
     }
     if (question.id === "recurrent_meniere_features") {
-      return !(feeling === "repeated_attacks" && answers.recurrent_head_trigger === "no" && answers.spontaneous_confirm === "yes" && answers.recurrent_spontaneous_duration === "over_twenty_minutes");
+      return !(feeling === "repeated_attacks" && (answers.recurrent_head_trigger === "no" || answers.recurrent_trigger_clarify === "sitting_still") && answers.recurrent_spontaneous_duration === "over_twenty_minutes");
+    }
+    if (question.id === "recurrent_orthostatic_features") {
+      return !(feeling === "repeated_attacks" && (answers.recurrent_head_trigger === "no" || answers.recurrent_trigger_clarify === "sitting_still"));
+    }
+    if (question.id === "recurrent_panic_features") {
+      return !(feeling === "repeated_attacks" && (answers.recurrent_head_trigger === "no" || answers.recurrent_trigger_clarify === "sitting_still"));
     }
     if (question.id === "stops_still" && feeling === "repeated_attacks") return true;
     if (question.id === "stops_still" && feeling === "brief_resolved") return true;
@@ -1337,8 +1382,10 @@
       }
       return;
     }
+    var isGoingBack = state.simplePatient._goingBack;
+    state.simplePatient._goingBack = false;
     while (state.simplePatient.step < SIMPLE_PATIENT_QUESTIONS.length &&
-           shouldSkipSimpleQuestion(SIMPLE_PATIENT_QUESTIONS[state.simplePatient.step], state.simplePatient.answers)) {
+           shouldSkipSimpleQuestion(SIMPLE_PATIENT_QUESTIONS[state.simplePatient.step], state.simplePatient.answers, isGoingBack)) {
       state.simplePatient.step++;
     }
     const step = state.simplePatient.step;
@@ -1358,9 +1405,18 @@
     const isMulti = question.type === "multi";
     const hasAnswer = currentValues.length > 0;
 
-    const options = (question.options || []).map(function (opt) {
+    function renderSimpleOption(opt) {
       const selected = currentValues.includes(opt.id);
       if (isMulti) {
+        if (isSplitNoneQuestion && opt.id === "none") {
+          return [
+            '<button class="simple-option' + (selected ? " selected" : "") + '" type="button"',
+            ' data-action="simple-none-answer" data-qid="' + escapeHtml(question.id) + '">',
+            '<span class="sp-ind sp-ind-check' + (selected ? " sp-ind-selected" : "") + '"></span>',
+            '<span class="simple-option-text">' + escapeHtml(opt.text) + '</span>',
+            '</button>'
+          ].join("");
+        }
         return [
           '<label class="simple-option' + (selected ? " selected" : "") + '">',
           '<input class="sr-only" type="checkbox" data-simple-qid="' + escapeHtml(question.id) + '" data-simple-oid="' + escapeHtml(opt.id) + '"' + (selected ? " checked" : "") + '>',
@@ -1379,7 +1435,22 @@
         '</span>',
         '</button>'
       ].join("");
-    }).join("");
+    }
+
+    const isSplitNoneQuestion = question.id === "recurrent_migraine_features" || question.id === "recurrent_tia_risk" || question.id === "recurrent_tia_warnings" || question.id === "recurrent_meniere_features" || question.id === "recurrent_orthostatic_features" || question.id === "recurrent_panic_features" || question.id === "brief_risk_factors";
+    const options = isSplitNoneQuestion
+      ? [
+          '<div class="simple-options split-none">',
+          '<div class="simple-options-main">',
+          (question.options || []).filter(function (opt) { return opt.id !== "none"; }).map(renderSimpleOption).join(""),
+          '</div>',
+          '<div class="simple-none-separator" aria-hidden="true"></div>',
+          '<div class="simple-options-none">',
+          (question.options || []).filter(function (opt) { return opt.id === "none"; }).map(renderSimpleOption).join(""),
+          '</div>',
+          '</div>'
+        ].join("")
+      : '<div class="simple-options' + (isMulti ? " multi" : "") + '">' + (question.options || []).map(renderSimpleOption).join("") + '</div>';
 
     app.innerHTML = [
       '<div class="simple-wrapper">',
@@ -1389,9 +1460,11 @@
         return '<span class="sdot' + (i === stepIndex ? " active" : i < stepIndex ? " done" : "") + '"></span>';
       }).join(""),
       '</div>',
-      '<div class="simple-card">',
+      '<div class="simple-card' + (isSplitNoneQuestion ? ' split-none-card' : '') + '">',
+      isSplitNoneQuestion ? '<div class="simple-question-header">' : '',
       '<p class="simple-q">' + escapeHtml(question.text) + '</p>',
       question.help ? '<p class="simple-help">' + escapeHtml(question.help) + '</p>' : "",
+      isSplitNoneQuestion ? '</div>' : '',
       question.list ? (function () {
         var yesOpt = question.options[0];
         var noneOpt = question.options[1];
@@ -1410,11 +1483,29 @@
           '<div class="flag-card-header"><span class="flag-dot green"></span>Red flags absent — none of these apply</div>',
           '</button>'
         ].join("");
-      })() : '<div class="simple-options' + (isMulti ? " multi" : "") + '">' + options + '</div>',
+      })() : options,
       !question.list && isMulti ? '<div class="actions"><button class="button" type="button" data-action="simple-next"' + (!hasAnswer ? " disabled" : "") + '>Done</button></div>' : "",
       '</div>',
       '</div>'
     ].join("");
+  }
+
+  function shouldAutoAdvanceSimpleNone(questionId) {
+    return [
+      "recurrent_migraine_features",
+      "recurrent_tia_risk",
+      "recurrent_tia_warnings",
+      "recurrent_meniere_features",
+      "recurrent_orthostatic_features",
+      "recurrent_panic_features",
+      "brief_risk_factors"
+    ].includes(questionId);
+  }
+
+  function advanceSimpleQuestion() {
+    state.simplePatient.step++;
+    if (state.simplePatient.step >= SIMPLE_PATIENT_QUESTIONS.length) state.simplePatient.done = true;
+    renderSimplePatient();
   }
 
   function renderSimpleUrgentWarning() {
@@ -1552,8 +1643,9 @@
       }).join(""),
       '</tbody></table>',
       '<div class="poss-section">',
-      '<h3>Possible explanations to discuss with your doctor</h3>',
-      '<p class="muted" style="font-size:0.88rem;margin-bottom:10px">This is not a diagnosis. Your doctor will confirm the cause after examination.</p>',
+      '<div class="diagnosis-disclaimer">This is not a diagnosis.</div>',
+      '<p class="poss-section-subtitle">On the basis of your history these are the possibilities we feel are likely, but it is your doctor who will take the history, examine you, and determine the actual cause. This does not substitute for your doctor\'s assessment.</p>',
+      '<p class="poss-section-intro">The possibilities your doctor may need to consider based on your history are:</p>',
       '<div class="poss-list">',
       '<div class="poss-item"><strong>BPPV (Benign Paroxysmal Positional Vertigo)</strong><p>The most likely cause of positional vertigo. Crystals in the inner ear shift to the wrong canal, causing brief spinning with certain head positions. ' + (isClassicBPPV ? 'The very brief duration of your spells strongly fits this pattern. ' : '') + 'Your doctor will do a Dix-Hallpike test to confirm and may treat it with a simple head repositioning manoeuvre (Epley).</p></div>',
       '<div class="poss-item"><strong>Other positional vertigo</strong><p>Less commonly, positional vertigo can have other causes. Your doctor\'s examination will help distinguish these.</p></div>',
@@ -1596,22 +1688,35 @@
     const recurrentTiaRiskItems = Array.isArray(a.recurrent_tia_risk) ? a.recurrent_tia_risk.filter(function (v) { return v !== "none"; }) : [];
     const recurrentTiaWarningItems = Array.isArray(a.recurrent_tia_warnings) ? a.recurrent_tia_warnings.filter(function (v) { return v !== "none"; }) : [];
     const recurrentMeniereItems = Array.isArray(a.recurrent_meniere_features) ? a.recurrent_meniere_features.filter(function (v) { return v !== "none"; }) : [];
+    const recurrentOrthostaticItems = Array.isArray(a.recurrent_orthostatic_features) ? a.recurrent_orthostatic_features.filter(function (v) { return v !== "none"; }) : [];
+    const recurrentPanicItems = Array.isArray(a.recurrent_panic_features) ? a.recurrent_panic_features.filter(function (v) { return v !== "none"; }) : [];
     const hasRiskFactors = riskFactorItems.length > 0;
     const showRiskNotice = a.feeling === "brief_resolved" && hasRiskFactors;
     const showSingleUrgentNotice = a.feeling === "single_attack";
     const showRecurrentTiaNotice = recurrentTiaWarningItems.length > 0 || recurrentTiaRiskItems.length > 0;
     const possibilities = computeSimplePossibilities(a);
 
+    const noneFeatureLabels = [];
+    if (!recurrentMigraineItems.length && a.recurrent_migraine_features) noneFeatureLabels.push("Migraine features");
+    if (!recurrentTiaRiskItems.length && a.recurrent_tia_risk) noneFeatureLabels.push("TIA risk factors");
+    if (!recurrentTiaWarningItems.length && a.recurrent_tia_warnings) noneFeatureLabels.push("TIA warning symptoms");
+    if (!recurrentMeniereItems.length && a.recurrent_meniere_features) noneFeatureLabels.push("Meniere-type ear features");
+    if (!recurrentOrthostaticItems.length && a.recurrent_orthostatic_features) noneFeatureLabels.push("Standing / BP-related features");
+    if (!recurrentPanicItems.length && a.recurrent_panic_features) noneFeatureLabels.push("Panic / anxiety features");
+
     const rows = [
       ["Attack or constant", getSimpleLabel("feeling", a.feeling)],
       ["Pattern", getSimpleLabel("pattern", a.pattern)],
       ["Head-movement trigger", getSimpleLabel("recurrent_head_trigger", a.recurrent_head_trigger)],
+      ["Trigger clarification", getSimpleLabel("recurrent_trigger_clarify", a.recurrent_trigger_clarify)],
       ["Spontaneous/non-positional", getSimpleLabel("spontaneous_confirm", a.spontaneous_confirm)],
       ["Spontaneous attack duration", getSimpleLabel("recurrent_spontaneous_duration", a.recurrent_spontaneous_duration)],
-      ["Migraine features", recurrentMigraineItems.length ? recurrentMigraineItems.map(function (id) { return getSimpleOptionText("recurrent_migraine_features", id); }).join(", ") : (a.recurrent_migraine_features ? "None" : "")],
-      ["TIA risk factors", recurrentTiaRiskItems.length ? recurrentTiaRiskItems.map(function (id) { return getSimpleOptionText("recurrent_tia_risk", id); }).join(", ") : (a.recurrent_tia_risk ? "None" : "")],
-      ["TIA warning symptoms", recurrentTiaWarningItems.length ? recurrentTiaWarningItems.map(function (id) { return getSimpleOptionText("recurrent_tia_warnings", id); }).join(", ") : (a.recurrent_tia_warnings ? "None" : "")],
-      ["Meniere-type ear features", recurrentMeniereItems.length ? recurrentMeniereItems.map(function (id) { return getSimpleOptionText("recurrent_meniere_features", id); }).join(", ") : (a.recurrent_meniere_features ? "None" : "")],
+      ["Migraine features", recurrentMigraineItems.length ? recurrentMigraineItems.map(function (id) { return getSimpleOptionText("recurrent_migraine_features", id); }).join(", ") : ""],
+      ["TIA risk factors", recurrentTiaRiskItems.length ? recurrentTiaRiskItems.map(function (id) { return getSimpleOptionText("recurrent_tia_risk", id); }).join(", ") : ""],
+      ["TIA warning symptoms", recurrentTiaWarningItems.length ? recurrentTiaWarningItems.map(function (id) { return getSimpleOptionText("recurrent_tia_warnings", id); }).join(", ") : ""],
+      ["Meniere-type ear features", recurrentMeniereItems.length ? recurrentMeniereItems.map(function (id) { return getSimpleOptionText("recurrent_meniere_features", id); }).join(", ") : ""],
+      ["Standing/BP-related features", recurrentOrthostaticItems.length ? recurrentOrthostaticItems.map(function (id) { return getSimpleOptionText("recurrent_orthostatic_features", id); }).join(", ") : ""],
+      ["Panic/anxiety features", recurrentPanicItems.length ? recurrentPanicItems.map(function (id) { return getSimpleOptionText("recurrent_panic_features", id); }).join(", ") : ""],
       ["Stops when still", getSimpleLabel("stops_still", a.stops_still)],
       ["Duration", getSimpleLabel("duration", a.duration)],
       ["Warning signs", a.urgent ? (hasUrgent ? "Yes — urgent warning signs reported" : "None") : ""],
@@ -1645,13 +1750,18 @@
         return '<tr><td class="summary-lbl">' + escapeHtml(row[0]) + '</td><td>' + escapeHtml(row[1]) + '</td></tr>';
       }).join(""),
       '</tbody></table>',
+      noneFeatureLabels.length > 0 ? '<div class="negatives-box"><strong>None of the following were reported:</strong> ' + escapeHtml(noneFeatureLabels.join(", ")) + '.</div>' : "",
       '<div class="poss-section">',
-      '<h3>Possible explanations to discuss with your doctor</h3>',
-      '<p class="muted" style="font-size:0.88rem;margin-bottom:10px">This is not a diagnosis. Your doctor will determine the cause after examination.</p>',
+      '<div class="diagnosis-disclaimer">This is not a diagnosis.</div>',
+      '<p class="poss-section-subtitle">On the basis of your history these are the possibilities we feel are likely, but it is your doctor who will take the history, examine you, and determine the actual cause. This does not substitute for your doctor\'s assessment.</p>',
+      '<p class="poss-section-intro">The possibilities your doctor may need to consider based on your history are:</p>',
       '<div class="poss-list">',
       possibilities.map(function (p) {
         var cls = p.color ? ' poss-item--' + p.color : '';
-        return '<div class="poss-item' + cls + '"><strong>' + escapeHtml(p.name) + '</strong><p>' + escapeHtml(p.plain) + '</p></div>';
+        var body = p.bullets
+          ? '<ul class="poss-bullets">' + p.bullets.map(function (item) { return '<li>' + escapeHtml(item) + '</li>'; }).join("") + '</ul>'
+          : '<p>' + escapeHtml(p.plain) + '</p>';
+        return '<div class="poss-item' + cls + '"><strong>' + escapeHtml(p.name) + '</strong>' + body + '</div>';
       }).join(""),
       '</div>',
       '</div>',
@@ -2427,12 +2537,15 @@
       state.simplePatient.answers[sqId] = existing;
       var nextBtn = app.querySelector('[data-action="simple-next"]');
       if (nextBtn) nextBtn.disabled = existing.length === 0;
+      var noneBtn = app.querySelector('[data-action="simple-none-answer"]');
+      if (noneBtn) noneBtn.disabled = existing.some(function (v) { return v !== "none"; });
       document.querySelectorAll('[data-simple-qid="' + sqId + '"]').forEach(function (cb) {
         var lbl = cb.closest(".simple-option");
         if (lbl) lbl.classList.toggle("selected", existing.includes(cb.dataset.simpleOid));
         if (soId === "none" && target.checked && cb.dataset.simpleOid !== "none") cb.checked = false;
         if (soId !== "none" && target.checked && cb.dataset.simpleOid === "none") cb.checked = false;
       });
+      if (soId === "none" && target.checked && shouldAutoAdvanceSimpleNone(sqId)) advanceSimpleQuestion();
       return;
     }
 
@@ -2589,7 +2702,12 @@
         return;
       }
       state.simplePatient.answers[sqid] = soid;
-      if (sqid === "recurrent_head_trigger" && soid === "yes") {
+      if (sqid === "recurrent_head_trigger" && soid === "not_sure") {
+        state.simplePatient.done = true;
+        renderSimplePatient();
+        return;
+      }
+      if ((sqid === "recurrent_head_trigger" && soid === "yes") || (sqid === "recurrent_trigger_clarify" && soid === "only_head_position")) {
         state.simplePatient.positionalRedirect = true;
         renderSimplePatient();
         return;
@@ -2609,6 +2727,11 @@
       if (state.simplePatient.step >= SIMPLE_PATIENT_QUESTIONS.length) state.simplePatient.done = true;
       renderSimplePatient();
     }
+    if (action === "simple-none-answer") {
+      var noneQid = actionTarget.dataset.qid;
+      state.simplePatient.answers[noneQid] = ["none"];
+      advanceSimpleQuestion();
+    }
     if (action === "simple-next") {
       var sqid2 = SIMPLE_PATIENT_QUESTIONS[state.simplePatient.step] && SIMPLE_PATIENT_QUESTIONS[state.simplePatient.step].id;
       var sqVal = sqid2 ? state.simplePatient.answers[sqid2] : null;
@@ -2627,9 +2750,7 @@
           return;
         }
       }
-      state.simplePatient.step++;
-      if (state.simplePatient.step >= SIMPLE_PATIENT_QUESTIONS.length) state.simplePatient.done = true;
-      renderSimplePatient();
+      advanceSimpleQuestion();
     }
     if (action === "simple-back") {
       if (state.simplePatient.positionalRedirect) {
@@ -2641,10 +2762,11 @@
       if (state.simplePatient.step > 0) {
         state.simplePatient.step--;
         while (state.simplePatient.step > 0 &&
-               shouldSkipSimpleQuestion(SIMPLE_PATIENT_QUESTIONS[state.simplePatient.step], state.simplePatient.answers)) {
+               shouldSkipSimpleQuestion(SIMPLE_PATIENT_QUESTIONS[state.simplePatient.step], state.simplePatient.answers, true)) {
           state.simplePatient.step--;
         }
       }
+      state.simplePatient._goingBack = true;
       renderSimplePatient();
     }
     if (action === "simple-urgent-continue") {
@@ -3637,8 +3759,9 @@
     const stopsStill = a.stops_still === "yes_returns" || a.stops_still === "yes_stays";
     const isBrief = a.duration === "seconds" || a.duration === "minutes";
 
-    const isRecurrentPositional = a.stops_still === "yes_returns" || (isRepeated && a.recurrent_head_trigger === "yes");
-    const isRecurrentSpontaneous = isRepeated && a.recurrent_head_trigger === "no" && a.spontaneous_confirm === "yes";
+    const isRecurrentPositional = a.stops_still === "yes_returns" || (isRepeated && (a.recurrent_head_trigger === "yes" || a.recurrent_trigger_clarify === "only_head_position"));
+    const isRecurrentSpontaneous = isRepeated && (a.recurrent_head_trigger === "no" || a.recurrent_trigger_clarify === "sitting_still");
+    const isRecurrentStillUnclear = isRepeated && (a.recurrent_head_trigger === "not_sure" && a.recurrent_trigger_clarify === "still_not_sure");
     const recurrentMigraineItems = Array.isArray(a.recurrent_migraine_features) ? a.recurrent_migraine_features.filter(function (v) { return v !== "none"; }) : [];
     const recurrentTiaRiskItems = Array.isArray(a.recurrent_tia_risk) ? a.recurrent_tia_risk.filter(function (v) { return v !== "none"; }) : [];
     const recurrentTiaWarningItems = Array.isArray(a.recurrent_tia_warnings) ? a.recurrent_tia_warnings.filter(function (v) { return v !== "none"; }) : [];
@@ -3648,6 +3771,10 @@
     const hasRecurrentMigraineFeatures = recurrentMigraineItems.length > 0;
     const hasRecurrentTiaPattern = recurrentTiaRiskItems.length > 0 || recurrentTiaWarningItems.length > 0;
     const hasRecurrentMenierePattern = isSpontaneousOverTwenty && recurrentMeniereItems.length > 0;
+    const recurrentOrthostaticItems = Array.isArray(a.recurrent_orthostatic_features) ? a.recurrent_orthostatic_features.filter(function (v) { return v !== "none"; }) : [];
+    const recurrentPanicItems = Array.isArray(a.recurrent_panic_features) ? a.recurrent_panic_features.filter(function (v) { return v !== "none"; }) : [];
+    const hasRecurrentOrthostaticPattern = recurrentOrthostaticItems.length > 0;
+    const hasRecurrentPanicPattern = recurrentPanicItems.length > 0;
 
     const hasUrgentFlags = a.urgent === "yes";
     const singleHasRedFlags = a.single_red_flags === "yes";
@@ -3686,8 +3813,8 @@
         match: feelingBriefResolved && !hasUrgentFlags && !hasRiskFactors && circ === "migraine_preceded"
       },
       {
-        name: "Brief resolved vertigo — cause needs confirming",
-        plain: "A brief attack that has gone away on its own, without a clearly identified cause. Your doctor will review the episode and may check blood pressure, inner ear function, and other factors to find the most likely explanation.",
+        name: "Cause uncertain — please see your doctor",
+        plain: "Because your attack has completely resolved, there may be no clues left for examination. A brief episode of dizziness that goes away on its own could be something minor — such as BPPV that settled on its own — but it could also be something more serious, such as a transient ischaemic attack (TIA or mini-stroke). Please see your doctor, especially if this is the first time this has happened.",
         match: feelingBriefResolved && !hasUrgentFlags && !hasRiskFactors && (!circ || circ === "none")
       },
       {
@@ -3731,8 +3858,8 @@
       },
       {
         name: "Recurrent vertigo pattern needs clarification",
-        plain: "The relationship between attacks and head movement is not clear yet. Your doctor may first separate positional vertigo from spontaneous non-positional vertigo, because the likely causes are different.",
-        match: isRepeated && !isRecurrentPositional && !isRecurrentSpontaneous
+        plain: "You have recurrent attacks of vertigo, but you are not sure if they are positional or non-positional. Let your doctor decide and then give the report accordingly.",
+        match: isRecurrentStillUnclear || (isRepeated && !isRecurrentPositional && !isRecurrentSpontaneous)
       },
       {
         name: "Vestibular migraine",
@@ -3751,13 +3878,36 @@
         match: isRecurrentSpontaneous && hasRecurrentMenierePattern
       },
       {
-        name: "Other less common causes of spontaneous vertigo",
-        plain: "If the attacks are clearly not triggered by head movement and do not strongly fit migraine, TIA, or Meniere's disease, the doctor may consider other less common causes after examination.",
+        name: "Orthostatic hypotension",
+        plain: "One more possibility is low blood pressure on standing, called orthostatic hypotension. Your doctor will probably check your standing blood pressure also. Sometimes the blood pressure falls when you stand up, and that can cause dizziness.",
+        match: isRecurrentSpontaneous && hasRecurrentOrthostaticPattern
+      },
+      {
+        name: "Panic attacks or anxiety-related episodes",
+        plain: "Sudden fear, palpitations, breathlessness, chest discomfort, or a sense of impending doom with dizziness can point toward panic attacks or anxiety-related episodes. Your doctor will consider this along with the other non-positional causes.",
+        match: isRecurrentSpontaneous && hasRecurrentPanicPattern
+      },
+      {
+        name: "Possibilities in this situation",
+        bullets: [
+          "Vestibular migraine",
+          "Vertebral basilar TIA",
+          "Meniere's disease",
+          hasRecurrentOrthostaticPattern ? "Orthostatic hypotension, because dizziness can happen when blood pressure falls after standing" : "",
+          hasRecurrentPanicPattern ? "Panic attacks or anxiety-related episodes" : "",
+          "Other less common causes that your doctor may consider after seeing you"
+        ].filter(Boolean),
         match: isRecurrentSpontaneous && !isSpontaneousUnderTwenty
       },
       {
-        name: "Meniere's disease is unlikely from the duration",
-        plain: "Because these spontaneous attacks last less than 20 minutes, Meniere's disease should not be the main label. The more important possibilities to discuss are vestibular migraine and vertebrobasilar TIA, depending on the migraine features, risk factors, and warning symptoms.",
+        name: "Possibilities your doctor will need to consider",
+        bullets: [
+          "Vestibular migraine",
+          "Vertebral basilar TIA, depending on the migraine features, risk factors, and warning symptoms",
+          hasRecurrentOrthostaticPattern ? "Orthostatic hypotension, because dizziness can happen when blood pressure falls after standing" : "",
+          hasRecurrentPanicPattern ? "Panic attacks or anxiety-related episodes" : "",
+          "Meniere's disease is unlikely because of the duration"
+        ].filter(Boolean),
         match: isRecurrentSpontaneous && isSpontaneousUnderTwenty
       },
       {
