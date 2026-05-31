@@ -1,0 +1,18 @@
+{
+    "name": "Weekly Menu Generator",
+    "short_name": "Menu Plan",
+    "description": "Generate a weekly meal menu from regular household options.",
+    "start_url": "index.html",
+    "scope": "./",
+    "display": "standalone",
+    "background_color": "#f7f4ef",
+    "theme_color": "#28715d",
+    "icons": [
+        {
+            "src": "app-icon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        }
+    ]
+}

@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Menu Generator</title>
+    <meta name="theme-color" content="#28715d">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="app-icon.svg" type="image/svg+xml">
+    <style>
+        :root {
+            --bg: #f7f4ef;
+            --paper: #ffffff;
+            --ink: #252525;
+            --muted: #66615a;
+            --line: #ded7cc;
+            --accent: #28715d;
+            --accent-soft: #e6f2ed;
+            --warm: #ad5d21;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+        }
+
+        main {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 20px 16px 40px;
+        }
+
+        header {
+            margin-bottom: 18px;
+        }
+
+        h1 {
+            margin: 0 0 4px;
+            font-size: 26px;
+        }
+
+        .subtitle {
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        button {
+            border: 1px solid var(--accent);
+            background: var(--accent);
+            color: white;
+            padding: 13px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        button.secondary {
+            background: white;
+            color: var(--accent);
+        }
+
+        button.warning {
+            border-color: var(--warm);
+            background: var(--warm);
+        }
+
+        button.small {
+            padding: 8px 10px;
+            font-size: 13px;
+        }
+
+        .week {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .day {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 14px;
+        }
+
+        .day strong {
+            display: block;
+            color: var(--accent);
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .meal-row {
+            display: grid;
+            grid-template-columns: 82px 1fr;
+            gap: 10px;
+            padding: 7px 0;
+            border-top: 1px solid var(--line);
+            align-items: start;
+        }
+
+        .meal-row:first-of-type {
+            border-top: 0;
+        }
+
+        .meal-label {
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .meal {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        details {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .add-panel {
+            display: none;
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 16px;
+        }
+
+        .add-panel.open {
+            display: block;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .checkbox-row,
+        .meal-flags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .checkbox-row label,
+        .meal-flags label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            padding: 7px 10px;
+            background: white;
+            font-size: 13px;
+        }
+
+        .checkbox-row input,
+        .meal-flags input {
+            width: 15px;
+            height: 15px;
+            padding: 0;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .item-list {
+            display: grid;
+            gap: 8px;
+            margin-top: 12px;
+            max-height: 280px;
+            overflow: auto;
+        }
+
+        .menu-item {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 8px;
+            align-items: center;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 9px;
+            background: white;
+        }
+
+        .menu-item small {
+            display: block;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        summary {
+            cursor: pointer;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .add-row {
+            display: grid;
+            grid-template-columns: 1fr 190px auto;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 12px;
+            font: inherit;
+            background: white;
+        }
+
+        .hint {
+            color: var(--muted);
+            font-size: 13px;
+            margin: 10px 0 0;
+        }
+
+        .small-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 520px) {
+            .actions {
+                grid-template-columns: 1fr;
+            }
+
+            .day {
+                padding: 12px;
+            }
+
+            .add-row {
+                grid-template-columns: 1fr;
+            }
+
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .meal-row {
+                grid-template-columns: 1fr;
+                gap: 2px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <header>
+            <h1>Weekly Menu Generator</h1>
+            <p class="subtitle">Tap generate and get a simple weekly meal plan.</p>
+        </header>
+
+        <section class="actions">
+            <button type="button" onclick="generateWeek()">Generate Week</button>
+            <button type="button" class="secondary" onclick="toggleAddPanel()">Customize</button>
+        </section>
+
+        <section class="add-panel" id="addPanel">
+            <div class="field">
+                <label>Meals to generate</label>
+                <div class="checkbox-row" id="enabledMeals"></div>
+            </div>
+
+            <div class="settings-grid">
+                <div class="field">
+                    <label for="saladCount">Salads per week</label>
+                    <input id="saladCount" type="number" min="0" max="7" value="1">
+                </div>
+                <div class="field">
+                    <label for="sproutsBhelCount">Sprouts bhel per week</label>
+                    <input id="sproutsBhelCount" type="number" min="0" max="7" value="1">
+                </div>
+                <div class="field">
+                    <label for="flatbreadLimit">Paratha/thepla/thalipeeth max</label>
+                    <input id="flatbreadLimit" type="number" min="0" max="7" value="3">
+                </div>
+            </div>
+
+            <div class="add-row">
+                <input id="newItem" type="text" placeholder="Example: Tomato omelette">
+                <select id="newItemGroup"></select>
+                <button type="button" onclick="addItem()">Add</button>
+            </div>
+            <div class="field">
+                <label>New item can be used for</label>
+                <div class="checkbox-row" id="newItemMealTypes"></div>
+            </div>
+            <p class="hint">Rules and items are saved in this browser. Each person can keep their own menu and rules.</p>
+            <div class="item-list" id="itemList"></div>
+        </section>
+
+        <section class="week" id="week"></section>
+
+        <div class="small-actions">
+            <button type="button" class="secondary" onclick="exportText()">Export Text</button>
+            <button type="button" class="secondary" onclick="saveData()">Save</button>
+            <button type="button" class="warning" onclick="clearSaved()">Clear Saved</button>
+        </div>
+    </main>
+
+    <script>
+        const storageKey = "anjuWeeklyDinnerGeneratorV1";
+        const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        const mealTypes = [
+            { value: "breakfast", label: "Breakfast" },
+            { value: "lunch", label: "Lunch" },
+            { value: "snack", label: "Tea snack" },
+            { value: "dinner", label: "Dinner" }
+        ];
+        const blockedMenuWords = ["khichdi"];
+        const groupOptions = [
+            { value: "flatbread", label: "Paratha / thepla / thalipeeth" },
+            { value: "protein", label: "Dal / usal / protein" },
+            { value: "salad", label: "Salad" },
+            { value: "soup", label: "Soup / light meal" },
+            { value: "vegetable", label: "Vegetable main" },
+            { value: "fusion", label: "Global / fusion" },
+            { value: "breakfast", label: "Breakfast-for-dinner" },
+            { value: "custom", label: "Other" }
+        ];
+        const defaultRules = {
+            saladCount: 1,
+            sproutsBhelCount: 1,
+            flatbreadLimit: 3,
+            enabledMeals: ["dinner"]
+        };
+
+        const starterItems = [
+            { name: "Doodhi paratha", group: "flatbread", mealTypes: ["breakfast", "lunch", "dinner"] },
+            { name: "Methi paratha", group: "flatbread", mealTypes: ["breakfast", "lunch", "dinner"] },
+            { name: "Mutter paratha", group: "flatbread", mealTypes: ["breakfast", "lunch", "dinner"] },
+            { name: "Paneer paratha", group: "flatbread", mealTypes: ["breakfast", "lunch", "dinner"] },
+            { name: "Moong dal paratha", group: "flatbread", mealTypes: ["breakfast", "lunch", "dinner"] },
+            { name: "Paneer tofu paratha", group: "flatbread", mealTypes: ["breakfast", "lunch", "dinner"] },
+            { name: "Thalipeeth", group: "flatbread", mealTypes: ["breakfast", "snack", "dinner"] },
+            { name: "Pithla bhakri", group: "flatbread", mealTypes: ["lunch", "dinner"] },
+            { name: "Moong dal chila", group: "protein", mealTypes: ["breakfast", "snack", "dinner"] },
+            { name: "Mixed usal and bread", group: "protein", mealTypes: ["lunch", "dinner"] },
+            { name: "Mixed sprout usal", group: "protein", mealTypes: ["lunch", "dinner"] },
+            { name: "Sprouts bhel", group: "protein", mealTypes: ["snack", "dinner"] },
+            { name: "Sprouted moong", group: "protein", mealTypes: ["snack", "dinner"] },
+            { name: "Chole", group: "protein", mealTypes: ["lunch", "dinner"] },
+            { name: "Mutter paneer", group: "protein", mealTypes: ["lunch", "dinner"] },
+            { name: "Ragda protein patties", group: "protein", mealTypes: ["snack", "dinner"] },
+            { name: "Carrot ginger soup", group: "soup", mealTypes: ["snack", "dinner"] },
+            { name: "Palak soup", group: "soup", mealTypes: ["snack", "dinner"] },
+            { name: "Broccoli soup", group: "soup", mealTypes: ["snack", "dinner"] },
+            { name: "Sweet corn soup", group: "soup", mealTypes: ["snack", "dinner"] },
+            { name: "Roasted tomato soup", group: "soup", mealTypes: ["snack", "dinner"] },
+            { name: "Salad and soup", group: "soup", mealTypes: ["lunch", "dinner"] },
+            { name: "Dinner salad", group: "salad", mealTypes: ["lunch", "dinner"] },
+            { name: "Sprouts salad", group: "salad", mealTypes: ["lunch", "dinner"] },
+            { name: "Chana salad", group: "salad", mealTypes: ["lunch", "dinner"] },
+            { name: "Bhendi", group: "vegetable", mealTypes: ["lunch", "dinner"] },
+            { name: "Tondli", group: "vegetable", mealTypes: ["lunch", "dinner"] },
+            { name: "Handvo", group: "vegetable", mealTypes: ["breakfast", "snack", "dinner"] },
+            { name: "Quinoa upma", group: "vegetable", mealTypes: ["breakfast", "lunch", "dinner"] },
+            { name: "Avocado toast", group: "fusion", mealTypes: ["breakfast", "snack", "dinner"] },
+            { name: "Burger and soup", group: "fusion", mealTypes: ["lunch", "dinner"] },
+            { name: "Sweet potato wraps", group: "fusion", mealTypes: ["lunch", "dinner"] },
+            { name: "Khow suey", group: "fusion", mealTypes: ["dinner"] },
+            { name: "French toast", group: "breakfast", mealTypes: ["breakfast", "snack", "dinner"] }
+        ];
+
+        let state = {
+            items: starterItems,
+            plan: [],
+            rules: defaultRules,
+            removedNames: []
+        };
+
+        function loadData() {
+            const saved = localStorage.getItem(storageKey);
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    state = {
+                        items: mergeStarterItems(parsed.items || starterItems, parsed.removedNames || []),
+                        plan: parsed.plan || [],
+                        rules: { ...defaultRules, ...(parsed.rules || {}) },
+                        removedNames: parsed.removedNames || []
+                    };
+                } catch (error) {
+                    state = { items: starterItems, plan: [], rules: defaultRules, removedNames: [] };
+                }
+            }
+
+            renderSettings();
+            if (state.plan.length === 0) {
+                generateWeek(false);
+            } else {
+                renderWeek();
+            }
+        }
+
+        function mergeStarterItems(savedItems, removedNames = []) {
+            const merged = savedItems
+                .filter(item => isAllowedMenuItem(item.name))
+                .map(normalizeItem);
+            const savedNames = new Set(merged.map(item => item.name.toLowerCase()));
+            const removed = new Set(removedNames.map(name => name.toLowerCase()));
+
+            starterItems.forEach(item => {
+                const normalized = item.name.toLowerCase();
+                if (!savedNames.has(normalized) && !removed.has(normalized)) {
+                    merged.push(item);
+                }
+            });
+
+            return merged;
+        }
+
+        function normalizeItem(item) {
+            return {
+                name: item.name,
+                group: item.group || "custom",
+                mealTypes: Array.isArray(item.mealTypes) && item.mealTypes.length ? item.mealTypes : inferMealTypes(item)
+            };
+        }
+
+        function inferMealTypes(item) {
+            if (item.group === "breakfast") return ["breakfast", "snack", "dinner"];
+            return ["dinner"];
+        }
+
+        function isAllowedMenuItem(name) {
+            const normalized = String(name || "").toLowerCase();
+            return !blockedMenuWords.some(word => normalized.includes(word));
+        }
+
+        function generateWeek(shouldSave = true) {
+            readSettings();
+            const plan = [];
+            const enabledMeals = getEnabledMeals();
+            const dinnerContext = {
+                usedNames: new Set(),
+                flatbreadCount: 0,
+                lastGroup: "",
+                forcedDays: buildForcedDays()
+            };
+            const slotContexts = Object.fromEntries(enabledMeals.map(mealType => [mealType, {
+                usedNames: new Set(),
+                lastGroup: ""
+            }]));
+
+            days.forEach((day, dayIndex) => {
+                const meals = {};
+                enabledMeals.forEach(mealType => {
+                    const chosen = mealType === "dinner"
+                        ? pickDinnerItem(dayIndex, dinnerContext)
+                        : pickMealItem(mealType, slotContexts[mealType]);
+                    meals[mealType] = chosen ? chosen.name : "";
+                });
+                plan.push({ day, meals });
+            });
+
+            state.plan = plan;
+            renderWeek();
+            if (shouldSave) saveData();
+        }
+
+        function pickDinnerItem(dayIndex, context) {
+            const forcedRule = context.forcedDays[dayIndex] || "";
+            const choices = getAllowedChoices({
+                mealType: "dinner",
+                forcedRule,
+                usedNames: context.usedNames,
+                flatbreadCount: context.flatbreadCount,
+                lastGroup: context.lastGroup
+            });
+
+            const chosen = choices[Math.floor(Math.random() * choices.length)];
+            context.lastGroup = chosen.group;
+            context.usedNames.add(chosen.name);
+            if (chosen.group === "flatbread") context.flatbreadCount += 1;
+            return chosen;
+        }
+
+        function pickMealItem(mealType, context) {
+            let choices = state.items.filter(item => {
+                if (!item.mealTypes.includes(mealType)) return false;
+                if (context.usedNames.has(item.name)) return false;
+                return true;
+            });
+
+            if (choices.length === 0) {
+                choices = state.items.filter(item => item.mealTypes.includes(mealType));
+            }
+
+            if (choices.length === 0) return null;
+
+            const variedChoices = choices.filter(item => item.group !== context.lastGroup);
+            const finalChoices = variedChoices.length ? variedChoices : choices;
+            const chosen = finalChoices[Math.floor(Math.random() * finalChoices.length)];
+            context.lastGroup = chosen.group;
+            context.usedNames.add(chosen.name);
+            return chosen;
+        }
+
+        function getEnabledMeals() {
+            const enabled = state.rules.enabledMeals || ["dinner"];
+            return mealTypes.map(item => item.value).filter(value => enabled.includes(value));
+        }
+
+        function buildForcedDays() {
+            const forced = {};
+            const indexes = shuffle([...Array(days.length).keys()]);
+            let cursor = 0;
+
+            for (let i = 0; i < clampRule(state.rules.saladCount); i += 1) {
+                forced[indexes[cursor]] = "salad";
+                cursor += 1;
+            }
+
+            for (let i = 0; i < clampRule(state.rules.sproutsBhelCount); i += 1) {
+                if (cursor >= indexes.length) break;
+                forced[indexes[cursor]] = "sprouts-bhel";
+                cursor += 1;
+            }
+
+            return forced;
+        }
+
+        function getAllowedChoices({ mealType, forcedRule, usedNames, flatbreadCount, lastGroup }) {
+            let choices = state.items.filter(item => {
+                if (!item.mealTypes.includes(mealType)) return false;
+                if (usedNames.has(item.name)) return false;
+                if (forcedRule === "sprouts-bhel" && item.name !== "Sprouts bhel") return false;
+                if (forcedRule === "salad" && item.group !== "salad") return false;
+                if (forcedRule !== "sprouts-bhel" && item.name === "Sprouts bhel") return false;
+                if (forcedRule !== "salad" && item.group === "flatbread" && flatbreadCount >= clampRule(state.rules.flatbreadLimit)) return false;
+                return true;
+            });
+
+            if (choices.length === 0 && forcedRule === "sprouts-bhel") {
+                choices = [{ name: "Sprouts bhel", group: "protein" }];
+            }
+
+            if (choices.length === 0 && forcedRule === "salad") {
+                choices = state.items.filter(item => item.group === "salad" && item.mealTypes.includes(mealType));
+            }
+
+            if (choices.length === 0) {
+                choices = state.items.filter(item => item.mealTypes.includes(mealType) && (item.group !== "flatbread" || flatbreadCount < clampRule(state.rules.flatbreadLimit)));
+            }
+
+            const variedChoices = choices.filter(item => item.group !== lastGroup);
+            return variedChoices.length ? variedChoices : choices;
+        }
+
+        function shuffle(values) {
+            return values
+                .map(value => ({ value, sort: Math.random() }))
+                .sort((a, b) => a.sort - b.sort)
+                .map(item => item.value);
+        }
+
+        function clampRule(value) {
+            const number = Number(value);
+            if (Number.isNaN(number)) return 0;
+            return Math.max(0, Math.min(7, Math.floor(number)));
+        }
+
+        function renderWeek() {
+            document.getElementById("week").innerHTML = days.map(day => {
+                const planned = state.plan.find(item => item.day === day);
+                const meals = planned ? normalizePlanDay(planned).meals : {};
+                return `
+                    <article class="day">
+                        <strong>${escapeHtml(day)}</strong>
+                        ${getEnabledMeals().map(mealType => {
+                            const mealLabel = mealTypes.find(item => item.value === mealType).label;
+                            return `
+                                <div class="meal-row">
+                                    <div class="meal-label">${escapeHtml(mealLabel)}</div>
+                                    <div class="meal">${escapeHtml(meals[mealType] || "")}</div>
+                                </div>
+                            `;
+                        }).join("")}
+                    </article>
+                `;
+            }).join("");
+        }
+
+        function normalizePlanDay(dayPlan) {
+            if (dayPlan.meals) return dayPlan;
+            return { day: dayPlan.day, meals: { dinner: dayPlan.meal || "" } };
+        }
+
+        function renderSettings() {
+            document.getElementById("saladCount").value = state.rules.saladCount;
+            document.getElementById("sproutsBhelCount").value = state.rules.sproutsBhelCount;
+            document.getElementById("flatbreadLimit").value = state.rules.flatbreadLimit;
+            document.getElementById("enabledMeals").innerHTML = mealCheckboxes("enabled-meal", getEnabledMeals());
+            document.getElementById("newItemGroup").innerHTML = groupOptions
+                .map(group => `<option value="${escapeHtml(group.value)}">${escapeHtml(group.label)}</option>`)
+                .join("");
+            document.getElementById("newItemMealTypes").innerHTML = mealCheckboxes("new-item-meal", ["dinner"]);
+            renderItemList();
+        }
+
+        function renderItemList() {
+            document.getElementById("itemList").innerHTML = state.items
+                .slice()
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map(item => {
+                    const group = groupOptions.find(option => option.value === item.group);
+                    return `
+                        <div class="menu-item">
+                            <div>
+                                <strong>${escapeHtml(item.name)}</strong>
+                                <small>${escapeHtml(group ? group.label : item.group)}</small>
+                                <div class="meal-flags">
+                                    ${mealCheckboxes("item-meal", item.mealTypes, item.name)}
+                                </div>
+                            </div>
+                            <button type="button" class="secondary small" data-remove-item="${escapeHtml(item.name)}">Delete</button>
+                        </div>
+                    `;
+                }).join("");
+        }
+
+        function mealCheckboxes(field, selectedValues, itemName = "") {
+            return mealTypes.map(mealType => {
+                const checked = selectedValues.includes(mealType.value) ? "checked" : "";
+                const itemAttribute = itemName ? ` data-item-name="${escapeHtml(itemName)}"` : "";
+                return `<label><input type="checkbox" data-field="${field}" value="${escapeHtml(mealType.value)}"${itemAttribute} ${checked}> ${escapeHtml(mealType.label)}</label>`;
+            }).join("");
+        }
+
+        function readSettings() {
+            const enabledMeals = Array.from(document.querySelectorAll('[data-field="enabled-meal"]:checked')).map(input => input.value);
+            state.rules = {
+                saladCount: clampRule(document.getElementById("saladCount").value),
+                sproutsBhelCount: clampRule(document.getElementById("sproutsBhelCount").value),
+                flatbreadLimit: clampRule(document.getElementById("flatbreadLimit").value),
+                enabledMeals: enabledMeals.length ? enabledMeals : ["dinner"]
+            };
+
+            state.items = state.items.map(item => {
+                const checked = Array.from(document.querySelectorAll('[data-field="item-meal"]:checked'))
+                    .filter(input => input.dataset.itemName === item.name)
+                    .map(input => input.value);
+                return { ...item, mealTypes: checked.length ? checked : item.mealTypes };
+            });
+        }
+
+        function addItem() {
+            const input = document.getElementById("newItem");
+            const groupInput = document.getElementById("newItemGroup");
+            const name = input.value.trim();
+            if (!name) return;
+            const selectedMealTypes = Array.from(document.querySelectorAll('[data-field="new-item-meal"]:checked')).map(item => item.value);
+
+            const alreadyExists = state.items.some(item => item.name.toLowerCase() === name.toLowerCase());
+            if (!isAllowedMenuItem(name)) {
+                alert("Khichdi is kept out of the regular menu because it is only for emergency days.");
+                return;
+            }
+
+            if (!alreadyExists) {
+                state.items.push({ name, group: groupInput.value, mealTypes: selectedMealTypes.length ? selectedMealTypes : ["dinner"] });
+                state.removedNames = state.removedNames.filter(item => item.toLowerCase() !== name.toLowerCase());
+            }
+
+            input.value = "";
+            saveData();
+            generateWeek();
+            renderSettings();
+        }
+
+        function removeItem(name) {
+            if (!confirm(`Delete "${name}" from this menu list?`)) return;
+            state.items = state.items.filter(item => item.name !== name);
+            state.removedNames.push(name);
+            state.plan = state.plan.map(dayPlan => {
+                const normalized = normalizePlanDay(dayPlan);
+                Object.keys(normalized.meals).forEach(mealType => {
+                    if (normalized.meals[mealType] === name) {
+                        normalized.meals[mealType] = "";
+                    }
+                });
+                return normalized;
+            });
+            saveData();
+            renderSettings();
+            renderWeek();
+        }
+
+        function toggleAddPanel(forceOpen) {
+            const panel = document.getElementById("addPanel");
+            const shouldOpen = typeof forceOpen === "boolean" ? forceOpen : !panel.classList.contains("open");
+            panel.classList.toggle("open", shouldOpen);
+            if (shouldOpen) {
+                document.getElementById("newItem").focus();
+            }
+        }
+
+        function saveData() {
+            readSettings();
+            localStorage.setItem(storageKey, JSON.stringify(state));
+        }
+
+        function clearSaved() {
+            if (!confirm("Clear saved added items and generated plan?")) return;
+            localStorage.removeItem(storageKey);
+            location.reload();
+        }
+
+        function exportText() {
+            const enabledMeals = getEnabledMeals();
+            const text = state.plan.map(dayPlan => {
+                const normalized = normalizePlanDay(dayPlan);
+                const lines = [`${normalized.day}:`];
+                enabledMeals.forEach(mealType => {
+                    const mealLabel = mealTypes.find(item => item.value === mealType).label;
+                    lines.push(`  ${mealLabel}: ${normalized.meals[mealType] || ""}`);
+                });
+                return lines.join("\n");
+            }).join("\n\n");
+            const output = window.open("", "_blank");
+            output.document.write(`<pre>${escapeHtml(text)}</pre>`);
+            output.document.close();
+        }
+
+        function escapeHtml(value) {
+            return String(value || "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker.register("service-worker.js");
+            });
+        }
+
+        document.addEventListener("click", event => {
+            const button = event.target.closest("[data-remove-item]");
+            if (button) {
+                removeItem(button.dataset.removeItem);
+            }
+        });
+
+        loadData();
+    </script>
+</body>
+</html>
