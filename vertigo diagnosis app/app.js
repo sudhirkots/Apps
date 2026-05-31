@@ -645,8 +645,7 @@
       text: "How long does each dizzy spell last once it starts?",
       type: "single",
       options: [
-        { id: "under_one_min", text: "It settles on its own within about a minute", desc: "Brief spinning that fades quickly — classic BPPV pattern" },
-        { id: "one_to_five_min", text: "1 to 5 minutes" },
+        { id: "under_five_min", text: "Less than 5 minutes", desc: "The spinning lasts a few seconds to a minute, though a mild unsteadiness may linger for up to 3–4 minutes — but under 5 minutes in total" },
         { id: "over_five_min", text: "More than 5 minutes each time" }
       ]
     },
@@ -1618,7 +1617,7 @@
       var opt = triggerQ ? triggerQ.options.find(function (o) { return o.id === id; }) : null;
       return opt ? opt.text : id;
     });
-    const isClassicBPPV = pa.pos_duration === "under_one_min";
+    const isClassicBPPV = pa.pos_duration === "under_five_min";
 
     const rows = [
       ["Type", "Positional vertigo"],
@@ -1661,14 +1660,20 @@
   }
 
   function renderSimplePositionalRedirect() {
+    var isSingleAttack = state.simplePatient.answers.feeling === "single_attack";
+    var heading = isSingleAttack
+      ? "This is probably your first attack of positional vertigo"
+      : "You have positional vertigo";
+    var helpText = isSingleAttack
+      ? "Your dizziness stops in one position and comes back when you move — this is positional vertigo. Let us analyze it a little further so your doctor has more detail."
+      : "Your attacks are triggered by head position or movement. Let us ask a few more questions to narrow down the possibilities further so your doctor has more detail.";
     app.innerHTML = [
       '<div class="simple-wrapper">',
       '<button class="back-button" type="button" data-action="simple-back">' + iconSvg("back") + ' Back</button>',
       '<div class="simple-card">',
       '<div class="submit-check-icon">' + iconSvg("rotate") + '</div>',
-      '<p class="simple-q">You possibly have positional vertigo</p>',
-      '<p class="simple-help">Because your attacks are triggered by head position or sudden head movement, this is positional vertigo. The main possibilities to discuss with your doctor are BPPV and central positional vertigo.</p>',
-      '<p class="simple-help">Let us check a few more things about your positional vertigo so your doctor has more detail.</p>',
+      '<p class="simple-q">' + escapeHtml(heading) + '</p>',
+      '<p class="simple-help">' + escapeHtml(helpText) + '</p>',
       '<div class="actions">',
       '<button class="button" type="button" data-action="simple-positional-start">Continue ›</button>',
       '<button class="button secondary" type="button" data-action="go-home">Start again</button>',
@@ -1741,7 +1746,7 @@
       '<p class="muted" style="margin:0">Date: ' + escapeHtml(new Date().toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })) + '</p>',
       '</div>',
       '</div>',
-      hasUrgent ? '<div class="notice danger"><strong>Urgent warning signs reported.</strong> Please tell the doctor immediately.</div>' : "",
+      (hasUrgent && a.feeling === "brief_resolved") ? '<div class="notice danger" style="font-size:1.05rem"><strong>Vertebrobasilar TIA — urgent assessment needed.</strong> A brief attack can be a TIA (mini-stroke). Do not wait — see a doctor today.</div>' : (hasUrgent ? '<div class="notice danger"><strong>Urgent warning signs reported.</strong> Please tell the doctor immediately.</div>' : ""),
       showRiskNotice ? '<div class="notice danger"><strong>Vascular risk factors noted.</strong> A brief dizzy episode with these risk factors needs to be reviewed by a doctor today.</div>' : "",
       showSingleUrgentNotice ? '<div class="notice danger"><strong>See your doctor urgently today.</strong></div>' : "",
       showRecurrentTiaNotice ? '<div class="notice danger"><strong>Possible vascular warning pattern.</strong> Recurrent non-positional vertigo with stroke risk factors or neurologic symptoms should be reviewed by a doctor urgently.</div>' : "",
@@ -1754,7 +1759,6 @@
       '<div class="poss-section">',
       '<div class="diagnosis-disclaimer">This is not a diagnosis.</div>',
       '<p class="poss-section-subtitle">On the basis of your history these are the possibilities we feel are likely, but it is your doctor who will take the history, examine you, and determine the actual cause. This does not substitute for your doctor\'s assessment.</p>',
-      '<p class="poss-section-intro">The possibilities your doctor may need to consider based on your history are:</p>',
       '<div class="poss-list">',
       possibilities.map(function (p) {
         var cls = p.color ? ' poss-item--' + p.color : '';
@@ -3788,9 +3792,10 @@
 
     var all = [
       {
-        name: "Vertebro-basilar TIA — urgent assessment needed",
-        plain: "A brief attack with neurological warning signs can be a TIA (transient ischaemic attack) affecting the brain's balance centres. This needs to be seen by a doctor today — do not wait.",
-        match: feelingBriefResolved && hasUrgentFlags
+        name: "Vertebrobasilar TIA possible — urgent assessment needed",
+        plain: "A brief episode of dizziness with warning signs can be a TIA. Urgent assessment today.",
+        match: feelingBriefResolved && hasUrgentFlags,
+        color: "red"
       },
       {
         name: "Vertebro-basilar TIA — see doctor urgently (risk factors present)",
@@ -3798,24 +3803,27 @@
         match: feelingBriefResolved && !hasUrgentFlags && hasRiskFactors
       },
       {
-        name: "Micturition syncope",
-        plain: "A brief drop in blood pressure that can happen when getting up at night to pass urine. Standing up combined with the act of urinating can briefly reduce blood flow to the brain, causing dizziness or near-fainting.",
-        match: feelingBriefResolved && !hasUrgentFlags && !hasRiskFactors && circ === "night_urination"
+        name: "Your history suggests micturition syncope",
+        plain: "Getting up at night to pass urine can briefly cut blood flow to the brain — this fits your description. Everything else is possible too: BPPV, vestibular migraine, postural hypotension, or a TIA.",
+        match: feelingBriefResolved && !hasUrgentFlags && !hasRiskFactors && circ === "night_urination",
+        color: "green"
       },
       {
-        name: "Postural hypotension (low blood pressure on standing)",
-        plain: "Blood pressure that drops suddenly when you stand up. Blood pressure medicines and prostate medicines can both make this more likely. Your doctor may check your blood pressure lying, sitting, and standing.",
-        match: feelingBriefResolved && !hasUrgentFlags && !hasRiskFactors && circ === "stood_up_bp_med"
+        name: "Your history suggests postural hypotension",
+        plain: "A sudden drop in blood pressure on standing, especially with BP or prostate medicines, fits your description. Everything else is possible too: BPPV, vestibular migraine, or a TIA.",
+        match: feelingBriefResolved && !hasUrgentFlags && !hasRiskFactors && circ === "stood_up_bp_med",
+        color: "green"
       },
       {
-        name: "Vestibular migraine",
-        plain: "In people with a history of migraine, a brief dizzy episode that comes on in the same way as a migraine attack is often vestibular migraine. This is very manageable once confirmed.",
-        match: feelingBriefResolved && !hasUrgentFlags && !hasRiskFactors && circ === "migraine_preceded"
+        name: "Your history suggests vestibular migraine",
+        plain: "A brief dizzy episode in someone with a migraine history could be vestibular migraine — this fits your description. Everything else is possible too: BPPV, postural hypotension, or a TIA.",
+        match: feelingBriefResolved && !hasUrgentFlags && !hasRiskFactors && circ === "migraine_preceded",
+        color: "green"
       },
       {
-        name: "Cause uncertain — please see your doctor",
-        plain: "Because your attack has completely resolved, there may be no clues left for examination. A brief episode of dizziness that goes away on its own could be something minor — such as BPPV that settled on its own — but it could also be something more serious, such as a transient ischaemic attack (TIA or mini-stroke). Please see your doctor, especially if this is the first time this has happened.",
-        match: feelingBriefResolved && !hasUrgentFlags && !hasRiskFactors && (!circ || circ === "none")
+        name: "Please show your doctor",
+        plain: "A single brief attack that has already gone is difficult to diagnose — even after a full examination there may be no clues. It could be something minor like BPPV, or something dangerous like a TIA. Since this is your first attack, please show your doctor and let him decide.",
+        match: feelingBriefResolved && !hasUrgentFlags && !hasRiskFactors
       },
       {
         name: "Possible stroke or TIA — seek emergency care now",
