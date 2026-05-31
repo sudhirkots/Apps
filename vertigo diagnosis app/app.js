@@ -1758,8 +1758,10 @@
       noneFeatureLabels.length > 0 ? '<div class="negatives-box"><strong>None of the following were reported:</strong> ' + escapeHtml(noneFeatureLabels.join(", ")) + '.</div>' : "",
       '<div class="poss-section">',
       (function () {
-        var urgentPoss = possibilities.filter(function (p) { return p.color === "red"; });
-        var regularPoss = possibilities.filter(function (p) { return p.color !== "red"; });
+        var greenPoss = possibilities.filter(function (p) { return p.color === "green"; });
+        var redPoss = possibilities.filter(function (p) { return p.color === "red"; });
+        var regularPoss = possibilities.filter(function (p) { return p.color !== "red" && p.color !== "green"; });
+        var abovePoss = greenPoss.concat(redPoss);
         function renderCard(p) {
           var cls = p.color ? ' poss-item--' + p.color : '';
           var body = p.bullets
@@ -1768,7 +1770,7 @@
           return '<div class="poss-item' + cls + '"><strong>' + escapeHtml(p.name) + '</strong>' + body + '</div>';
         }
         return [
-          urgentPoss.length ? '<div style="margin-bottom:1rem">' + urgentPoss.map(renderCard).join("") + '</div>' : '',
+          abovePoss.length ? '<div style="margin-bottom:1rem">' + abovePoss.map(renderCard).join("") + '</div>' : '',
           '<div class="diagnosis-disclaimer">This is not a diagnosis.</div>',
           '<p class="poss-section-subtitle">On the basis of your history these are the possibilities we feel are likely, but it is your doctor who will take the history, examine you, and determine the actual cause. This does not substitute for your doctor\'s assessment.</p>',
           '<div class="poss-list">',
@@ -3813,19 +3815,19 @@
       {
         name: "Your history suggests micturition syncope",
         plain: "Getting up at night to pass urine can briefly cut blood flow to the brain — this fits your description. Everything else is possible too: BPPV, vestibular migraine, postural hypotension, or a TIA.",
-        match: feelingBriefResolved && !hasUrgentFlags && !hasRiskFactors && circ === "night_urination",
+        match: feelingBriefResolved && !hasRiskFactors && circ === "night_urination",
         color: "green"
       },
       {
         name: "Your history suggests postural hypotension",
         plain: "A sudden drop in blood pressure on standing, especially with BP or prostate medicines, fits your description. Everything else is possible too: BPPV, vestibular migraine, or a TIA.",
-        match: feelingBriefResolved && !hasUrgentFlags && !hasRiskFactors && circ === "stood_up_bp_med",
+        match: feelingBriefResolved && !hasRiskFactors && circ === "stood_up_bp_med",
         color: "green"
       },
       {
         name: "Your history suggests vestibular migraine",
         plain: "A brief dizzy episode in someone with a migraine history could be vestibular migraine — this fits your description. Everything else is possible too: BPPV, postural hypotension, or a TIA.",
-        match: feelingBriefResolved && !hasUrgentFlags && !hasRiskFactors && circ === "migraine_preceded",
+        match: feelingBriefResolved && !hasRiskFactors && circ === "migraine_preceded",
         color: "green"
       },
       {
