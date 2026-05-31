@@ -850,6 +850,24 @@
       ]
     },
     {
+      id: "brief_urgent",
+      text: "Did you have any of these with the attack of dizziness or vertigo?",
+      type: "single",
+      urgent: true,
+      list: [
+        "Double vision",
+        "Tingling or numbness on one side of the body",
+        "Slurred speech or trouble speaking",
+        "Weakness on one side of the body",
+        "Unable to walk or stand without support",
+        "Sudden severe headache or neck pain"
+      ],
+      options: [
+        { id: "yes", text: "Yes — I had one or more of these" },
+        { id: "none", text: "None of these" }
+      ]
+    },
+    {
       id: "brief_risk_factors",
       text: "Do you have any of these?",
       help: "Select all that apply.",
@@ -1346,6 +1364,7 @@
     if (question.id === "duration" && feeling === "repeated_attacks") return true;
     if (question.id === "duration" && (feeling === "brief_resolved" || feeling === "single_attack")) return true;
     if (question.id === "urgent" && (feeling === "single_attack" || feeling === "repeated_attacks")) return true;
+    if (question.id === "brief_urgent" && feeling !== "brief_resolved") return true;
     if (question.id === "brief_risk_factors" && feeling !== "brief_resolved") return true;
     if (question.id === "brief_circumstances") {
       if (feeling !== "brief_resolved") return true;
@@ -1715,7 +1734,7 @@
   function renderSimpleSummary() {
     const sp = state.simplePatient;
     const a = sp.answers;
-    const hasUrgent = a.urgent === "yes";
+    const hasUrgent = a.urgent === "yes" || a.brief_urgent === "yes";
     const earItems = Array.isArray(a.ear) ? a.ear.filter(function (v) { return v !== "none"; }) : [];
     const riskFactorItems = Array.isArray(a.brief_risk_factors) ? a.brief_risk_factors.filter(function (v) { return v !== "none"; }) : [];
     const recurrentMigraineItems = Array.isArray(a.recurrent_migraine_features) ? a.recurrent_migraine_features.filter(function (v) { return v !== "none"; }) : [];
@@ -1753,7 +1772,7 @@
       ["Panic/anxiety features", recurrentPanicItems.length ? recurrentPanicItems.map(function (id) { return getSimpleOptionText("recurrent_panic_features", id); }).join(", ") : ""],
       ["Stops when still", getSimpleLabel("stops_still", a.stops_still)],
       ["Duration", getSimpleLabel("duration", a.duration)],
-      ["Warning signs", a.urgent ? (hasUrgent ? "Yes — urgent warning signs reported" : "None") : ""],
+      ["Warning signs", (a.urgent || a.brief_urgent) ? (hasUrgent ? "Yes — urgent warning signs reported" : "None") : ""],
       ["Risk factors", a.brief_risk_factors ? (hasRiskFactors ? riskFactorItems.map(function (id) { return getSimpleOptionText("brief_risk_factors", id); }).join(", ") : "None") : ""],
       ["Circumstances", getSimpleLabel("brief_circumstances", a.brief_circumstances)],
       ["Red flags", a.single_red_flags ? (a.single_red_flags === "yes"
@@ -3825,7 +3844,7 @@
     const hasRecurrentOrthostaticPattern = recurrentOrthostaticItems.length > 0;
     const hasRecurrentPanicPattern = recurrentPanicItems.length > 0;
 
-    const hasUrgentFlags = a.urgent === "yes";
+    const hasUrgentFlags = a.urgent === "yes" || a.brief_urgent === "yes";
     const singleHasRedFlags = a.single_red_flags === "yes";
     const VASCULAR_IDS_P = ["double_vision", "tingling_one_side", "slurred_speech", "weakness_one_side", "new_ringing", "reduced_hearing"];
     const detailFlagsP = Array.isArray(a.single_red_flag_detail) ? a.single_red_flag_detail : [];
