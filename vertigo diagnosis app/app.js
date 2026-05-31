@@ -1757,17 +1757,24 @@
       '</tbody></table>',
       noneFeatureLabels.length > 0 ? '<div class="negatives-box"><strong>None of the following were reported:</strong> ' + escapeHtml(noneFeatureLabels.join(", ")) + '.</div>' : "",
       '<div class="poss-section">',
-      (hasUrgent && a.feeling === "brief_resolved") ? '<div class="poss-item poss-item--red" style="margin-bottom:1rem"><strong>Vertebrobasilar TIA — urgent assessment needed</strong><p>A brief episode of dizziness with warning signs can be a TIA. Do not wait — see a doctor today.</p></div>' : '',
-      '<div class="diagnosis-disclaimer">This is not a diagnosis.</div>',
-      '<p class="poss-section-subtitle">On the basis of your history these are the possibilities we feel are likely, but it is your doctor who will take the history, examine you, and determine the actual cause. This does not substitute for your doctor\'s assessment.</p>',
-      '<div class="poss-list">',
-      possibilities.map(function (p) {
-        var cls = p.color ? ' poss-item--' + p.color : '';
-        var body = p.bullets
-          ? '<ul class="poss-bullets">' + p.bullets.map(function (item) { return '<li>' + escapeHtml(item) + '</li>'; }).join("") + '</ul>'
-          : '<p>' + escapeHtml(p.plain) + '</p>';
-        return '<div class="poss-item' + cls + '"><strong>' + escapeHtml(p.name) + '</strong>' + body + '</div>';
-      }).join(""),
+      (function () {
+        var urgentPoss = possibilities.filter(function (p) { return p.color === "red"; });
+        var regularPoss = possibilities.filter(function (p) { return p.color !== "red"; });
+        function renderCard(p) {
+          var cls = p.color ? ' poss-item--' + p.color : '';
+          var body = p.bullets
+            ? '<ul class="poss-bullets">' + p.bullets.map(function (item) { return '<li>' + escapeHtml(item) + '</li>'; }).join("") + '</ul>'
+            : '<p>' + escapeHtml(p.plain) + '</p>';
+          return '<div class="poss-item' + cls + '"><strong>' + escapeHtml(p.name) + '</strong>' + body + '</div>';
+        }
+        return [
+          urgentPoss.length ? '<div style="margin-bottom:1rem">' + urgentPoss.map(renderCard).join("") + '</div>' : '',
+          '<div class="diagnosis-disclaimer">This is not a diagnosis.</div>',
+          '<p class="poss-section-subtitle">On the basis of your history these are the possibilities we feel are likely, but it is your doctor who will take the history, examine you, and determine the actual cause. This does not substitute for your doctor\'s assessment.</p>',
+          '<div class="poss-list">',
+          regularPoss.map(renderCard).join(""),
+        ].join("");
+      })(),
       '</div>',
       '</div>',
       '</div>',
