@@ -1391,6 +1391,10 @@
       return;
     }
     if (state.simplePatient.positionalFlow) {
+      var curPosQ = SIMPLE_POSITIONAL_QUESTIONS[state.simplePatient.positionalStep];
+      if (!state.simplePatient.positionalDone && curPosQ && curPosQ.id === "pos_duration" && state.simplePatient.answers.feeling === "single_attack") {
+        state.simplePatient.positionalDone = true;
+      }
       if (state.simplePatient.positionalDone) {
         renderSimplePositionalSummary();
       } else {
@@ -1653,6 +1657,8 @@
 
   function renderSimplePositionalSummary() {
     const pa = state.simplePatient.positionalAnswers;
+    const a = state.simplePatient.answers;
+    const isSingleAttack = a.feeling === "single_attack";
     const triggerAnyAll = Array.isArray(pa.pos_trigger) && pa.pos_trigger.includes("any_all");
     const triggerItems = Array.isArray(pa.pos_trigger) ? pa.pos_trigger.filter(function (v) { return v !== "any_all" && v !== "not_sure"; }) : [];
     const durationQ = SIMPLE_POSITIONAL_QUESTIONS.find(function (q) { return q.id === "pos_duration"; });
@@ -1669,9 +1675,33 @@
     const rows = [
       ["Type", "Positional vertigo"],
       ["Triggers", triggerAnyAll ? "Any or all of these movements" : (triggerLabels.length ? triggerLabels.join(", ") : "Not specified")],
-      ["Duration of each spell", durationLabel],
+      isSingleAttack ? null : ["Duration of each spell", durationLabel],
       ["Worse side", sideLabel]
-    ].filter(function (r) { return r[1]; });
+    ].filter(function (r) { return r && r[1]; });
+
+    var possHtml;
+    if (isSingleAttack) {
+      possHtml = [
+        '<div class="poss-list">',
+        '<div class="poss-item">',
+        '<p>This could be the first time you are getting positional vertigo.</p>',
+        '<p><strong>The most common cause is BPPV (Benign Paroxysmal Positional Vertigo).</strong> In BPPV, tiny calcium crystals that normally sit in one part of the inner ear break loose and drift into one of the balance canals. When you move your head in a certain direction, these crystals shift and send a false spinning signal to the brain, causing a brief intense bout of vertigo. It is not dangerous, and your doctor can usually confirm it with a simple bedside test (Dix-Hallpike) and treat it immediately with a head-repositioning manoeuvre (Epley).</p>',
+        '<p><strong>Less common causes</strong> include central positional vertigo (caused by a lesion in the cerebellum or brainstem, such as a tumour or multiple sclerosis plaque), perilymph fistula (a tear in the membrane between the middle and inner ear), and superior semicircular canal dehiscence (an abnormal opening in the bone covering the superior canal). Your doctor\'s examination will help distinguish these from BPPV.</p>',
+        '</div>',
+        '</div>',
+        '<div class="diagnosis-disclaimer" style="margin-top:1.25rem">This is not a diagnosis on the basis of your history alone. These are the possibilities we feel are likely, but it is your doctor who will take the history, examine you, and determine the actual cause. This does not substitute for your doctor\'s assessment.</div>'
+      ].join("");
+    } else {
+      possHtml = [
+        '<div class="diagnosis-disclaimer">This is not a diagnosis.</div>',
+        '<p class="poss-section-subtitle">On the basis of your history these are the possibilities we feel are likely, but it is your doctor who will take the history, examine you, and determine the actual cause. This does not substitute for your doctor\'s assessment.</p>',
+        '<p class="poss-section-intro">The possibilities your doctor may need to consider based on your history are:</p>',
+        '<div class="poss-list">',
+        '<div class="poss-item"><strong>BPPV (Benign Paroxysmal Positional Vertigo)</strong><p>The most likely cause of positional vertigo. Crystals in the inner ear shift to the wrong canal, causing brief spinning with certain head positions. ' + (isClassicBPPV ? 'The very brief duration of your spells strongly fits this pattern. ' : '') + 'Your doctor will do a Dix-Hallpike test to confirm and may treat it with a simple head repositioning manoeuvre (Epley).</p></div>',
+        '<div class="poss-item"><strong>Other positional vertigo</strong><p>Less commonly, positional vertigo can have other causes. Your doctor\'s examination will help distinguish these.</p></div>',
+        '</div>'
+      ].join("");
+    }
 
     app.innerHTML = [
       '<div class="simple-summary-outer">',
@@ -1689,13 +1719,7 @@
       }).join(""),
       '</tbody></table>',
       '<div class="poss-section">',
-      '<div class="diagnosis-disclaimer">This is not a diagnosis.</div>',
-      '<p class="poss-section-subtitle">On the basis of your history these are the possibilities we feel are likely, but it is your doctor who will take the history, examine you, and determine the actual cause. This does not substitute for your doctor\'s assessment.</p>',
-      '<p class="poss-section-intro">The possibilities your doctor may need to consider based on your history are:</p>',
-      '<div class="poss-list">',
-      '<div class="poss-item"><strong>BPPV (Benign Paroxysmal Positional Vertigo)</strong><p>The most likely cause of positional vertigo. Crystals in the inner ear shift to the wrong canal, causing brief spinning with certain head positions. ' + (isClassicBPPV ? 'The very brief duration of your spells strongly fits this pattern. ' : '') + 'Your doctor will do a Dix-Hallpike test to confirm and may treat it with a simple head repositioning manoeuvre (Epley).</p></div>',
-      '<div class="poss-item"><strong>Other positional vertigo</strong><p>Less commonly, positional vertigo can have other causes. Your doctor\'s examination will help distinguish these.</p></div>',
-      '</div>',
+      possHtml,
       '</div>',
       '</div>',
       '<div class="summary-actions no-print">',
@@ -1775,12 +1799,62 @@
     ].join("");
   }
 
+  function renderSingleAttackUrgentSummary() {
+    const a = state.simplePatient.answers;
+    const VASCULAR_IDS = ["double_vision", "tingling_one_side", "slurred_speech", "weakness_one_side", "new_ringing", "reduced_hearing"];
+    const VASCULAR_LABELS = {
+      double_vision: "Double vision",
+      tingling_one_side: "Tingling or numbness on one side of the body",
+      slurred_speech: "Slurred speech or difficulty speaking",
+      weakness_one_side: "Weakness on one side of the body",
+      new_ringing: "New ringing in the ears (tinnitus)",
+      reduced_hearing: "Reduced hearing in one ear"
+    };
+    const detailFlags = Array.isArray(a.single_red_flag_detail) ? a.single_red_flag_detail : [];
+    const vascularFlags = detailFlags.filter(function(v) { return VASCULAR_IDS.indexOf(v) !== -1; });
+
+    app.innerHTML = [
+      '<div class="simple-summary-outer">',
+      '<div class="simple-summary-card" id="printArea">',
+      '<div class="summary-brand">',
+      dizzyPersonSmallSvg(),
+      '<div>',
+      '<h2 class="summary-brand-title">Your dizziness — for your doctor</h2>',
+      '<p class="muted" style="margin:0">Date: ' + escapeHtml(new Date().toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })) + '</p>',
+      '</div>',
+      '</div>',
+      '<div style="text-align:center;margin:1.5rem 0 1rem">',
+      '<div style="font-size:2rem;line-height:1;margin-bottom:0.5rem;color:var(--danger)">' + iconSvg("alert") + '</div>',
+      '<strong style="font-size:1.25rem;color:var(--danger);display:block">Possible stroke or TIA — seek emergency care now</strong>',
+      '</div>',
+      '<div class="poss-item poss-item--red" style="margin-bottom:1.5rem">',
+      '<p>An ongoing first attack with neurological warning signs (double vision, tingling, slurred speech, weakness, new tinnitus, or hearing change) may indicate a stroke or TIA affecting the brain\'s balance area. Please seek emergency care immediately.</p>',
+      vascularFlags.length ? '<p><strong>Warning signs you reported:</strong></p><ul class="poss-bullets">' + vascularFlags.map(function(v) { return '<li>' + escapeHtml(VASCULAR_LABELS[v] || v) + '</li>'; }).join("") + '</ul>' : '',
+      '<p><strong>Please call emergency services or go to the nearest emergency department immediately. Do not drive yourself.</strong></p>',
+      '</div>',
+      '<div class="diagnosis-disclaimer">',
+      'This is not a diagnosis on the basis of your history alone. These are the possibilities we feel are likely, but it is your doctor who will take the history, examine you, and determine the actual cause. This does not substitute for your doctor\'s assessment.',
+      '</div>',
+      '</div>',
+      '<div class="summary-actions no-print">',
+      '<button class="button" type="button" onclick="window.print()">Print / Save as PDF</button>',
+      '<button class="button secondary" type="button" data-action="go-home">Start again</button>',
+      '</div>',
+      '</div>'
+    ].join("");
+  }
+
   function renderSimpleSummary() {
     const sp = state.simplePatient;
     const a = sp.answers;
     const hasUrgent = a.urgent === "yes" || (Array.isArray(a.brief_urgent_detail) && a.brief_urgent_detail.some(function(v){return v !== "none";}));
     if (a.feeling === "brief_resolved" && Array.isArray(a.brief_urgent_detail) && a.brief_urgent_detail.some(function(v){return v !== "none";})) {
       renderBriefUrgentSummary();
+      return;
+    }
+    const VASCULAR_IDS_SA = ["double_vision", "tingling_one_side", "slurred_speech", "weakness_one_side", "new_ringing", "reduced_hearing"];
+    if (a.feeling === "single_attack" && Array.isArray(a.single_red_flag_detail) && a.single_red_flag_detail.some(function(v) { return VASCULAR_IDS_SA.indexOf(v) !== -1; })) {
+      renderSingleAttackUrgentSummary();
       return;
     }
     const earItems = Array.isArray(a.ear) ? a.ear.filter(function (v) { return v !== "none"; }) : [];
@@ -2851,14 +2925,6 @@
         state.simplePatient.urgentWarning = true;
         renderSimplePatient();
         return;
-      }
-      if (sqid2 === "single_red_flag_detail" && Array.isArray(sqVal)) {
-        var VASCULAR_IDS = ["double_vision", "tingling_one_side", "slurred_speech", "weakness_one_side", "new_ringing", "reduced_hearing"];
-        if (sqVal.some(function (v) { return VASCULAR_IDS.indexOf(v) !== -1; })) {
-          state.simplePatient.urgentWarning = true;
-          renderSimplePatient();
-          return;
-        }
       }
       advanceSimpleQuestion();
     }
