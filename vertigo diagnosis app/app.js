@@ -4059,7 +4059,7 @@
       {
         name: "Vestibular migraine",
         plain: "This is the most common cause of recurrent spontaneous, non-positional vertigo. Migraine history, headache around attacks, late nights, travel, missed meals, stress, nausea, vomiting, light sensitivity, or sound sensitivity all support this possibility.",
-        match: isRecurrentSpontaneous && hasRecurrentMigraineFeatures && !isSpontaneousUnderTwenty
+        match: isRecurrentSpontaneous && hasRecurrentMigraineFeatures
       },
       {
         name: "Vertebrobasilar TIA — discuss urgently with your doctor",
@@ -4098,6 +4098,7 @@
       {
         name: "Possibilities your doctor will need to consider",
         bullets: [
+          "Vestibular migraine",
           "Vertebrobasilar TIA — stroke risk factors and warning symptoms during attacks make this important to exclude",
           hasRecurrentOrthostaticPattern ? "Orthostatic hypotension — dizziness that comes on after standing up is worth checking" : "",
           hasRecurrentPanicPattern ? "Panic attacks or anxiety-related episodes" : "",
