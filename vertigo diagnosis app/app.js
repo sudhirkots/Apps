@@ -4059,7 +4059,7 @@
       {
         name: "Vestibular migraine",
         plain: "This is the most common cause of recurrent spontaneous, non-positional vertigo. Migraine history, headache around attacks, late nights, travel, missed meals, stress, nausea, vomiting, light sensitivity, or sound sensitivity all support this possibility.",
-        match: isRecurrentSpontaneous && hasRecurrentMigraineFeatures
+        match: isRecurrentSpontaneous && hasRecurrentMigraineFeatures && !isSpontaneousUnderTwenty
       },
       {
         name: "Vertebrobasilar TIA — discuss urgently with your doctor",
@@ -4086,22 +4086,23 @@
         name: "Possibilities in this situation",
         bullets: [
           "Vestibular migraine",
-          "Vertebral basilar TIA",
+          "Vertebrobasilar TIA",
           "Meniere's disease",
-          hasRecurrentOrthostaticPattern ? "Orthostatic hypotension, because dizziness can happen when blood pressure falls after standing" : "",
+          hasRecurrentOrthostaticPattern ? "Orthostatic hypotension — dizziness that comes on after standing up is worth checking" : "",
           hasRecurrentPanicPattern ? "Panic attacks or anxiety-related episodes" : "",
-          "Other less common causes that your doctor may consider after seeing you"
+          "Other less common causes that your doctor may consider after seeing you",
+          "Your doctor will have to go through all these possibilities and decide after examining you"
         ].filter(Boolean),
         match: isRecurrentSpontaneous && !isSpontaneousUnderTwenty
       },
       {
         name: "Possibilities your doctor will need to consider",
         bullets: [
-          "Vestibular migraine",
-          "Vertebral basilar TIA, depending on the migraine features, risk factors, and warning symptoms",
-          hasRecurrentOrthostaticPattern ? "Orthostatic hypotension, because dizziness can happen when blood pressure falls after standing" : "",
+          "Vertebrobasilar TIA — stroke risk factors and warning symptoms during attacks make this important to exclude",
+          hasRecurrentOrthostaticPattern ? "Orthostatic hypotension — dizziness that comes on after standing up is worth checking" : "",
           hasRecurrentPanicPattern ? "Panic attacks or anxiety-related episodes" : "",
-          "Meniere's disease is unlikely because of the duration"
+          "Meniere's disease is unlikely because your attacks are under 20 minutes",
+          "Other less common causes that your doctor may consider after examining you"
         ].filter(Boolean),
         match: isRecurrentSpontaneous && isSpontaneousUnderTwenty
       },
