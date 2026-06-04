@@ -1685,8 +1685,10 @@
         '<div class="poss-list">',
         '<div class="poss-item">',
         '<p>This could be the first time you are getting positional vertigo.</p>',
-        '<p><strong>The most common cause is BPPV (Benign Paroxysmal Positional Vertigo).</strong> In BPPV, tiny calcium crystals that normally sit in one part of the inner ear break loose and drift into one of the balance canals. When you move your head in a certain direction, these crystals shift and send a false spinning signal to the brain, causing a brief intense bout of vertigo. It is not dangerous, and your doctor can usually confirm it with a simple bedside test (Dix-Hallpike) and treat it immediately with a head-repositioning manoeuvre (Epley).</p>',
-        '<p><strong>Less common causes</strong> include central positional vertigo (caused by a lesion in the cerebellum or brainstem, such as a tumour or multiple sclerosis plaque), perilymph fistula (a tear in the membrane between the middle and inner ear), and superior semicircular canal dehiscence (an abnormal opening in the bone covering the superior canal). Your doctor\'s examination will help distinguish these from BPPV.</p>',
+        '<p><strong>The most common cause is BPPV (Benign Paroxysmal Positional Vertigo).</strong> In BPPV, tiny calcium crystals that normally sit in one part of the inner ear break loose and drift into one of the balance canals. When you move your head in a certain direction, these crystals shift and send a false spinning signal to the brain, causing a brief intense bout of vertigo. BPPV is not dangerous, and your doctor can usually confirm it with a simple bedside test (Dix-Hallpike) and treat it immediately with a head-repositioning manoeuvre (Epley).</p>',
+        '</div>',
+        '<div class="poss-item">',
+        '<p><strong>Other conditions can also cause positional vertigo</strong> — some ear problems, and certain brain problems. Some of them can be dangerous, so it is best to let your doctor examine you and find out.</p>',
         '</div>',
         '</div>',
         '<div class="diagnosis-disclaimer" style="margin-top:1.25rem">This is not a diagnosis on the basis of your history alone. These are the possibilities we feel are likely, but it is your doctor who will take the history, examine you, and determine the actual cause. This does not substitute for your doctor\'s assessment.</div>'
@@ -1939,10 +1941,11 @@
             : '<p>' + escapeHtml(p.plain) + '</p>';
           return '<div class="poss-item' + cls + '"><strong>' + escapeHtml(p.name) + '</strong>' + body + '</div>';
         }
+        var skipDisclaimer = regularPoss.length === 1 && regularPoss[0].skipDisclaimer && abovePoss.length === 0;
         return [
           abovePoss.length ? '<div style="margin-bottom:1rem">' + abovePoss.map(renderCard).join("") + '</div>' : '',
-          '<div class="diagnosis-disclaimer">This is not a diagnosis.</div>',
-          '<p class="poss-section-subtitle">On the basis of your history these are the possibilities we feel are likely, but it is your doctor who will take the history, examine you, and determine the actual cause. This does not substitute for your doctor\'s assessment.</p>',
+          skipDisclaimer ? '' : '<div class="diagnosis-disclaimer">This is not a diagnosis.</div>',
+          skipDisclaimer ? '' : '<p class="poss-section-subtitle">On the basis of your history these are the possibilities we feel are likely, but it is your doctor who will take the history, examine you, and determine the actual cause. This does not substitute for your doctor\'s assessment.</p>',
           '<div class="poss-list">',
           regularPoss.map(renderCard).join(""),
         ].join("");
@@ -4038,13 +4041,19 @@
         color: "green"
       },
       {
-        name: "Positional vertigo — BPPV or central positional vertigo",
-        plain: "Because the attacks are triggered by head position or sudden head movement, this is positional vertigo. The common possibility is BPPV, but the doctor should also consider central positional vertigo when the pattern is atypical or warning signs are present.",
+        name: "Positional vertigo — BPPV most likely",
+        plain: "Because the attacks are triggered by head position or sudden head movement, this is positional vertigo. BPPV is the most common cause. In BPPV, calcium crystals that have drifted into a balance canal send a false spinning signal to the brain when the head moves in a certain direction. BPPV is not dangerous, and your doctor can confirm it with a Dix-Hallpike test and treat it with a head-repositioning manoeuvre (Epley).",
+        match: isRecurrentPositional
+      },
+      {
+        name: "Other causes of positional vertigo",
+        plain: "Other conditions can also cause positional vertigo — some ear problems, and certain brain problems. Some of them can be dangerous, so it is best to let your doctor examine you and find out.",
         match: isRecurrentPositional
       },
       {
         name: "Recurrent vertigo pattern needs clarification",
-        plain: "You have recurrent attacks of vertigo, but you are not sure if they are positional or non-positional. Let your doctor decide and then give the report accordingly.",
+        plain: "You have recurrent attacks of vertigo, but you are not sure whether they are triggered by head movement or not. To help your doctor, it is worth paying attention to what causes each attack and what relieves it. Ask yourself: Does it start with a sudden head movement — like looking up, looking down, or turning over in bed? Or does it come on while you are sitting still, reading, or working at a computer? Does it happen while you are walking? Once you have noticed a pattern, describe it to your doctor. Knowing what triggers the vertigo and what makes it better will help your doctor decide whether this is a positional problem like BPPV or something else entirely.",
+        skipDisclaimer: true,
         match: isRecurrentStillUnclear || (isRepeated && !isRecurrentPositional && !isRecurrentSpontaneous)
       },
       {
