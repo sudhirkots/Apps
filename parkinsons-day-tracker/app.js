@@ -14,6 +14,11 @@
    * STRINGS — every user-facing string lives here, so the port is a
    * copy-paste and translation later needs no hunting through markup.
    * ===================================================================== */
+  // Bump with every deploy, together with CACHE and the ?v= query strings.
+  // Shown in the menu so a device can be identified at a glance — an installed
+  // PWA silently running an old build is otherwise invisible.
+  var APP_VERSION = "v5";
+
   var S = {
     appName: "Day Tracker",
 
@@ -186,7 +191,39 @@
 
     // Subtitles
     ccOn: "Subtitles on",
-    ccOff: "Subtitles off"
+    ccOff: "Subtitles off",
+
+    // Filling in later
+    fillTitle: "Fill in a missed hour",
+    fillPrompt: function (hour) {
+      return "How were you at " + hour + "?";
+    },
+    fillHint: "Tap any hour to fill it in or change it.",
+    filledLater: "Filled in later",
+    clearHour: "Clear this hour",
+    prevDay: "◀",
+    nextDay: "▶",
+    today: "Today",
+    yesterday: "Yesterday",
+    restOfDayTitle: "The rest of the day",
+    restOfDayFine: "The hours I did not fill were fine",
+    restOfDayNote:
+      "Marks every empty hour up to now as yellow. Only press this if that is true — an hour left blank tells the doctor more than a wrong colour.",
+    restOfDayDone: function (n) {
+      return n + (n === 1 ? " hour" : " hours") + " marked yellow";
+    },
+    restOfDayNothing: "No empty hours to fill",
+    cancelFill: "Never mind",
+    pastDayReadOnly:
+      "This day is finished and cannot be changed. Hours are filled in on the day itself, while you still remember.",
+
+    // End-of-day prompt
+    endOfDayKicker: "Before you sleep",
+    endOfDayTitle: "Fill in the rest of today?",
+    endOfDayBody:
+      "Some hours today are still empty. You can fill them in now, while you still remember. After tonight this day is closed.",
+    endOfDayGo: "Fill in today",
+    endOfDaySkip: "Leave them empty"
   };
 
   /* Common tablets and dosing patterns (§9 of the review list). Names are the
@@ -300,6 +337,72 @@
   }
 
   /**
+   * Resolve what each (day, hour) actually shows.
+   *
+   * Real-time entries are point observations: two different colours inside one
+   * hour is real information and renders as a split (§9). An entry with
+   * `edit` is different — it is the patient asserting "that hour was X",
+   * filled in after the fact, so it supersedes everything else in that hour
+   * rather than adding to it. The superseded rows stay in the log; the log is
+   * still append-only. Nothing is ever rewritten, only outranked.
+   *
+   * Returns { "<dayKey>": { "<hour>": {colours:[…], late:bool} } }
+   */
+  function resolveHours(entries) {
+    var byDayHour = {};
+    (entries || []).forEach(function (e) {
+      var k = dayKey(e.ts);
+      var h = new Date(e.ts).getHours();
+      if (!byDayHour[k]) byDayHour[k] = {};
+      if (!byDayHour[k][h]) byDayHour[k][h] = [];
+      byDayHour[k][h].push(e);
+    });
+
+    var out = {};
+    Object.keys(byDayHour).forEach(function (k) {
+      out[k] = {};
+      Object.keys(byDayHour[k]).forEach(function (h) {
+        var list = byDayHour[k][h];
+        var edits = list.filter(function (e) {
+          return e.edit;
+        });
+        if (edits.length) {
+          // Latest assertion wins. Appended in order, so the last one is newest.
+          var winner = edits[edits.length - 1];
+          out[k][h] = { colours: winner.color ? [winner.color] : [], late: true };
+        } else {
+          var seen = COLOURS.filter(function (c) {
+            return list.some(function (e) {
+              return e.color === c;
+            });
+          });
+          out[k][h] = {
+            colours: seen,
+            late: list.every(function (e) {
+              return !!e.enteredTs;
+            })
+          };
+        }
+      });
+    });
+    return out;
+  }
+
+  /** One effective entry per resolved (day, hour) — what the counts should use. */
+  function effectiveEntries(entries) {
+    var resolved = resolveHours(entries);
+    var out = [];
+    Object.keys(resolved).forEach(function (k) {
+      Object.keys(resolved[k]).forEach(function (h) {
+        resolved[k][h].colours.forEach(function (c) {
+          out.push({ color: c, dayKey: k, hour: +h, late: resolved[k][h].late });
+        });
+      });
+    });
+    return out;
+  }
+
+  /**
    * Build the chart model: one row per day that has any entry, columns for
    * waking hours. An hour holding more than one distinct colour is a split and
    * must never be overwritten by a later single colour (§9).
@@ -309,15 +412,14 @@
     var cutoffKey = dayKey(cutoff);
     var todayKey = dayKey(now);
 
+    var resolved = resolveHours(data.entries);
+
     var byDay = {};
     (data.entries || []).forEach(function (e) {
       var k = dayKey(e.ts);
       if (k < cutoffKey) return;
-      if (!byDay[k]) byDay[k] = { key: k, ts: e.ts, hours: {} };
+      if (!byDay[k]) byDay[k] = { key: k, ts: e.ts, hours: resolved[k] || {} };
       if (e.ts < byDay[k].ts) byDay[k].ts = e.ts;
-      var h = new Date(e.ts).getHours();
-      if (!byDay[k].hours[h]) byDay[k].hours[h] = {};
-      byDay[k].hours[h][e.color] = true;
     });
 
     // Today always shows, even with nothing logged yet.
@@ -327,10 +429,12 @@
     return days.map(function (k) {
       var day = byDay[k];
       var cells = hours.map(function (h) {
-        var present = COLOURS.filter(function (c) {
-          return day.hours[h] && day.hours[h][c];
-        });
-        return { hour: h, colours: present };
+        var cell = day.hours[h];
+        return {
+          hour: h,
+          colours: cell ? cell.colours : [],
+          late: cell ? cell.late : false
+        };
       });
       return { key: k, ts: day.ts, cells: cells };
     });
@@ -388,8 +492,10 @@
     });
     var counts = { red: 0, yellow: 0, green: 0 };
     var total = 0;
-    (data.entries || []).forEach(function (e) {
-      if (!set[dayKey(e.ts)]) return;
+    // Count resolved hours, not raw rows — otherwise a corrected hour would be
+    // counted twice, once as its old colour.
+    effectiveEntries(data.entries).forEach(function (e) {
+      if (!set[e.dayKey]) return;
       if (counts[e.color] === undefined) return;
       counts[e.color]++;
       total++;
@@ -439,7 +545,34 @@
       }
     }
 
+    // End-of-day sweep, roughly an hour before the stated bedtime — 9:20pm for
+    // the default 22:00. The last chance to complete the day while recall is
+    // still same-day; after midnight the day is closed deliberately.
+    //
+    // Offset clear of the top of the hour on purpose: at exactly 9pm the hourly
+    // check-in wins, and the patient would get two prompts seconds apart. The
+    // hourly asks what is true right now, which is better data than recall, so
+    // it keeps priority and the sweep follows later in the hour.
+    var sweepMins = hhmmToMinutes(data.waking.end) - 40;
+    var nowMins2 = hour * 60 + minute;
+    if (sweepMins > 0 && nowMins2 >= sweepMins && nowMins2 < sweepMins + ALARM_WINDOW_MINUTES) {
+      var ekey = "e" + dk;
+      if (!data.fired[ekey] && countEmptyHoursToday(data, now) > 0) {
+        return { kind: "endOfDay", key: ekey, empty: countEmptyHoursToday(data, now) };
+      }
+    }
+
     return null;
+  }
+
+  /** Waking hours already past today that still hold nothing. */
+  function countEmptyHoursToday(data, now) {
+    var dk = dayKey(now);
+    var resolved = resolveHours(data.entries)[dk] || {};
+    var nowHour = new Date(now).getHours();
+    return wakingHours(data.waking).filter(function (h) {
+      return h <= nowHour && !(resolved[h] && resolved[h].colours.length);
+    }).length;
   }
 
   /** Drop fired-slots from previous days so the map cannot grow without bound. */
@@ -503,8 +636,12 @@
     }
 
     base.tablets = tablets;
+    // A cleared hour is recorded as an edit carrying color:null, so null is
+    // valid but only on an edit row.
     base.entries = Array.isArray(d.entries) ? d.entries.filter(function (e) {
-      return e && COLOURS.indexOf(e.color) !== -1 && typeof e.ts === "number";
+      if (!e || typeof e.ts !== "number") return false;
+      if (COLOURS.indexOf(e.color) !== -1) return true;
+      return e.color === null && !!e.edit;
     }) : [];
     base.takes = Array.isArray(d.takes) ? d.takes.filter(function (t) {
       return t && typeof t.ts === "number";
@@ -558,6 +695,8 @@
   var toastTimer = null;
   var chartRange = 7;
   var draft = null; // in-progress setup edits
+  var reportOffset = 0; // 0 = today; earlier days are read-only
+  var fillHour = null; // hour currently being filled in, or null
 
   var app = document.getElementById("app");
 
@@ -636,6 +775,27 @@
     showToast(S.recordedAt(COLOUR_META[colour].short, clockLabel(now)));
   }
 
+  /* Filling in an hour appends an assertion; it never rewrites a row. `ts` is
+   * the hour being described, `enteredTs` is when the patient actually said so,
+   * and `edit` marks it as superseding whatever else sits in that hour. The
+   * gap between ts and enteredTs is what tells the doctor this was recalled
+   * rather than logged live. Same day only — overnight recall is not reliable
+   * enough to be worth recording. */
+  function assertHour(hour, colour) {
+    var now = Date.now();
+    var slot = new Date(now);
+    slot.setHours(hour, 0, 0, 0);
+    if (slot.getTime() > now) return false; // never the future
+    data.entries.push({
+      color: colour,
+      ts: slot.getTime(),
+      enteredTs: now,
+      edit: true
+    });
+    save();
+    return true;
+  }
+
   function recordTake(name, dose, time) {
     data.takes.push({ name: name, dose: dose, time: time || null, ts: Date.now() });
     save();
@@ -648,8 +808,8 @@
       '<div class="pop">' +
       "<h1>" + S.welcomeTitle + "</h1>" +
       '<div class="video-wrap">' +
-      '<video id="intro" controls playsinline preload="auto" crossorigin="anonymous" src="assets/doctor-intro.mp4?v=3">' +
-      '<track kind="subtitles" srclang="en" label="English" src="assets/captions-en.vtt?v=3"' +
+      '<video id="intro" controls playsinline preload="auto" crossorigin="anonymous" src="assets/doctor-intro.mp4?v=5">' +
+      '<track kind="subtitles" srclang="en" label="English" src="assets/captions-en.vtt?v=5"' +
       (data.settings.captions ? " default" : "") +
       " />" +
       "</video>" +
@@ -930,7 +1090,9 @@
   }
 
   function screenMenu() {
-    var sub = data.profile.name ? esc(data.profile.name) : S.noProfile;
+    var sub =
+      (data.profile.name ? esc(data.profile.name) : S.noProfile) +
+      ' <span style="opacity:0.6">· ' + APP_VERSION + "</span>";
     var canEnable = window.Notification && Notification.permission === "default";
     return (
       '<div class="pop">' +
@@ -983,39 +1145,52 @@
 
   function screenToday() {
     var now = Date.now();
-    var dk = dayKey(now);
+    var viewing = now - reportOffset * 86400000;
+    var dk = dayKey(viewing);
+    var isToday = reportOffset === 0;
     var hours = wakingHours(data.waking);
-    var todays = data.entries.filter(function (e) {
-      return dayKey(e.ts) === dk;
-    });
+    var resolved = resolveHours(data.entries)[dk] || {};
 
     var counts = { red: 0, yellow: 0, green: 0 };
-    todays.forEach(function (e) {
-      counts[e.color]++;
+    var logged = 0;
+    hours.forEach(function (h) {
+      if (!resolved[h] || !resolved[h].colours.length) return;
+      resolved[h].colours.forEach(function (c) {
+        if (counts[c] !== undefined) counts[c]++;
+      });
+      logged++;
     });
 
-    var d = new Date(now);
+    var d = new Date(viewing);
+    var dayName =
+      reportOffset === 0 ? S.today : reportOffset === 1 ? S.yesterday : "";
     var header =
       d.toLocaleDateString(undefined, { weekday: "long", day: "numeric", month: "long" }) +
-      " · " + todays.length + S.entries +
+      " · " + logged + S.entries +
       (data.profile.name ? " · " + esc(data.profile.name) : "");
 
-    var byHour = {};
-    todays.forEach(function (e) {
-      var h = new Date(e.ts).getHours();
-      if (!byHour[h]) byHour[h] = {};
-      byHour[h][e.color] = true;
-    });
+    // Hours still to come today have not happened; they are not an omission.
+    var nowHour = new Date(now).getHours();
+    function isFuture(h) {
+      return isToday && h > nowHour;
+    }
 
     var strip = hours
       .map(function (h) {
-        var present = COLOURS.filter(function (c) {
-          return byHour[h] && byHour[h][c];
-        });
-        return (
-          "<div><div class=\"hour-cell\" style=\"" + cellStyle(present) + '"></div>' +
-          '<div class="hour-label">' + hourLabel(h) + "</div></div>"
-        );
+        var cell = resolved[h];
+        var present = cell ? cell.colours : [];
+        var editable = isToday && !isFuture(h);
+        var classes =
+          "hour-cell" +
+          (cell && cell.late ? " late" : "") +
+          (isFuture(h) ? " future" : "") +
+          (fillHour === h ? " picking" : "") +
+          (editable ? " hour-tap" : "");
+        var inner = editable
+          ? '<button class="' + classes + '" style="' + cellStyle(present) +
+            '" data-act="pick-hour" data-hour="' + h + '" aria-label="' + hourLabel(h) + '"></button>'
+          : '<div class="' + classes + '" style="' + cellStyle(present) + '"></div>';
+        return "<div>" + inner + '<div class="hour-label">' + hourLabel(h) + "</div></div>";
       })
       .join("");
 
@@ -1038,9 +1213,50 @@
       })
       .join("");
 
+    // The editor sits under the strip so the hour being changed stays visible.
+    var editor = "";
+    if (isToday && fillHour !== null) {
+      var existing = resolved[fillHour];
+      editor =
+        '<div class="card pop" style="margin-top:12px">' +
+        '<h2 style="font-size:24px;margin-bottom:12px">' + esc(S.fillPrompt(hourLabel(fillHour))) + "</h2>" +
+        '<div class="fill-choices">' +
+        COLOURS.map(function (c) {
+          return (
+            '<button class="fill-btn ' + c + '" data-act="fill-colour" data-colour="' + c + '">' +
+            esc(COLOUR_META[c].short) + "</button>"
+          );
+        }).join("") +
+        "</div>" +
+        (existing && existing.colours.length
+          ? '<button class="btn-ghost" data-act="clear-hour" style="margin-top:10px">' + S.clearHour + "</button>"
+          : "") +
+        '<button class="btn-secondary" data-act="cancel-fill" style="margin-top:8px">' + S.cancelFill + "</button>" +
+        "</div>";
+    }
+
+    // Bulk assertion — never a silent default. The patient states the empty
+    // hours were fine; the app does not assume it on their behalf.
+    var emptyPast = isToday
+      ? hours.filter(function (h) {
+          return !isFuture(h) && !(resolved[h] && resolved[h].colours.length);
+        })
+      : [];
+    var restOfDay = emptyPast.length
+      ? '<div class="section-label">' + S.restOfDayTitle + "</div>" +
+        '<button class="btn-secondary" data-act="fill-rest">' + S.restOfDayFine + "</button>" +
+        '<p class="muted" style="font-size:15px;margin-top:8px">' + S.restOfDayNote + "</p>"
+      : "";
+
     return (
       '<div class="pop">' +
       "<h1>" + S.todayTitle + "</h1>" +
+      '<div class="day-nav">' +
+      '<button data-act="report-day" data-delta="1" aria-label="previous day">' + S.prevDay + "</button>" +
+      '<span class="day-nav-label">' + esc(dayName) + "</span>" +
+      '<button data-act="report-day" data-delta="-1"' + (isToday ? " disabled" : "") +
+      ' aria-label="next day">' + S.nextDay + "</button>" +
+      "</div>" +
       '<p class="muted">' + header + "</p>" +
       '<div class="tiles">' +
       '<div class="tile red"><span class="big">' + counts.red + '</span><span class="label">' + S.off + "</span></div>" +
@@ -1048,7 +1264,11 @@
       '<div class="tile green"><span class="big">' + counts.green + '</span><span class="label">' + S.extra + "</span></div>" +
       "</div>" +
       '<div class="section-label">' + S.hourByHour + "</div>" +
+      '<p class="muted" style="font-size:15px;margin:-4px 0 10px">' +
+      (isToday ? S.fillHint : S.pastDayReadOnly) + "</p>" +
       '<div class="hour-strip">' + strip + "</div>" +
+      editor +
+      restOfDay +
       (schedule ? '<div class="section-label">' + S.tabletSchedule + "</div>" + schedule : "") +
       '<div class="stack" style="margin-top:18px">' +
       '<button class="btn-secondary" data-act="print">' + S.print + "</button>" +
@@ -1102,7 +1322,11 @@
             var title = c.colours.length
               ? hourLabel(c.hour) + " — " + c.colours.join(" + ")
               : hourLabel(c.hour) + " — " + S.notLogged;
-            return '<div class="chart-cell" style="' + cellStyle(c.colours) + '" title="' + esc(title) + '"></div>';
+            return (
+              '<div class="chart-cell' + (c.late && c.colours.length ? " late" : "") + '" style="' +
+              cellStyle(c.colours) + '" title="' + esc(title) + (c.late && c.colours.length ? " · " + S.filledLater : "") +
+              '"></div>'
+            );
           })
           .join("");
 
@@ -1147,6 +1371,7 @@
       '<span class="legend-item"><span class="swatch green"></span>' + S.extra + "</span>" +
       '<span class="legend-item"><span class="swatch unlogged"></span>' + S.notLogged + "</span>" +
       '<span class="legend-item"><span class="swatch split"></span>' + S.multiple + "</span>" +
+      '<span class="legend-item"><span class="swatch late"></span>' + S.filledLater + "</span>" +
       '<span class="legend-item"><span class="swatch line" style="height:18px"></span>' + S.tabletTaken + "</span>" +
       '<span class="legend-item"><span class="swatch dashed" style="height:18px"></span>' + S.tabletNotConfirmed + "</span>" +
       "</div>";
@@ -1207,6 +1432,19 @@
   function overlayHtml() {
     if (!alarm) return "";
     var now = Date.now();
+
+    if (alarm.kind === "endOfDay") {
+      return (
+        '<div class="overlay pop">' +
+        '<div class="kicker">' + S.endOfDayKicker + "</div>" +
+        "<h1>" + S.endOfDayTitle + "</h1>" +
+        '<p class="center" style="font-size:19px">' + S.endOfDayBody + "</p>" +
+        '<div class="stack" style="margin-top:8px">' +
+        '<button class="btn-primary" data-act="end-of-day-go" style="min-height:70px">' + S.endOfDayGo + "</button>" +
+        '<button class="btn-secondary" data-act="dismiss-alarm">' + S.endOfDaySkip + "</button>" +
+        "</div></div>"
+      );
+    }
 
     if (alarm.kind === "tablet") {
       return (
@@ -1395,6 +1633,61 @@
             render();
           }
         }, SNOOZE_MINUTES * 60000);
+        break;
+
+      case "pick-hour":
+        var picked = +el.getAttribute("data-hour");
+        fillHour = fillHour === picked ? null : picked;
+        render();
+        break;
+
+      case "fill-colour":
+        if (fillHour !== null) {
+          assertHour(fillHour, el.getAttribute("data-colour"));
+          showToast(S.recordedAt(COLOUR_META[el.getAttribute("data-colour")].short, hourLabel(fillHour)));
+          fillHour = null;
+        }
+        render();
+        break;
+
+      case "clear-hour":
+        if (fillHour !== null) {
+          assertHour(fillHour, null);
+          fillHour = null;
+        }
+        render();
+        break;
+
+      case "cancel-fill":
+        fillHour = null;
+        render();
+        break;
+
+      case "fill-rest":
+        var wh = wakingHours(data.waking);
+        var res = resolveHours(data.entries)[dayKey(Date.now())] || {};
+        var nowH = new Date().getHours();
+        var filled = 0;
+        wh.forEach(function (h) {
+          if (h > nowH) return;
+          if (res[h] && res[h].colours.length) return;
+          if (assertHour(h, "yellow")) filled++;
+        });
+        showToast(filled ? S.restOfDayDone(filled) : S.restOfDayNothing);
+        render();
+        break;
+
+      case "report-day":
+        reportOffset = Math.max(0, reportOffset + +el.getAttribute("data-delta"));
+        fillHour = null;
+        render();
+        break;
+
+      case "end-of-day-go":
+        alarm = null;
+        reportOffset = 0;
+        fillHour = null;
+        go("today");
         break;
 
       case "mark-taken":
@@ -1613,8 +1906,16 @@
         alarmSelected = null;
         fireFeedback();
         notify(
-          due.kind === "tablet" ? S.takeTablet(due.dose, due.name) : S.logQuestion,
-          due.kind === "tablet" ? S.tabletBody : S.alarmsLine1
+          due.kind === "tablet"
+            ? S.takeTablet(due.dose, due.name)
+            : due.kind === "endOfDay"
+            ? S.endOfDayTitle
+            : S.logQuestion,
+          due.kind === "tablet"
+            ? S.tabletBody
+            : due.kind === "endOfDay"
+            ? S.endOfDayBody
+            : S.alarmsLine1
         );
         render();
         return;
@@ -1632,8 +1933,29 @@
   /* ---------- Service worker ---------- */
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", function () {
-      navigator.serviceWorker.register("service-worker.js?v=3").catch(function () {
-        /* offline support is a bonus, not a requirement */
+      navigator.serviceWorker
+        .register("service-worker.js")
+        .then(function (reg) {
+          // Ask for a new worker on every launch. Without this an installed PWA
+          // can sit on an old build indefinitely and give no sign of it.
+          reg.update();
+          setInterval(function () {
+            reg.update();
+          }, 60 * 60 * 1000);
+        })
+        .catch(function () {
+          /* offline support is a bonus, not a requirement */
+        });
+
+      // When a new worker takes over, reload once so the fresh shell is what the
+      // patient is actually looking at. `hadController` keeps the very first
+      // install (which claims immediately) from causing a pointless reload.
+      var hadController = !!navigator.serviceWorker.controller;
+      var reloaded = false;
+      navigator.serviceWorker.addEventListener("controllerchange", function () {
+        if (!hadController || reloaded) return;
+        reloaded = true;
+        location.reload();
       });
     });
   }
@@ -1649,6 +1971,9 @@
       wakingHours: wakingHours,
       flattenDoses: flattenDoses,
       lockMinutesLeft: lockMinutesLeft,
+      resolveHours: resolveHours,
+      effectiveEntries: effectiveEntries,
+      countEmptyHoursToday: countEmptyHoursToday,
       buildChart: buildChart,
       doseMarkersForDay: doseMarkersForDay,
       statePercentages: statePercentages,

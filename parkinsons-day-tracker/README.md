@@ -73,6 +73,41 @@ page for the notes.
 
 `entries` and `takes` are append-only logs, never edited. That is what makes the chart trustworthy.
 
+### Filling in a missed hour
+
+Rule 9 says timestamps are not editable, and that still holds — but a patient who is frozen at 11am
+physically cannot log at 11am, and that is the hour you most want to see. So hours can be filled in
+or corrected, under three constraints that protect what rule 9 was defending:
+
+1. **Same day only.** Today's hours can be filled until midnight; earlier days are read-only.
+   Overnight recall is not reliable enough to be worth recording, and a chart is more useful with an
+   honest gap than with a guess.
+2. **Nothing is ever rewritten.** A correction appends a new row carrying `edit: true`, which
+   outranks whatever else sits in that hour. The superseded row stays in the log. Clearing an hour
+   appends `color: null`. The log remains append-only; only the *resolved view* changes.
+3. **Late entries stay visibly late.** Every filled-in row carries `enteredTs` — when the patient
+   actually typed it, as against `ts`, the hour it describes. Those cells carry a dot on the chart
+   and in the legend. Recall is weaker evidence than real-time logging, and you should be able to
+   see which is which before changing a dose.
+
+At 40 minutes before the stated bedtime — 9:20pm for the default 22:00 — the app offers to complete
+the day, but only if hours are actually empty. It sits clear of the top of the hour deliberately:
+the hourly check-in asks what is true *now*, which beats recall, so it keeps priority.
+
+**Why unlogged hours are not silently treated as yellow.** It is tempting, since most of the day
+should be yellow, and it would cut the patient's work. But it erases the difference between "I was
+fine" and "I did not log", and the bias runs the wrong way: a patient deep in an off period is the
+least able to operate a phone, so the hours most likely to go unfilled are exactly the red ones.
+Defaulting them to yellow would make an under-treated patient look well controlled. Instead the
+patient can *assert* it — "the hours I did not fill were fine" — which is data rather than an
+assumption, and is marked as filled-in-later like any other recall.
+
+### Deploying
+
+`APP_VERSION` in `app.js`, `CACHE` in `service-worker.js`, and the `?v=N` query strings move
+together on every deploy. The version shows in the menu, because an installed PWA quietly running an
+old build is otherwise invisible — a device can be identified at a glance instead of guessed at.
+
 ### Under review
 
 Two of the rules above are currently being tested rather than assumed. **Menu → Try the navigation

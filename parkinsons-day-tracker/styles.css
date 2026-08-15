@@ -639,6 +639,123 @@ textarea:focus {
   border: 1px solid var(--unlogged-border);
 }
 
+/* Tappable hour, for filling in a missed one. Same footprint as the plain
+   cell so the strip does not reflow when a day becomes read-only. */
+button.hour-cell {
+  width: 100%;
+  padding: 0;
+  min-height: 52px;
+  cursor: pointer;
+}
+
+.hour-cell.hour-tap:active {
+  filter: brightness(0.92);
+}
+
+.hour-cell.picking {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.hour-cell.future {
+  opacity: 0.4;
+  border-style: dashed;
+}
+
+/* A filled-in-later hour carries a dot, so recalled data never passes as
+   real-time data on the doctor's chart. */
+.hour-cell.late,
+.chart-cell.late {
+  position: relative;
+}
+
+.hour-cell.late::after,
+.chart-cell.late::after {
+  content: "";
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.28);
+}
+
+.chart-cell.late::after {
+  width: 4px;
+  height: 4px;
+  right: 1px;
+  bottom: 1px;
+}
+
+.fill-choices {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.fill-btn {
+  min-height: 64px;
+  border-radius: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.fill-btn.red {
+  background: var(--red-fill);
+}
+.fill-btn.yellow {
+  background: var(--yellow-fill);
+  color: #2a2208;
+}
+.fill-btn.green {
+  background: var(--green-fill);
+  color: #1c2113;
+}
+
+.day-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.day-nav button {
+  min-width: 64px;
+  min-height: 48px;
+  background: var(--color-neutral-200);
+}
+
+.day-nav button[disabled] {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.day-nav-label {
+  font-family: var(--font-heading);
+  font-size: 20px;
+}
+
+.swatch.late {
+  background: var(--yellow-fill);
+  position: relative;
+}
+
+.swatch.late::after {
+  content: "";
+  position: absolute;
+  right: 1px;
+  bottom: 1px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
+}
+
 .hour-label {
   font-size: 13px;
   text-align: center;
