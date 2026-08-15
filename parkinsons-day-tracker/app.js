@@ -193,12 +193,13 @@
    * ones seen most often in Indian PD practice; the patient's actual regimen
    * always overrides, so these only prefill the form. */
   var TABLET_PRESETS = [
-    { name: "Syndopa 110", times: ["08:00", "12:00", "16:00", "20:00"], dose: "1 tablet" },
-    { name: "Syndopa Plus", times: ["08:00", "13:00", "18:00"], dose: "1 tablet" },
-    { name: "Syndopa CR", times: ["08:00", "20:00"], dose: "1 tablet" },
-    { name: "Ropark", times: ["08:00", "14:00", "20:00"], dose: "1 tablet" },
-    { name: "Pramipex", times: ["08:00", "14:00", "20:00"], dose: "half tablet" },
-    { name: "Amantrel", times: ["08:00", "14:00"], dose: "1 tablet" }
+    { name: "Syndopa 110", times: ["08:00", "12:00", "16:00", "20:00"], dose: "1 tablet", note: "4× daily" },
+    { name: "Syndopa Plus (125)", times: ["08:00", "12:00", "16:00", "20:00"], dose: "1 tablet", note: "4× daily" },
+    { name: "Syndopa CR (250)", times: ["22:00"], dose: "1 tablet", note: "At bedtime" },
+    { name: "Ropinirole", times: ["08:00", "14:00", "20:00"], dose: "1 tablet", note: "3× daily" },
+    { name: "Pramipexole", times: ["08:00", "14:00", "20:00"], dose: "1 tablet", note: "3× daily" },
+    // Kept off the evening slot — amantadine late in the day tends to disturb sleep.
+    { name: "Amantadine", times: ["08:00", "14:00"], dose: "1 tablet", note: "2× daily" }
   ];
 
   var COLOURS = ["red", "yellow", "green"];
@@ -647,8 +648,8 @@
       '<div class="pop">' +
       "<h1>" + S.welcomeTitle + "</h1>" +
       '<div class="video-wrap">' +
-      '<video id="intro" controls playsinline preload="auto" crossorigin="anonymous" src="assets/doctor-intro.mp4?v=2">' +
-      '<track kind="subtitles" srclang="en" label="English" src="assets/captions-en.vtt?v=2"' +
+      '<video id="intro" controls playsinline preload="auto" crossorigin="anonymous" src="assets/doctor-intro.mp4?v=3">' +
+      '<track kind="subtitles" srclang="en" label="English" src="assets/captions-en.vtt?v=3"' +
       (data.settings.captions ? " default" : "") +
       " />" +
       "</video>" +
@@ -807,7 +808,7 @@
         return (
           '<button data-act="preset" data-i="' + i + '" style="min-height:56px;text-align:left;padding:10px 14px">' +
           "<strong>" + esc(p.name) + "</strong><br />" +
-          '<span style="font-size:14px;opacity:0.75">' + p.times.length + "× daily</span>" +
+          '<span style="font-size:14px;opacity:0.75">' + esc(p.note) + "</span>" +
           "</button>"
         );
       }).join("") +
@@ -1631,7 +1632,7 @@
   /* ---------- Service worker ---------- */
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", function () {
-      navigator.serviceWorker.register("service-worker.js?v=2").catch(function () {
+      navigator.serviceWorker.register("service-worker.js?v=3").catch(function () {
         /* offline support is a bonus, not a requirement */
       });
     });
