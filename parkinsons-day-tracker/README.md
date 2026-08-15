@@ -73,7 +73,38 @@ page for the notes.
 
 `entries` and `takes` are append-only logs, never edited. That is what makes the chart trustworthy.
 
+### Under review
+
+Two of the rules above are currently being tested rather than assumed. **Menu → Try the navigation
+bar** turns on a bottom nav (Log / Chart / Medicines / Menu) and a "today so far" strip on the home
+screen — reversing rules 1 and 8. It is off by default.
+
+Measured at 375×667, the bar costs 17px of colour-button height (152px → 135px) and still clears the
+132px accessibility floor with no scrolling, so the trade-off is not as sharp as feared. The open
+question is not layout but mis-taps: whether a patient with tremor reaching for "yellow" catches
+"Chart" instead. That needs a real phone and a real patient, not a measurement.
+
+Decide it on the device, then delete whichever branch loses.
+
 ---
+
+## The intro video
+
+`assets/doctor-intro.mp4` is the treating doctor's own recording. That is deliberate and worth
+protecting — a patient follows their own neurologist's face and voice more readily than a synthetic
+one, and the app is handed over in clinic.
+
+The current cut runs **3:44** against a target of ≤2:00. The narration it should follow is in the app
+at Menu → Video script, timed to roughly 1:50.
+
+`assets/captions-en.vtt` exists but is a **scaffold, not a transcript** — the cue text is the script
+and the timings are placeholders. Subtitles are therefore off by default, because captions that do
+not match the spoken words are worse than none. To finish them: re-record to the script (then only
+timings need adjusting), or transcribe the existing audio and replace the cue text. Then set
+`settings.captions = true` in `emptyData()`.
+
+Translation is ready on the code side — every string is in one table at the top of `app.js` — but
+each language also needs its own recording, which is the real cost.
 
 ## Accessibility floor
 

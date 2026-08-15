@@ -153,8 +153,53 @@
 
     exportDone: "Backup file saved",
     importDone: "Backup loaded",
-    importBad: "That file could not be read"
+    importBad: "That file could not be read",
+
+    // Colour explainer (menu revisit path — one screen, not three)
+    coloursTitle: "What the colours mean",
+
+    // Chart range label
+    showingDays: function (n) {
+      return "Showing " + n + (n === 1 ? " day" : " days") + " with entries";
+    },
+    showingWindow: function (n, win) {
+      return (
+        "Showing " + n + (n === 1 ? " day" : " days") +
+        " with entries, from the last " + win + " days"
+      );
+    },
+
+    // Tablet presets
+    presetsLabel: "COMMON TABLETS — TAP TO FILL",
+    presetCustom: "Something else",
+
+    // Navigation experiment
+    navToggleOn: "Try the navigation bar",
+    navToggleOff: "Turn off the navigation bar",
+    navExperimentNote:
+      "Experiment. The plain screen has fewer things to mis-tap; the bar is quicker to move around. Try both on the phone.",
+    navLog: "Log",
+    navChart: "Chart",
+    navMeds: "Medicines",
+    navMenu: "Menu",
+    todayAtAGlance: "TODAY SO FAR",
+
+    // Subtitles
+    ccOn: "Subtitles on",
+    ccOff: "Subtitles off"
   };
+
+  /* Common tablets and dosing patterns (§9 of the review list). Names are the
+   * ones seen most often in Indian PD practice; the patient's actual regimen
+   * always overrides, so these only prefill the form. */
+  var TABLET_PRESETS = [
+    { name: "Syndopa 110", times: ["08:00", "12:00", "16:00", "20:00"], dose: "1 tablet" },
+    { name: "Syndopa Plus", times: ["08:00", "13:00", "18:00"], dose: "1 tablet" },
+    { name: "Syndopa CR", times: ["08:00", "20:00"], dose: "1 tablet" },
+    { name: "Ropark", times: ["08:00", "14:00", "20:00"], dose: "1 tablet" },
+    { name: "Pramipex", times: ["08:00", "14:00", "20:00"], dose: "half tablet" },
+    { name: "Amantrel", times: ["08:00", "14:00"], dose: "1 tablet" }
+  ];
 
   var COLOURS = ["red", "yellow", "green"];
 
@@ -420,7 +465,12 @@
       profile: { name: "", age: "", year: "", doctor: "", notes: "" },
       waking: { start: "07:00", end: "22:00" },
       lockUntil: 0,
-      fired: {}
+      fired: {},
+      // Additive to the §6 contract. The Android side may ignore it; it is a
+      // presentation preference, never clinical data.
+      // captions default OFF until captions-en.vtt is synced to the real audio —
+      // subtitles that do not match the spoken words are worse than none.
+      settings: { navMode: false, captions: false }
     };
   }
 
@@ -466,6 +516,10 @@
     if (d.waking && d.waking.start && d.waking.end) base.waking = { start: d.waking.start, end: d.waking.end };
     base.lockUntil = typeof d.lockUntil === "number" ? d.lockUntil : 0;
     base.fired = pruneFired(d.fired, Date.now());
+    if (d.settings) {
+      if (typeof d.settings.navMode === "boolean") base.settings.navMode = d.settings.navMode;
+      if (typeof d.settings.captions === "boolean") base.settings.captions = d.settings.captions;
+    }
     return base;
   }
 
@@ -593,7 +647,11 @@
       '<div class="pop">' +
       "<h1>" + S.welcomeTitle + "</h1>" +
       '<div class="video-wrap">' +
-      '<video id="intro" controls playsinline preload="auto" src="assets/doctor-intro.mp4?v=1"></video>' +
+      '<video id="intro" controls playsinline preload="auto" crossorigin="anonymous" src="assets/doctor-intro.mp4?v=2">' +
+      '<track kind="subtitles" srclang="en" label="English" src="assets/captions-en.vtt?v=2"' +
+      (data.settings.captions ? " default" : "") +
+      " />" +
+      "</video>" +
       "</div>" +
       '<div class="stack">' +
       '<button class="btn-secondary" data-act="play-video" style="min-height:60px">' + S.playVideo + "</button>" +
@@ -617,6 +675,32 @@
       '<div style="margin-top:18px">' +
       '<button class="btn-primary" data-act="go" data-view="' + nextAttr + '">' + backLabel + "</button>" +
       "</div></div>"
+    );
+  }
+
+  /* Revisiting from the menu: all three colours on one scrollable screen.
+   * Onboarding keeps one-idea-per-screen (§2.7) — a newly-diagnosed patient
+   * meeting the states for the first time is a different job from a patient
+   * checking "which one was green again?". */
+  function screenColours() {
+    return (
+      '<div class="pop">' +
+      "<h1>" + S.coloursTitle + "</h1>" +
+      COLOURS.map(function (c) {
+        var m = COLOUR_META[c];
+        return (
+          '<div class="panel panel-' + c + '" style="margin-bottom:14px;padding:20px">' +
+          '<div style="display:flex;align-items:center;gap:16px">' +
+          '<img src="' + m.art + '" alt="" style="width:88px;height:88px;border-radius:24px;object-fit:contain;background:rgba(255,255,255,0.5);flex:none" />' +
+          '<h2 style="font-size:28px;margin:0">' + esc(m.name) + "</h2>" +
+          "</div>" +
+          '<p style="font-size:18px;margin:14px 0 6px">' + esc(m.full) + "</p>" +
+          '<p style="font-size:17px;font-style:italic;margin:0;opacity:0.85">' + esc(exampleFor(c)) + "</p>" +
+          "</div>"
+        );
+      }).join("") +
+      '<button class="btn-primary" data-act="go" data-view="menu">' + S.backToMenu + "</button>" +
+      "</div>"
     );
   }
 
@@ -714,9 +798,25 @@
       })
       .join("");
 
+    // One tap fills a whole tablet — name, times and dose. The patient's real
+    // regimen always overrides; this only saves typing on the common cases.
+    var presets =
+      '<div class="section-label">' + S.presetsLabel + "</div>" +
+      '<div class="quick-doses" style="grid-template-columns:repeat(2,1fr);margin-bottom:16px">' +
+      TABLET_PRESETS.map(function (p, i) {
+        return (
+          '<button data-act="preset" data-i="' + i + '" style="min-height:56px;text-align:left;padding:10px 14px">' +
+          "<strong>" + esc(p.name) + "</strong><br />" +
+          '<span style="font-size:14px;opacity:0.75">' + p.times.length + "× daily</span>" +
+          "</button>"
+        );
+      }).join("") +
+      "</div>";
+
     return (
       '<div class="pop">' +
       "<h1>" + S.setupTitle + "</h1>" +
+      presets +
       cards +
       '<button class="btn-secondary" data-act="add-tablet" style="min-height:58px">' + S.addTablet + "</button>" +
       '<div style="margin-top:14px">' +
@@ -733,6 +833,54 @@
       '<img src="' + m.art + '" alt="" />' +
       "<span><span class=\"name\">" + esc(m.short) + '</span><span class="desc">' + esc(m.desc) + "</span></span>" +
       "</button>"
+    );
+  }
+
+  /* Compact strip of today's hours so far — the "home heat table" from the
+   * review list. Only rendered in nav mode; §2.8 keeps history off the home
+   * screen otherwise. */
+  function todayStrip() {
+    var dk = dayKey(Date.now());
+    var hours = wakingHours(data.waking);
+    var byHour = {};
+    data.entries.forEach(function (e) {
+      if (dayKey(e.ts) !== dk) return;
+      var h = new Date(e.ts).getHours();
+      if (!byHour[h]) byHour[h] = {};
+      byHour[h][e.color] = true;
+    });
+    return (
+      '<div class="today-strip">' +
+      '<div class="section-label" style="margin:0 0 6px">' + S.todayAtAGlance + "</div>" +
+      '<div class="today-strip-cells">' +
+      hours
+        .map(function (h) {
+          var present = COLOURS.filter(function (c) {
+            return byHour[h] && byHour[h][c];
+          });
+          return '<div class="mini-cell" style="' + cellStyle(present) + '" title="' + hourLabel(h) + '"></div>';
+        })
+        .join("") +
+      "</div></div>"
+    );
+  }
+
+  function navBar() {
+    if (!data.settings.navMode) return "";
+    var item = function (act, viewName, label) {
+      var on = view === viewName;
+      return (
+        '<button class="nav-item' + (on ? " on" : "") + '" data-act="' + act +
+        '" data-view="' + viewName + '" aria-current="' + on + '">' + label + "</button>"
+      );
+    };
+    return (
+      '<nav class="nav-bar">' +
+      item("go", "log", S.navLog) +
+      item("go", "month", S.navChart) +
+      item("go", "today", S.navMeds) +
+      item("open-menu", "menu", S.navMenu) +
+      "</nav>"
     );
   }
 
@@ -766,11 +914,16 @@
         "</div>";
     }
 
+    var nav = data.settings.navMode;
     return (
-      '<div class="log-screen">' +
+      '<div class="log-screen' + (nav ? " with-nav" : "") + '">' +
+      (nav ? todayStrip() : "") +
       "<h1>" + S.logQuestion + "</h1>" +
       body +
-      '<button class="btn-secondary" data-act="open-menu" style="min-height:62px;flex:none">' + S.menu + "</button>" +
+      // In nav mode the bar carries the menu, so the big button is redundant.
+      (nav
+        ? ""
+        : '<button class="btn-secondary" data-act="open-menu" style="min-height:62px;flex:none">' + S.menu + "</button>") +
       "</div>"
     );
   }
@@ -783,7 +936,7 @@
       "<h1>" + S.menu + "</h1>" +
       '<p class="muted">' + sub + "</p>" +
       '<button class="btn-menu" data-act="go" data-view="welcome">' + S.menuVideo + "</button>" +
-      '<button class="btn-menu" data-act="go" data-view="stepRed">' + S.menuColours + "</button>" +
+      '<button class="btn-menu" data-act="go" data-view="colours">' + S.menuColours + "</button>" +
       '<button class="btn-menu" data-act="go" data-view="waking">' + S.menuWaking + "</button>" +
       '<button class="btn-menu" data-act="go" data-view="profile">' + S.menuProfile + "</button>" +
       '<button class="btn-menu" data-act="go" data-view="setup">' + S.menuTablets + "</button>" +
@@ -794,6 +947,9 @@
       (canEnable ? '<button class="btn-menu" data-act="enable-alarms">' + S.menuEnableAlarms + "</button>" : "") +
       '<button class="btn-menu" data-act="export">' + S.menuExport + "</button>" +
       '<button class="btn-menu" data-act="import">' + S.menuImport + "</button>" +
+      '<button class="btn-menu" data-act="toggle-nav">' +
+      (data.settings.navMode ? S.navToggleOff : S.navToggleOn) + "</button>" +
+      '<p class="muted" style="font-size:15px;margin:2px 4px 10px">' + S.navExperimentNote + "</p>" +
       '<button class="btn-primary" data-act="leave-menu" style="min-height:68px;margin-top:8px">' + S.backToLogging + "</button>" +
       "</div>"
     );
@@ -1001,6 +1157,11 @@
       '<button data-act="range" data-days="7" aria-pressed="' + (chartRange === 7) + '">' + S.week + "</button>" +
       '<button data-act="range" data-days="30" aria-pressed="' + (chartRange === 30) + '">' + S.month + "</button>" +
       "</div>" +
+      // Days with nothing logged are skipped (§9), so with sparse data both
+      // ranges can render the same rows. Say the window out loud, or the
+      // toggle reads as broken.
+      '<p class="muted" style="font-size:15px;margin:-4px 0 12px">' +
+      esc(S.showingWindow(rows.length, chartRange)) + "</p>" +
       '<div class="tiles">' +
       '<div class="tile red"><span class="big">' + stats.pct.red + '%</span><span class="label">' + S.off + "</span></div>" +
       '<div class="tile yellow"><span class="big">' + stats.pct.yellow + '%</span><span class="label">' + S.normal + "</span></div>" +
@@ -1108,6 +1269,7 @@
       return screenStep("green", "stepAlarms");
     },
     stepAlarms: screenStepAlarms,
+    colours: screenColours,
     waking: screenWaking,
     setup: screenSetup,
     log: screenLog,
@@ -1118,12 +1280,20 @@
     script: screenScript
   };
 
+  // Screens the nav bar may sit under. It must never appear during onboarding
+  // or over a half-filled form, where a stray tap would discard typed timings.
+  var NAV_VIEWS = ["log", "month", "today", "menu", "colours", "script"];
+
   function render() {
     var builder = SCREENS[view] || screenLog;
     var html = builder();
+    if (data.settings.navMode && NAV_VIEWS.indexOf(view) !== -1 && !alarm) {
+      html += navBar();
+    }
     if (toast) html += '<div class="toast">' + esc(toast) + "</div>";
     html += overlayHtml();
     app.innerHTML = html;
+    app.classList.toggle("has-nav", data.settings.navMode && NAV_VIEWS.indexOf(view) !== -1 && !alarm);
   }
 
   /* ---------- Events (delegated on data-act) ---------- */
@@ -1306,6 +1476,28 @@
         }
         break;
 
+      case "preset":
+        var preset = TABLET_PRESETS[+el.getAttribute("data-i")];
+        // Replace a still-blank first card rather than stacking an empty one.
+        var blank =
+          draft.length === 1 && !draft[0].name.trim() && draft[0].doses.length === 1;
+        var filled = {
+          name: preset.name,
+          doses: preset.times.map(function (t) {
+            return { time: t, dose: preset.dose };
+          })
+        };
+        if (blank) draft[0] = filled;
+        else draft.push(filled);
+        render();
+        break;
+
+      case "toggle-nav":
+        data.settings.navMode = !data.settings.navMode;
+        save();
+        render();
+        break;
+
       case "export":
         exportBackup();
         break;
@@ -1439,7 +1631,7 @@
   /* ---------- Service worker ---------- */
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", function () {
-      navigator.serviceWorker.register("service-worker.js?v=1").catch(function () {
+      navigator.serviceWorker.register("service-worker.js?v=2").catch(function () {
         /* offline support is a bonus, not a requirement */
       });
     });
@@ -1474,6 +1666,10 @@
     go: go,
     reset: function () {
       data = emptyData();
+      draft = null;
+      alarm = null;
+      selected = null;
+      fromMenu = false;
       save();
       go("welcome");
     }

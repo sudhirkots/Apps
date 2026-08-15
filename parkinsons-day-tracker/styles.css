@@ -360,6 +360,82 @@ button:focus-visible {
   font-size: 34px;
 }
 
+/* ---------- Navigation experiment (off by default) ----------
+   Reverses §2.1 "no navigation bar". Kept behind a toggle so the two can be
+   compared on a real phone rather than argued about. */
+.nav-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 30;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-divider);
+}
+
+.nav-item {
+  min-height: 56px; /* above the 44px floor even in the bar */
+  border-radius: 20px;
+  background: transparent;
+  font-size: 16px;
+  padding: 8px 4px;
+  color: var(--color-neutral-700);
+}
+
+.nav-item.on {
+  background: var(--color-accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Reserve room so the bar never covers the last control on a screen. */
+#app.has-nav {
+  padding-bottom: calc(74px + env(safe-area-inset-bottom));
+}
+
+/* Today-so-far strip on the home screen (reverses §2.8). */
+.today-strip {
+  flex: none;
+  margin-bottom: 4px;
+}
+
+.today-strip-cells {
+  display: flex;
+  gap: 2px;
+}
+
+.mini-cell {
+  flex: 1 1 0;
+  height: 22px;
+  border-radius: 4px;
+  background: var(--unlogged-fill);
+  border: 1px solid var(--unlogged-border);
+}
+
+/* With the strip and the bar both present the buttons lose ~100px. Let them
+   shrink to the 44px floor rather than push the screen into scrolling —
+   this is exactly the trade-off the phone test is meant to expose. */
+.log-screen.with-nav {
+  min-height: calc(100dvh - 32px - 74px);
+}
+
+.log-screen.with-nav .colour-btn {
+  min-height: 96px;
+}
+
+.log-screen.with-nav .colour-btn img {
+  width: 60px;
+  height: 60px;
+}
+
+.log-screen.with-nav h1 {
+  font-size: clamp(26px, 7.2vw, 32px);
+}
+
 /* ---------- Forms ---------- */
 label {
   display: block;
@@ -769,6 +845,7 @@ textarea:focus {
   }
 
   button,
+  .nav-bar,
   .toggle,
   .btn-primary,
   .btn-secondary,

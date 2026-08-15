@@ -1,0 +1,62 @@
+WEBVTT
+
+NOTE
+SCAFFOLD — TIMINGS ARE NOT SYNCED TO THE AUDIO.
+
+The cue text below is the §14 narration script, not a transcript of the current
+recording. The timings are evenly apportioned placeholders. Do not enable
+captions for patients until these are synced to the real audio.
+
+Two ways to finish this:
+  1. Re-record the intro to the script (the target is ~1:50, see Menu > Video
+     script). Then the text is already correct and only the timings need
+     adjusting to the new cut.
+  2. Keep the current 3:44 recording and transcribe it, replacing the cue text
+     with what is actually said.
+
+Sync the timings by playing the video and noting the real in/out points, then
+edit the timestamps here. Format is HH:MM:SS.mmm --> HH:MM:SS.mmm.
+
+Once synced, flip the default in app.js: settings.captions = true in emptyData().
+
+1
+00:00:00.000 --> 00:00:15.000
+This app helps me see how your Parkinson's medicine is working through the day.
+It takes a few seconds each time.
+
+2
+00:00:15.000 --> 00:00:35.000
+Every hour while you are awake, it will ask you one question:
+how are you feeling right now?
+You answer with one of three colours.
+
+3
+00:00:35.000 --> 00:01:05.000
+Red means you are off.
+Stiff or frozen. Hard to get up from a chair or from bed.
+Movements feel slow. Or a shaking tremor.
+Your feet feel stuck to the floor, or you need help to stand up. That is red.
+
+4
+00:01:05.000 --> 00:01:25.000
+Yellow means you are on.
+You get up, walk and do all your work fairly easily.
+You do not need anyone's help.
+This is your good period. Most of the day should be yellow.
+
+5
+00:01:25.000 --> 00:01:50.000
+Green means too much.
+Extra movements you cannot control, getting in the way of what you are doing.
+Your body, head or arms move on their own,
+so eating or sitting still is difficult.
+
+6
+00:01:50.000 --> 00:02:10.000
+The app will also remind you at each tablet time.
+Press "I have taken it" after you take the tablet, so I know the timing.
+
+7
+00:02:10.000 --> 00:02:20.000
+Bring the phone to your next visit.
+I will look at the chart and adjust your medicine.
