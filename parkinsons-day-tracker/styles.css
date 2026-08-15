@@ -1,0 +1,804 @@
+/* Day Tracker — styles
+   Design system per BUILDSPEC §4, accessibility floor §5, print rules §10. */
+
+/* ---------- Fonts (bundled; the app must look identical offline) ---------- */
+@font-face {
+  font-family: "Caprasimo";
+  src: url("assets/fonts/caprasimo.woff2?v=1") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Figtree";
+  src: url("assets/fonts/figtree-variable.woff2?v=1") format("woff2");
+  font-weight: 300 900;
+  font-display: swap;
+}
+
+/* ---------- Tokens ---------- */
+:root {
+  --color-bg: #f5ead8;
+  --color-surface: #ebddc5;
+  --color-text: #201e1d;
+  --color-divider: rgba(32, 30, 29, 0.16);
+  --color-accent: #c67139;
+  --color-accent-2: #7a8a5e;
+
+  --color-neutral-100: #f9f4ed;
+  --color-neutral-200: #eee7db;
+  --color-neutral-300: #dcd3c4;
+  --color-neutral-400: #c0b6a5;
+  --color-neutral-500: #a19786;
+  --color-neutral-600: #82796a;
+  --color-neutral-700: #645c50;
+  --color-neutral-800: #474238;
+  --color-neutral-900: #2e2b25;
+
+  --color-accent-100: #fff2eb;
+  --color-accent-200: #ffe1d0;
+  --color-accent-300: #ffc6a5;
+  --color-accent-400: #f6a06b;
+  --color-accent-500: #d67f48;
+  --color-accent-600: #b2622d;
+  --color-accent-700: #8c491a;
+  --color-accent-800: #643312;
+  --color-accent-900: #402310;
+
+  --color-accent-2-100: #f0fae1;
+  --color-accent-2-200: #e1eecc;
+  --color-accent-2-300: #ccdbb2;
+  --color-accent-2-400: #aebf92;
+  --color-accent-2-500: #8fa073;
+  --color-accent-2-600: #728157;
+  --color-accent-2-700: #56633f;
+  --color-accent-2-800: #3d472b;
+  --color-accent-2-900: #272e1b;
+
+  --font-heading: "Caprasimo", Georgia, serif;
+  --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* State colours are fixed literals, not themeable — they carry clinical meaning. */
+  --red-fill: #a8432f;
+  --red-soft: #f7e6e0;
+  --red-ink: #5e2318;
+  --red-border: #a8432f;
+
+  --yellow-fill: #c9a13a;
+  --yellow-soft: #f7edd3;
+  --yellow-ink: #4a3a12;
+  --yellow-border: #a9822a;
+
+  --green-fill: #8fa073;
+  --green-soft: #e1eecc;
+  --green-ink: #272e1b;
+  --green-border: #728157;
+
+  --unlogged-fill: #eee7db;
+  --unlogged-border: #dcd3c4;
+}
+
+/* ---------- Reset and base ---------- */
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 18px; /* accessibility floor */
+  line-height: 1.45;
+  touch-action: manipulation;
+  overscroll-behavior-y: contain;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  min-height: 100%;
+  padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
+    max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-heading);
+  font-weight: 400;
+  line-height: 1.12;
+  margin: 0 0 12px;
+}
+
+h1 {
+  font-size: 34px;
+}
+
+p {
+  margin: 0 0 14px;
+}
+
+.muted {
+  color: var(--color-neutral-700);
+}
+
+.center {
+  text-align: center;
+}
+
+/* ---------- Animation — the only one ---------- */
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pop {
+  animation: popIn 0.28s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pop {
+    animation: none;
+  }
+}
+
+/* ---------- Buttons ---------- */
+button {
+  font-family: var(--font-body);
+  font-size: 18px;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  min-height: 44px; /* nothing below 44px */
+  padding: 14px 22px;
+  color: var(--color-text);
+  background: var(--color-neutral-200);
+  transition: filter 0.15s ease;
+}
+
+button:active {
+  filter: brightness(0.94);
+}
+
+button:focus-visible {
+  outline: 3px solid var(--color-accent-700);
+  outline-offset: 2px;
+}
+
+.btn-primary {
+  background: var(--color-accent);
+  color: #fff;
+  font-weight: 600;
+  width: 100%;
+  min-height: 66px;
+  font-size: 21px;
+}
+
+.btn-secondary {
+  background: var(--color-surface);
+  width: 100%;
+  min-height: 58px;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-neutral-700);
+  min-height: 44px;
+  padding: 8px 14px;
+  font-size: 16px;
+  text-decoration: underline;
+}
+
+.btn-menu {
+  width: 100%;
+  min-height: 64px;
+  background: var(--color-surface);
+  text-align: left;
+  margin-bottom: 10px;
+  font-size: 19px;
+}
+
+.stack > * + * {
+  margin-top: 12px;
+}
+
+/* ---------- Cards and panels ---------- */
+.card {
+  background: var(--color-surface);
+  border-radius: 32px;
+  padding: 22px;
+}
+
+.subcard {
+  background: var(--color-neutral-100);
+  border-radius: 26px;
+  padding: 16px;
+}
+
+.panel {
+  border-radius: 34px;
+  padding: 26px;
+}
+
+.panel-red {
+  background: var(--red-soft);
+  color: var(--red-ink);
+}
+.panel-yellow {
+  background: var(--yellow-soft);
+  color: var(--yellow-ink);
+}
+.panel-green {
+  background: var(--green-soft);
+  color: var(--green-ink);
+}
+.panel-accent {
+  background: var(--color-accent-200);
+}
+
+/* ---------- Onboarding step screens ---------- */
+.step {
+  min-height: 78dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.step-art {
+  width: 150px;
+  height: 150px;
+  border-radius: 36px;
+  object-fit: contain;
+  background: rgba(255, 255, 255, 0.5);
+  margin: 0 auto 18px;
+  display: block;
+}
+
+.step h2 {
+  font-size: 40px;
+  text-align: center;
+}
+
+.step .definition {
+  font-size: 20px;
+  text-align: center;
+}
+
+.step .example {
+  font-size: 18px;
+  font-style: italic;
+  text-align: center;
+  opacity: 0.85;
+}
+
+/* ---------- The log screen — must not scroll at 375x667 (§11.4) ---------- */
+.log-screen {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100dvh - 32px);
+  gap: 10px;
+}
+
+.log-screen h1 {
+  font-size: clamp(31px, 8.6vw, 38px);
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.colour-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.colour-btn {
+  flex: 1 1 0;
+  min-height: 132px; /* hard floor from §5 */
+  border-radius: 34px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  text-align: left;
+  color: #fff;
+  border: none;
+}
+
+.colour-btn img {
+  width: 78px;
+  height: 78px;
+  border-radius: 22px;
+  object-fit: contain;
+  background: rgba(255, 255, 255, 0.72);
+  flex: none;
+}
+
+.colour-btn .name {
+  font-family: var(--font-heading);
+  font-size: 30px;
+  display: block;
+  line-height: 1.1;
+}
+
+.colour-btn .desc {
+  font-size: 18px;
+  display: block;
+  opacity: 0.95;
+  /* one short line only — long copy overflows the phone (§11.4) */
+}
+
+.colour-btn.red {
+  background: var(--red-fill);
+}
+.colour-btn.yellow {
+  background: var(--yellow-fill);
+  color: #2a2208;
+}
+.colour-btn.green {
+  background: var(--green-fill);
+  color: #1c2113;
+}
+
+/* Selected / locked panels replace the buttons in place */
+.selected-panel h2 {
+  font-size: 34px;
+}
+
+/* ---------- Forms ---------- */
+label {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--color-neutral-700);
+}
+
+input[type="text"],
+input[type="time"],
+input[type="number"],
+textarea {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 20px;
+  padding: 14px 16px;
+  border: 2px solid var(--color-neutral-300);
+  border-radius: 18px;
+  background: var(--color-neutral-100);
+  color: var(--color-text);
+  min-height: 56px;
+}
+
+input[type="time"] {
+  min-height: 62px;
+  font-size: 24px;
+}
+
+textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.field + .field {
+  margin-top: 14px;
+}
+
+.section-label {
+  font-size: 14px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--color-neutral-600);
+  font-weight: 700;
+  margin: 18px 0 10px;
+}
+
+.quick-doses {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.quick-doses button {
+  min-height: 48px;
+  font-size: 16px;
+  background: var(--color-neutral-200);
+  padding: 10px;
+}
+
+.row-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* ---------- Alarm overlays ---------- */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: var(--color-bg);
+  overflow-y: auto;
+  padding: max(18px, env(safe-area-inset-top)) 18px max(18px, env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.overlay.tablet {
+  background: var(--color-accent-200);
+}
+
+.kicker {
+  font-size: 16px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--color-neutral-700);
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.overlay h1 {
+  font-size: 44px;
+  text-align: center;
+}
+
+.overlay.tablet h1 {
+  font-size: 46px;
+}
+
+.pic-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pic-buttons .colour-btn {
+  min-height: 120px;
+}
+
+/* ---------- Toast ---------- */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(18px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  background: var(--color-neutral-900);
+  color: var(--color-neutral-100);
+  padding: 14px 22px;
+  border-radius: 999px;
+  font-size: 17px;
+  z-index: 60;
+  max-width: 92vw;
+  text-align: center;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.22);
+}
+
+/* ---------- Video ---------- */
+.video-wrap {
+  background: #000;
+  border-radius: 32px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.video-wrap video {
+  display: block;
+  width: 100%;
+  max-height: 56vh;
+}
+
+/* ---------- Count tiles ---------- */
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.tile {
+  border-radius: 26px;
+  padding: 16px 10px;
+  text-align: center;
+}
+
+.tile .big {
+  font-family: var(--font-heading);
+  font-size: 36px;
+  display: block;
+  line-height: 1.05;
+}
+
+.tile .label {
+  font-size: 15px;
+}
+
+.tile.red {
+  background: var(--red-soft);
+  color: var(--red-ink);
+}
+.tile.yellow {
+  background: var(--yellow-soft);
+  color: var(--yellow-ink);
+}
+.tile.green {
+  background: var(--green-soft);
+  color: var(--green-ink);
+}
+
+/* ---------- Hour-by-hour strip (today) ---------- */
+.hour-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
+  gap: 8px;
+}
+
+.hour-cell {
+  height: 52px;
+  border-radius: 14px;
+  background: var(--unlogged-fill);
+  border: 1px solid var(--unlogged-border);
+}
+
+.hour-label {
+  font-size: 13px;
+  text-align: center;
+  color: var(--color-neutral-600);
+  margin-top: 4px;
+}
+
+/* ---------- The squares chart (§9) ---------- */
+.chart-scroll {
+  overflow-x: auto;
+  background: var(--color-neutral-100);
+  border-radius: 28px;
+  padding: 16px;
+}
+
+.chart {
+  position: relative;
+  min-width: 500px;
+}
+
+.chart-grid {
+  display: grid;
+  gap: 3px;
+  align-items: center;
+}
+
+.chart-head {
+  font-size: 12px;
+  color: var(--color-neutral-600);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.chart-rowlabel {
+  font-size: 13px;
+  color: var(--color-neutral-700);
+  white-space: nowrap;
+  padding-right: 6px;
+}
+
+.chart-cell {
+  aspect-ratio: 1;
+  border-radius: 5px;
+  background: var(--unlogged-fill);
+  border: 1px solid var(--unlogged-border);
+}
+
+.chart-cell.red {
+  background: var(--red-fill);
+  border-color: var(--red-border);
+}
+.chart-cell.yellow {
+  background: var(--yellow-fill);
+  border-color: var(--yellow-border);
+}
+.chart-cell.green {
+  background: var(--green-fill);
+  border-color: var(--green-border);
+}
+
+/* Dose-line overlay: a second grid sharing the column template exactly (§9) */
+.dose-layer {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  gap: 3px;
+  pointer-events: none;
+}
+
+.dose-row {
+  position: relative;
+  height: 100%;
+}
+
+.dose-line {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 3px;
+  margin-left: -1.5px;
+  background: var(--color-text);
+  border-radius: 2px;
+}
+
+.dose-line::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-text);
+}
+
+.dose-line.missed {
+  width: 2px;
+  margin-left: -1px;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--color-neutral-500) 0 4px,
+    transparent 4px 8px
+  );
+}
+
+.dose-line.missed::before {
+  display: none;
+}
+
+/* ---------- Legend ---------- */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  margin-top: 14px;
+  font-size: 15px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  border: 1px solid var(--unlogged-border);
+  flex: none;
+}
+
+.swatch.red {
+  background: var(--red-fill);
+}
+.swatch.yellow {
+  background: var(--yellow-fill);
+}
+.swatch.green {
+  background: var(--green-fill);
+}
+.swatch.unlogged {
+  background: var(--unlogged-fill);
+}
+.swatch.split {
+  background: linear-gradient(135deg, var(--red-fill) 50%, var(--yellow-fill) 50%);
+}
+.swatch.line {
+  background: var(--color-text);
+  width: 4px;
+  border-radius: 2px;
+}
+.swatch.dashed {
+  width: 4px;
+  border-radius: 2px;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--color-neutral-500) 0 4px,
+    transparent 4px 8px
+  );
+}
+
+/* ---------- Range toggle ---------- */
+.toggle {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.toggle button {
+  flex: 1;
+  background: var(--color-neutral-200);
+}
+
+.toggle button[aria-pressed="true"] {
+  background: var(--color-accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ---------- Script screen ---------- */
+.script-section {
+  border-bottom: 1px solid var(--color-divider);
+  padding: 14px 0;
+}
+
+.script-section:last-child {
+  border-bottom: none;
+}
+
+.script-time {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-accent-700);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ---------- Print (§10) ---------- */
+@media print {
+  body {
+    background: #fff;
+  }
+
+  button,
+  .toggle,
+  .btn-primary,
+  .btn-secondary,
+  .btn-menu,
+  .btn-ghost {
+    display: none !important;
+  }
+
+  .chart-scroll {
+    overflow: visible !important;
+    background: #fff;
+    padding: 0;
+  }
+
+  .chart {
+    min-width: 0;
+  }
+
+  .chart,
+  .card,
+  .tiles {
+    break-inside: avoid;
+  }
+
+  .chart-cell,
+  .tile,
+  .swatch,
+  .dose-line,
+  .hour-cell {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
