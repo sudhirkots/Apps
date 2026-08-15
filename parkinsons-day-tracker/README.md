@@ -32,7 +32,26 @@ migrated on load.
 
 ---
 
-## Running it
+## Where it lives
+
+**https://daytracker.sudhir-kothari.net** — the address to give patients. Cloudflare Pages project
+`day-tracker`, custom domain on a zone already in the Cloudflare account.
+
+Deploy with `./deploy.sh` after any change that should reach patients. **A git push alone does not
+update it** — that only refreshes the GitHub Pages copy at
+`sudhirkots.github.io/Apps/parkinsons-day-tracker/`, which still exists because the repository serves
+other projects from the same site. Two addresses running different versions is how an afternoon gets
+lost; the script exists to stop that.
+
+`deploy.sh` refuses to run when `APP_VERSION`, the `?v=` query strings and the service worker
+`CACHE` name disagree, because shipping a changed `app.js` under an unchanged version string leaves
+installed phones serving the old build with no visible sign of it.
+
+**Moving a patient between addresses loses their history.** Browser storage is per-origin, so the app
+opens empty at a new address. Export from the old one and import at the new one
+(Menu → Save a backup file / Load a backup file) before switching anybody.
+
+## Running it locally
 
 No build step and no dependencies. Serve the folder over HTTP — `file://` will not do, because
 service workers and the manifest need an origin.

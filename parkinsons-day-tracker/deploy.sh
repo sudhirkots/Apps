@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Deploy Day Tracker to Cloudflare Pages (project: day-tracker).
 #
-# The canonical patient-facing address is daytracker.sudhirkothari.com, served by
+# The canonical patient-facing address is daytracker.sudhir-kothari.net, served by
 # this Pages project. The GitHub Pages copy at
 # sudhirkots.github.io/Apps/parkinsons-day-tracker/ still exists because the repo
 # serves other projects from the same site — but it is NOT the one to hand out.
@@ -50,5 +50,5 @@ echo "Deploying v$VER_APP ..."
   --project-name day-tracker --branch main --commit-dirty=true
 
 echo
-echo "Live at https://daytracker.sudhirkothari.com (and day-tracker-ec6.pages.dev)"
+echo "Live at https://daytracker.sudhir-kothari.net (and day-tracker-ec6.pages.dev)"
 echo "Check Menu shows · v$VER_APP"
