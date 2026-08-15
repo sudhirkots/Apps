@@ -17,7 +17,7 @@
   // Bump with every deploy, together with CACHE and the ?v= query strings.
   // Shown in the menu so a device can be identified at a glance — an installed
   // PWA silently running an old build is otherwise invisible.
-  var APP_VERSION = "v5";
+  var APP_VERSION = "v6";
 
   var S = {
     appName: "Day Tracker",
@@ -182,7 +182,7 @@
     navToggleOn: "Try the navigation bar",
     navToggleOff: "Turn off the navigation bar",
     navExperimentNote:
-      "Experiment. The plain screen has fewer things to mis-tap; the bar is quicker to move around. Try both on the phone.",
+      "Turn this off for a plainer screen with fewer things to mis-tap.",
     navLog: "Log",
     navChart: "Chart",
     navMeds: "Medicines",
@@ -604,7 +604,12 @@
       // presentation preference, never clinical data.
       // captions default OFF until captions-en.vtt is synced to the real audio —
       // subtitles that do not match the spoken words are worse than none.
-      settings: { navMode: false, captions: false }
+      //
+      // navMode defaults ON as of v6: tested on a phone and adopted, superseding
+      // the original "no navigation bar" and "history never on the home screen"
+      // rules. The toggle stays, so it can be turned off for a patient who
+      // mis-taps it.
+      settings: { navMode: true, captions: false }
     };
   }
 
@@ -808,8 +813,8 @@
       '<div class="pop">' +
       "<h1>" + S.welcomeTitle + "</h1>" +
       '<div class="video-wrap">' +
-      '<video id="intro" controls playsinline preload="auto" crossorigin="anonymous" src="assets/doctor-intro.mp4?v=5">' +
-      '<track kind="subtitles" srclang="en" label="English" src="assets/captions-en.vtt?v=5"' +
+      '<video id="intro" controls playsinline preload="auto" crossorigin="anonymous" src="assets/doctor-intro.mp4?v=6">' +
+      '<track kind="subtitles" srclang="en" label="English" src="assets/captions-en.vtt?v=6"' +
       (data.settings.captions ? " default" : "") +
       " />" +
       "</video>" +

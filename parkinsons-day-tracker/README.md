@@ -108,18 +108,16 @@ assumption, and is marked as filled-in-later like any other recall.
 together on every deploy. The version shows in the menu, because an installed PWA quietly running an
 old build is otherwise invisible — a device can be identified at a glance instead of guessed at.
 
-### Under review
+### Superseded, by decision
 
-Two of the rules above are currently being tested rather than assumed. **Menu → Try the navigation
-bar** turns on a bottom nav (Log / Chart / Medicines / Menu) and a "today so far" strip on the home
-screen — reversing rules 1 and 8. It is off by default.
+Rules 1 and 8 above no longer hold. As of v6 the app ships with a bottom navigation bar
+(Log / Chart / Medicines / Menu) and a "today so far" strip on the home screen, both on by default.
+This was tested on a phone and adopted deliberately, not drifted into.
 
-Measured at 375×667, the bar costs 17px of colour-button height (152px → 135px) and still clears the
-132px accessibility floor with no scrolling, so the trade-off is not as sharp as feared. The open
-question is not layout but mis-taps: whether a patient with tremor reaching for "yellow" catches
-"Chart" instead. That needs a real phone and a real patient, not a measurement.
-
-Decide it on the device, then delete whichever branch loses.
+The measured cost is 17px of colour-button height at 375×667 (152px → 135px), still clear of the
+132px accessibility floor, with no scrolling. **Menu → Turn off the navigation bar** restores the
+plain screen for a patient who mis-taps it — "Green" sits directly above "Chart", which is the one
+adjacency worth watching in clinic.
 
 ---
 

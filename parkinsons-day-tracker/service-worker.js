@@ -3,16 +3,16 @@
  * ~18 MB — it is cached at runtime on first play, never precached (BUILDSPEC §12).
  * Bump CACHE and the ?v= query strings together whenever an asset changes. */
 
-var CACHE = "day-tracker-v5";
+var CACHE = "day-tracker-v6";
 
 var SHELL = [
   "./",
   "./index.html",
-  "./styles.css?v=5",
-  "./app.js?v=5",
-  "./manifest.webmanifest?v=5",
-  "./assets/fonts/caprasimo.woff2?v=5",
-  "./assets/fonts/figtree-variable.woff2?v=5",
+  "./styles.css?v=6",
+  "./app.js?v=6",
+  "./manifest.webmanifest?v=6",
+  "./assets/fonts/caprasimo.woff2?v=6",
+  "./assets/fonts/figtree-variable.woff2?v=6",
   "./assets/red-freezing.png",
   "./assets/yellow-standing.png",
   "./assets/green-dyskinesia.png",
