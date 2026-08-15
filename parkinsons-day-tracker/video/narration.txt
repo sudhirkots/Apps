@@ -1,0 +1,50 @@
+DAY TRACKER — EXPLAINER NARRATION
+194 words · about 1:45 at an unhurried pace
+
+Paste each block separately into VEED's text-to-speech, so each scene becomes its
+own audio clip you can line up against its screenshot. Do not paste the whole
+thing as one block — you lose the ability to retime a single scene.
+
+Voice: Indian English, male, warm, unhurried. Set speed slightly below default.
+
+═══════════════════════════════════════════════════════════════════
+SCENE 1 — screenshot: welcome.png
+═══════════════════════════════════════════════════════════════════
+This app keeps a simple diary of how your medicine works through the day. I read it at your next visit, and adjust your tablets.
+
+═══════════════════════════════════════════════════════════════════
+SCENE 2 — screenshot: log.png
+═══════════════════════════════════════════════════════════════════
+It asks you one question. How are you feeling right now? You answer with one of three colours.
+
+═══════════════════════════════════════════════════════════════════
+SCENE 3 — screenshot: colours.png, red block filling the frame
+═══════════════════════════════════════════════════════════════════
+Red means you are off. Stiff, or frozen. Hard to get up from a chair. Movements feel slow. Or a shaking tremor.
+
+═══════════════════════════════════════════════════════════════════
+SCENE 4 — screenshot: colours.png, green block filling the frame
+═══════════════════════════════════════════════════════════════════
+Green means you are on. You get up, walk, and do your work easily. Most of your day should be green.
+
+═══════════════════════════════════════════════════════════════════
+SCENE 5 — screenshot: colours.png, blue block filling the frame
+═══════════════════════════════════════════════════════════════════
+Blue means too much movement. Your body, head or arms move on their own, making it hard to eat or sit still.
+
+Blue is not better than green. It means the medicine is working too strongly.
+
+═══════════════════════════════════════════════════════════════════
+SCENE 6 — screenshots: log.png then log-selected.png
+═══════════════════════════════════════════════════════════════════
+Press the colour you feel. Then press Confirm. Two taps, so a shaky hand cannot record the wrong answer.
+
+═══════════════════════════════════════════════════════════════════
+SCENE 7 — screenshots: alarm-hourly.png then today.png
+═══════════════════════════════════════════════════════════════════
+Every hour the app will ring and ask. Answer when you can. At each tablet time it reminds you — press "I have taken it" after you take it.
+
+═══════════════════════════════════════════════════════════════════
+SCENE 8 — screenshot: log.png
+═══════════════════════════════════════════════════════════════════
+Red when you are stuck. Green when you are well. Blue when there is too much movement. Bring the phone to your next visit.
