@@ -8,11 +8,27 @@ four or five, hourly rather than half-hourly. The simplification is deliberate: 
 reliably separate troublesome from non-troublesome dyskinesia can still say "stuck", "fine", or
 "moving too much".
 
-| State | Meaning | Clinical |
-| --- | --- | --- |
-| **Red** | Off period | Hypokinesia: stiff, frozen, hard to rise, slow, tremor |
-| **Yellow** | On period | Normal: gets up, walks, works, needs no help |
-| **Green** | Troublesome period | Dyskinesia: uncontrolled extra movements interfering |
+| Stored state | Shown as | Meaning | Clinical |
+| --- | --- | --- | --- |
+| `off` | **Red** | Off period | Hypokinesia: stiff, frozen, hard to rise, slow, tremor |
+| `on` | **Green** | On period | Normal: gets up, walks, works, needs no help |
+| `extra` | **Indigo** | Troublesome period | Dyskinesia: uncontrolled extra movements interfering |
+
+Entries store the **clinical state**, never the colour, so the palette can be re-themed without
+migrating data or touching the Android contract.
+
+Green means on, and indigo — not green — means dyskinesia. An earlier build used yellow for on and
+green for dyskinesia, which fought the traffic light every patient already knows: someone having a
+good day would reach for green, and that reads on the chart as peak-dose dyskinesia, arguing for
+*less* levodopa in a patient who is doing fine. A wrong-direction error caused by nothing but colour
+convention.
+
+Off and on are the two commonest states and the classic red-green confusion pair, so they are
+separated by **lightness** as well as hue — around 8% of men cannot distinguish the hues, and can
+still read the chart by tone. Indigo rather than black for dyskinesia: the chart draws tablet times
+as dark vertical lines through the cells, and black cells would swallow them exactly where
+peak-dose clustering needs to be read. Data written before v7 (`color: "red"|"yellow"|"green"`) is
+migrated on load.
 
 ---
 
@@ -38,16 +54,16 @@ hour, and a vertical line through the squares at every tablet.
 - **Solid line** — a tablet the patient confirmed taking, drawn at its true minute within the hour.
 - **Faint dashed line** — a scheduled dose time that passed with no confirmation. Only drawn for
   times already past; a dashed line for a dose still to come today would be misleading.
-- **Diagonally split square** — more than one colour was logged in that hour. A red inside an
-  otherwise yellow hour is never overwritten, because losing it would misread the day.
+- **Diagonally split square** — more than one state was logged in that hour. A red inside an
+  otherwise green hour is never overwritten, because losing it would misread the day.
 
 What the patterns mean:
 
 | Pattern | Reading |
 | --- | --- |
-| Red bunching before each line, yellow after | **Wearing off** — the dose interval is too long |
+| Red bunching before each line, green after | **Wearing off** — the dose interval is too long |
 | Widening gap between the line and the colour change | **Delayed on** — absorption is slowing |
-| Green clustering just after a line | **Peak-dose dyskinesia** — the individual dose is too high |
+| Indigo clustering just after a line | **Peak-dose dyskinesia** — the individual dose is too high |
 | Red throughout, regardless of lines | **Under-dosed** overall |
 | Wandering or dashed lines | Timing drift or missed doses — explains a bad day *without* changing the prescription |
 
@@ -62,7 +78,7 @@ page for the notes.
 ## Design decisions that should not be re-litigated
 
 1. The logging screen shows **only** the question, the three buttons, and one Menu button.
-2. Colour meanings are fixed. Red = off, yellow = on/normal, green = dyskinesia.
+2. State meanings are fixed. Red = off, green = on/normal, indigo = dyskinesia.
 3. Tablet timings are constant day to day. The patient is told not to change them.
 4. One tablet = one name + many times. The name is never asked for again per dose time.
 5. Logging is **two taps**: select, then Confirm. Never log on a single tap.
@@ -84,7 +100,7 @@ or corrected, under three constraints that protect what rule 9 was defending:
    honest gap than with a guess.
 2. **Nothing is ever rewritten.** A correction appends a new row carrying `edit: true`, which
    outranks whatever else sits in that hour. The superseded row stays in the log. Clearing an hour
-   appends `color: null`. The log remains append-only; only the *resolved view* changes.
+   appends `state: null`. The log remains append-only; only the *resolved view* changes.
 3. **Late entries stay visibly late.** Every filled-in row carries `enteredTs` — when the patient
    actually typed it, as against `ts`, the hour it describes. Those cells carry a dot on the chart
    and in the legend. Recall is weaker evidence than real-time logging, and you should be able to
@@ -94,13 +110,13 @@ At 40 minutes before the stated bedtime — 9:20pm for the default 22:00 — the
 the day, but only if hours are actually empty. It sits clear of the top of the hour deliberately:
 the hourly check-in asks what is true *now*, which beats recall, so it keeps priority.
 
-**Why unlogged hours are not silently treated as yellow.** It is tempting, since most of the day
-should be yellow, and it would cut the patient's work. But it erases the difference between "I was
-fine" and "I did not log", and the bias runs the wrong way: a patient deep in an off period is the
-least able to operate a phone, so the hours most likely to go unfilled are exactly the red ones.
-Defaulting them to yellow would make an under-treated patient look well controlled. Instead the
-patient can *assert* it — "the hours I did not fill were fine" — which is data rather than an
-assumption, and is marked as filled-in-later like any other recall.
+**Why unlogged hours are not silently treated as on.** It is tempting, since most of the day should
+be green, and it would cut the patient's work. But it erases the difference between "I was fine" and
+"I did not log", and the bias runs the wrong way: a patient deep in an off period is the least able
+to operate a phone, so the hours most likely to go unfilled are exactly the red ones. Defaulting
+them to green would make an under-treated patient look well controlled. Instead the patient can
+*assert* it — "the hours I did not fill were fine" — which is data rather than an assumption, and is
+marked as filled-in-later like any other recall.
 
 ### Deploying
 
@@ -116,7 +132,7 @@ This was tested on a phone and adopted deliberately, not drifted into.
 
 The measured cost is 17px of colour-button height at 375×667 (152px → 135px), still clear of the
 132px accessibility floor, with no scrolling. **Menu → Turn off the navigation bar** restores the
-plain screen for a patient who mis-taps it — "Green" sits directly above "Chart", which is the one
+plain screen for a patient who mis-taps it — the "Blue" button sits directly above "Chart", which is the one
 adjacency worth watching in clinic.
 
 ---

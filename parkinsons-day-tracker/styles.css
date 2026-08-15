@@ -4,13 +4,13 @@
 /* ---------- Fonts (bundled; the app must look identical offline) ---------- */
 @font-face {
   font-family: "Caprasimo";
-  src: url("assets/fonts/caprasimo.woff2?v=1") format("woff2");
+  src: url("assets/fonts/caprasimo.woff2?v=7") format("woff2");
   font-weight: 400;
   font-display: swap;
 }
 @font-face {
   font-family: "Figtree";
-  src: url("assets/fonts/figtree-variable.woff2?v=1") format("woff2");
+  src: url("assets/fonts/figtree-variable.woff2?v=7") format("woff2");
   font-weight: 300 900;
   font-display: swap;
 }
@@ -57,21 +57,32 @@
   --font-heading: "Caprasimo", Georgia, serif;
   --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  /* State colours are fixed literals, not themeable — they carry clinical meaning. */
-  --red-fill: #a8432f;
-  --red-soft: #f7e6e0;
-  --red-ink: #5e2318;
-  --red-border: #a8432f;
+  /* State colours. Named for the clinical state, never the hue, so the palette
+     can be re-themed without touching markup or data.
 
-  --yellow-fill: #c9a13a;
-  --yellow-soft: #f7edd3;
-  --yellow-ink: #4a3a12;
-  --yellow-border: #a9822a;
+     Green is ON and indigo is EXTRA on purpose: everyone reads a traffic light,
+     and an earlier scheme where green meant "too much movement" invited a
+     patient having a good day to log dyskinesia.
 
-  --green-fill: #8fa073;
-  --green-soft: #e1eecc;
-  --green-ink: #272e1b;
-  --green-border: #728157;
+     Off and on are the two commonest states and are the classic red-green
+     confusion pair, so they are separated by LIGHTNESS as well as hue — off is
+     dark, on is clearly lighter. Around 8% of men cannot tell the hues apart;
+     they can still read the chart by tone. Never add a state that relies on hue
+     alone. */
+  --off-fill: #a8432f;
+  --off-soft: #f7e6e0;
+  --off-ink: #5e2318;
+  --off-border: #a8432f;
+
+  --on-fill: #6f9c4f;
+  --on-soft: #e4f0d8;
+  --on-ink: #24361a;
+  --on-border: #5c8440;
+
+  --extra-fill: #4f5d9f;
+  --extra-soft: #e2e5f5;
+  --extra-ink: #232a4d;
+  --extra-border: #3f4c86;
 
   --unlogged-fill: #eee7db;
   --unlogged-border: #dcd3c4;
@@ -234,17 +245,17 @@ button:focus-visible {
   padding: 26px;
 }
 
-.panel-red {
-  background: var(--red-soft);
-  color: var(--red-ink);
+.panel-off {
+  background: var(--off-soft);
+  color: var(--off-ink);
 }
-.panel-yellow {
-  background: var(--yellow-soft);
-  color: var(--yellow-ink);
+.panel-on {
+  background: var(--on-soft);
+  color: var(--on-ink);
 }
-.panel-green {
-  background: var(--green-soft);
-  color: var(--green-ink);
+.panel-extra {
+  background: var(--extra-soft);
+  color: var(--extra-ink);
 }
 .panel-accent {
   background: var(--color-accent-200);
@@ -343,16 +354,19 @@ button:focus-visible {
   /* one short line only — long copy overflows the phone (§11.4) */
 }
 
-.colour-btn.red {
-  background: var(--red-fill);
+.colour-btn.off {
+  background: var(--off-fill);
 }
-.colour-btn.yellow {
-  background: var(--yellow-fill);
-  color: #2a2208;
+/* Dark ink on green (6.5:1) beats white (3.2:1); indigo is the reverse (5.9:1
+   white). Contrast is measured, not eyeballed — these users often have reduced
+   vision on top of everything else. */
+.colour-btn.on {
+  background: var(--on-fill);
+  color: #12200a;
 }
-.colour-btn.green {
-  background: var(--green-fill);
-  color: #1c2113;
+.colour-btn.extra {
+  background: var(--extra-fill);
+  color: #fff;
 }
 
 /* Selected / locked panels replace the buttons in place */
@@ -612,17 +626,17 @@ textarea:focus {
   font-size: 15px;
 }
 
-.tile.red {
-  background: var(--red-soft);
-  color: var(--red-ink);
+.tile.off {
+  background: var(--off-soft);
+  color: var(--off-ink);
 }
-.tile.yellow {
-  background: var(--yellow-soft);
-  color: var(--yellow-ink);
+.tile.on {
+  background: var(--on-soft);
+  color: var(--on-ink);
 }
-.tile.green {
-  background: var(--green-soft);
-  color: var(--green-ink);
+.tile.extra {
+  background: var(--extra-soft);
+  color: var(--extra-ink);
 }
 
 /* ---------- Hour-by-hour strip (today) ---------- */
@@ -703,16 +717,16 @@ button.hour-cell {
   color: #fff;
 }
 
-.fill-btn.red {
-  background: var(--red-fill);
+.fill-btn.off {
+  background: var(--off-fill);
 }
-.fill-btn.yellow {
-  background: var(--yellow-fill);
-  color: #2a2208;
+.fill-btn.on {
+  background: var(--on-fill);
+  color: #12200a;
 }
-.fill-btn.green {
-  background: var(--green-fill);
-  color: #1c2113;
+.fill-btn.extra {
+  background: var(--extra-fill);
+  color: #fff;
 }
 
 .day-nav {
@@ -740,7 +754,7 @@ button.hour-cell {
 }
 
 .swatch.late {
-  background: var(--yellow-fill);
+  background: var(--on-fill);
   position: relative;
 }
 
@@ -803,17 +817,17 @@ button.hour-cell {
   border: 1px solid var(--unlogged-border);
 }
 
-.chart-cell.red {
-  background: var(--red-fill);
-  border-color: var(--red-border);
+.chart-cell.off {
+  background: var(--off-fill);
+  border-color: var(--off-border);
 }
-.chart-cell.yellow {
-  background: var(--yellow-fill);
-  border-color: var(--yellow-border);
+.chart-cell.on {
+  background: var(--on-fill);
+  border-color: var(--on-border);
 }
-.chart-cell.green {
-  background: var(--green-fill);
-  border-color: var(--green-border);
+.chart-cell.extra {
+  background: var(--extra-fill);
+  border-color: var(--extra-border);
 }
 
 /* Dose-line overlay: a second grid sharing the column template exactly (§9) */
@@ -889,20 +903,20 @@ button.hour-cell {
   flex: none;
 }
 
-.swatch.red {
-  background: var(--red-fill);
+.swatch.off {
+  background: var(--off-fill);
 }
-.swatch.yellow {
-  background: var(--yellow-fill);
+.swatch.on {
+  background: var(--on-fill);
 }
-.swatch.green {
-  background: var(--green-fill);
+.swatch.extra {
+  background: var(--extra-fill);
 }
 .swatch.unlogged {
   background: var(--unlogged-fill);
 }
 .swatch.split {
-  background: linear-gradient(135deg, var(--red-fill) 50%, var(--yellow-fill) 50%);
+  background: linear-gradient(135deg, var(--off-fill) 50%, var(--on-fill) 50%);
 }
 .swatch.line {
   background: var(--color-text);

@@ -1,213 +1,177 @@
 # Explainer video — script and production prompt
 
-A how-to-use video for **the patient and the caregiver together**. This is a different asset from
-the intro video already inside the app: that one explains what the three colours mean (~1:50, script
-at Menu → Video script). This one explains how to *operate* the app.
+One video, for the patient and the caregiver together. It explains what the three colours mean and
+how to answer. **Target: under two minutes.**
 
-Running time as written: **about 4 minutes**. A 1:50 cut is marked at the end.
+As written it is **194 words** — **1:45** at 110 words per minute, the right pace for this audience,
+and **1:56** even at a slow 100 wpm. It stays under two minutes at any sensible pace, with room for
+pauses. Do not add lines without removing others.
+
+---
+
+## The colours now work with instinct, not against it
+
+**Red is off. Green is on. Blue is too much movement.**
+
+This matters for the script. An earlier build used yellow for on and green for dyskinesia, and the
+video had to spend fifteen seconds fighting the traffic light every patient already knows — a person
+having a good day would reach for green, which on the chart reads as peak-dose dyskinesia and argues
+for cutting levodopa in someone who is doing fine.
+
+The palette was changed instead, so that warning is gone and the time went back into the script. The
+only counter-intuitive item left is **blue**, which nobody has a prior expectation about — so it
+needs describing, not un-teaching. Scene 5 does that.
 
 ---
 
 ## Before recording: the honest constraint
 
-AI video generators cannot draw this app's screens correctly. Asking one to "show a Parkinson's
-tracking app" produces plausible-looking fake UI with wrong colours, invented buttons and garbled
-text — worse than useless for a patient learning where to tap.
+AI video generators cannot draw this app's screens. Ask one for "a Parkinson's tracking app" and it
+produces plausible-looking fake UI — wrong colours, invented buttons, garbled text. For a patient
+learning where to tap, that is worse than no video.
 
-So build it as **real screenshots + a narrator**, not as generated video:
+Build it as **real screenshots + narration**:
 
-- **Screens** — the PNG files in `screenshots/`, captured from the live app.
-- **Voice** — either record it yourself, or use an AI voice. If patients already know your voice from
-  the in-app intro, use your own; the familiarity is doing real work.
-- **Presenter** — optional. A small talking-head corner is warmer for elderly patients than a
-  disembodied voice, but it is not required.
-
-Assemble in any editor. The screens are stills; add a highlight ring or arrow at each tap point, and
-a slow push-in so a static screenshot does not feel dead.
+- **Screens** — the PNGs in `screenshots/`, captured from the live app.
+- **Voice** — preferably your own. Patients who have met you follow your voice more readily than a
+  synthetic one. An AI voice prompt is included if you would rather not record.
 
 ---
 
-## Script
+## Script — 1:45
 
-Narration is written to be read aloud at an unhurried pace. Short sentences on purpose — many
-viewers will be 65+, some with cognitive slowing, and the caregiver may be watching over
-their shoulder.
-
-### 1 · Opening — 0:00–0:15
+### 1 · What this is — 0:00–0:12 · 25 words
 **Screen:** `welcome.png`
 
-> This app keeps a simple diary of how your Parkinson's medicine works through the day.
-> It takes a few seconds each time. At your next visit, your doctor will look at the diary and adjust
-> your tablets.
+> This app keeps a simple diary of how your medicine works through the day.
+> I read it at your next visit, and adjust your tablets.
 
-### 2 · The three colours — 0:15–1:05
-**Screen:** `colours.png` — hold on each colour block as it is described
+### 2 · The question — 0:12–0:20 · 18 words
+**Screen:** `log.png`
 
-> The app asks you one question: how are you feeling right now? You answer with a colour.
+> It asks you one question. How are you feeling right now? You answer with one of three colours.
+
+### 3 · Red — 0:20–0:36 · 22 words
+**Screen:** `colours.png`, red block full frame
+
+> **Red** means you are off. Stiff, or frozen. Hard to get up from a chair. Movements feel slow.
+> Or a shaking tremor.
+
+### 4 · Green — 0:36–0:50 · 21 words
+**Screen:** `colours.png`, green block full frame
+
+> **Green** means you are on. You get up, walk, and do your work easily.
+> Most of your day should be green.
+
+### 5 · Blue — 0:50–1:12 · 36 words
+**Screen:** `colours.png`, blue block full frame
+
+> **Blue** means too much movement. Your body, head or arms move on their own,
+> making it hard to eat or sit still.
 >
-> **Red** means you are off. Stiff or frozen. Hard to get up from a chair. Movements feel slow. Or a
-> shaking tremor.
->
-> **Yellow** means you are on. You get up, walk, and do your work fairly easily. You do not need
-> anyone's help. Most of the day should be yellow.
->
-> **Green** means too much movement. Your body, head or arms move on their own, and it gets in the
-> way of eating or sitting still.
->
-> Only three. If you are unsure, choose the one closest to how you feel.
+> Blue is not better than green. It means the medicine is working too strongly.
 
-### 3 · Waking hours — 1:05–1:20
-**Screen:** `waking.png`
+*This is the only colour the viewer has no instinct for. Give it the extra beat.*
 
-> The first time you open the app, tell it when you wake up and when you go to bed. The app will only
-> ask you during these hours. It will not disturb your sleep.
+### 6 · How to answer — 1:12–1:26 · 19 words
+**Screen:** `log.png` → `log-selected.png`
 
-### 4 · Your tablets — 1:20–1:50
-**Screen:** `setup.png` — highlight the preset row, then the filled card
+> Press the colour you feel. Then press Confirm. Two taps, so a shaky hand cannot record the wrong
+> answer.
 
-> Next, enter your tablets. If you take a common one, tap it here and the times are filled in for
-> you. Otherwise type the name once, and add each time you take it.
->
-> **Caregiver:** this is the part worth doing together, and worth getting exactly right. The whole
-> diary is read against these timings.
->
-> Once saved, keep the same timings every day. Do not change them on your own.
+### 7 · Alarms and tablets — 1:26–1:40 · 29 words
+**Screen:** `alarm-hourly.png` → `today.png`
 
-### 5 · The main screen — 1:50–2:20
-**Screen:** `log.png` → `log-selected.png` → `log-locked.png`
+> Every hour the app will ring and ask. Answer when you can.
+> At each tablet time it reminds you — press "I have taken it" after you take it.
 
-> This is the main screen. Three buttons, one question.
->
-> Press the colour you feel. Then press **Confirm**. Two taps, so a shaky hand cannot record the
-> wrong answer by mistake.
->
-> After you confirm, the app rests for fifteen minutes. That is normal. You do not need to do
-> anything else.
+### 8 · Close — 1:40–1:52 · 24 words
+**Screen:** `log.png`
 
-### 6 · The hourly alarm — 2:20–2:40
-**Screen:** `alarm-hourly.png`
+> Red when you are stuck. Green when you are well. Blue when there is too much movement.
+> Bring the phone to your next visit.
 
-> Once every hour while you are awake, the app will ring and ask for a colour. Answer it if you can.
-> If you are busy, press **Not now**.
->
-> You can also open the app and press a colour any time, without waiting for the alarm.
-
-### 7 · Tablet reminders — 2:40–3:00
-**Screen:** `today.png` — highlight the tablet schedule section
-
-> At each tablet time the app reminds you to take that tablet. After you take it, press
-> **I have taken it**. That is how the doctor knows your actual timing, not just the plan.
->
-> If you miss the reminder, open **Medicines** and press **Mark taken** next to that dose.
-
-### 8 · Filling in a missed hour — 3:00–3:25
-**Screen:** `today-filling.png`
-
-> Sometimes you cannot use the phone at the time — especially during a bad off period. That hour is
-> not lost.
->
-> Open **Medicines**, and tap any hour that is empty. Choose the colour you remember. You can also
-> change an hour if you picked the wrong colour.
->
-> This only works for today. After midnight the day is closed, because memory from yesterday is not
-> reliable enough for the doctor to act on.
-
-### 9 · Finishing the day — 3:25–3:45
-**Screen:** `today.png` — highlight "The hours I did not fill were fine"
-
-> At night the app will ask whether you want to complete the day. If the hours you missed were all
-> good hours, press **The hours I did not fill were fine**, and they are marked yellow together.
->
-> Only press it if it is true. An empty hour tells the doctor more than a wrong colour does.
-
-### 10 · The chart — 3:45–4:10
-**Screen:** `month.png`, then `month-30.png`
-
-> **Caregiver, this is the part that matters.** Every day is a row. Every hour is a square. The
-> vertical lines are the tablets.
->
-> The doctor reads the pattern between the lines and the colours — whether the medicine is wearing
-> off before the next dose, or working too strongly after it. That is what decides the next
-> prescription.
->
-> Nothing needs to be done here. Just keep the diary honest.
-
-### 11 · Close — 4:10–4:25
-**Screen:** `menu.png`, then back to `log.png`
-
-> Everything stays on this phone. Nothing is shared without you.
->
-> Bring the phone to your next visit. Answer the alarms when you can, take your tablets at the same
-> times, and let the diary do the rest.
+**Total: 194 words — 1:45 at 110 wpm, 1:56 at 100 wpm.**
 
 ---
 
-## Short cut — about 1:50
+## If you need to save time
 
-For patients who will not sit through four minutes, use scenes **1, 2, 5, 6, 7, 11** only. That
-covers what the colours mean and how to answer, which is the minimum needed for usable data. The
-caregiver can watch the full version separately — scenes 4, 8, 9 and 10 are mostly for them.
+1. Scene 7, second half — the tablet reminder is self-explanatory on screen (saves ~8s).
+2. Scene 1, second sentence (saves ~5s).
+3. Scene 6 — only if the two-tap flow looks obvious to you (saves ~11s).
+
+**Never cut** the second half of scene 5. "Blue is not better than green" is the one line carrying
+information the viewer cannot guess.
+
+---
+
+## What is deliberately not in this video
+
+These matter but do not survive a two-minute budget. They belong in a printed sheet handed over in
+clinic:
+
+- Setting waking hours and entering tablets (`waking.png`, `setup.png`) — done once, in clinic.
+- Filling in a missed hour, and "the hours I did not fill were fine" (`today-filling.png`).
+- Reading the squares chart (`month.png`) — that is for you, not the patient.
+- Backup and restore (`menu.png`).
 
 ---
 
 ## Production prompt
 
-For an AI voice or presenter tool (ElevenLabs, HeyGen, Synthesia, D-ID). Paste the narration
-scene by scene, with this as the voice direction:
+For an AI voice tool (ElevenLabs, HeyGen, Synthesia). Paste the narration scene by scene with this
+as voice direction:
 
 > Narrate this as a neurologist speaking directly to an elderly patient with Parkinson's disease and
-> their family caregiver, sitting across a desk in a clinic in India. Indian English accent, warm and
-> unhurried, the pace of someone who has said this many times and is in no rush.
+> their family caregiver, across a desk in a clinic in India. Indian English accent, warm and
+> unhurried — someone who has explained this many times and is in no rush.
 >
-> Speak slowly — roughly 110 words per minute. Leave a full beat of silence at every paragraph break;
-> the listener may be processing slowly. Emphasise the colour words — red, yellow, green — and the
-> button names the viewer must find on screen.
+> Around 110 words per minute. Leave a full beat of silence at every paragraph break. Emphasise the
+> colour words — red, green, blue — each time they open a sentence.
 >
-> Plain, kind, and matter-of-fact. Not cheerful, not clinical, and never condescending. This person
-> has a serious illness and knows it; the tone is a competent doctor being clear, not a
-> commercial being upbeat.
+> Plain, kind, matter-of-fact. Not cheerful, not clinical, never condescending. This person has a
+> serious illness and knows it. A competent doctor being clear, not a commercial being upbeat.
 >
 > Do not add greetings, sign-offs, disclaimers, or any words beyond the script.
 
-### Assembly notes
+### Assembly
 
 | Element | Direction |
 | --- | --- |
 | Screens | Real screenshots only. Never let a generative tool draw the interface. |
-| Motion | Slow 3–5% push-in on each still. Cross-dissolve between scenes, 400ms. |
+| Colour beats | Scenes 3–5 fill the frame with that colour block, so the colour itself is the visual. |
+| Motion | Slow 3–5% push-in on each still; 400ms cross-dissolves. |
 | Tap points | Ring or arrow appearing 0.3s before the narration names the button. |
-| Captions | Burn in, large, high contrast. Many viewers watch muted, and some have reduced vision. |
-| Colour blocks | When narrating red / yellow / green, fill the screen with that colour block from `colours.png`. |
+| Captions | Burn in, large, high contrast. Many will watch muted, and some have reduced vision. |
 | Music | None, or very low. It competes with comprehension for this audience. |
-| Aspect | 9:16 portrait — it is a phone app and will be watched on a phone. |
+| Aspect | 9:16 portrait — it is a phone app, watched on a phone. |
 
 ### If you want a talking-head presenter
 
-> A South Asian doctor in their fifties, in a plain shirt, seated in a modestly furnished consulting
-> room. Neutral background, soft daylight from one side. Calm, still posture, minimal hand movement.
-> No stock-footage gloss, no white teeth, no corporate smiling — this should look like an actual
-> clinic, not an advertisement.
+> A South Asian doctor in their fifties, plain shirt, seated in a modestly furnished consulting room.
+> Neutral background, soft daylight from one side. Calm, still posture, minimal hand movement. No
+> stock-footage gloss, no corporate smiling — an actual clinic, not an advertisement.
 
-Keep the presenter in a corner inset while screens are shown, full-frame only for the opening and
-close.
+Corner inset while screens are shown; full frame only for the opening and close.
 
 ---
 
 ## Screens referenced
 
-| File | Screen |
+| File | Used in |
 | --- | --- |
-| `welcome.png` | Opening — the doctor's intro video |
-| `colours.png` | All three colours on one screen |
-| `waking.png` | Waking hours setup |
-| `setup.png` | Tablets, with quick-set presets |
-| `log.png` | Main logging screen |
-| `log-selected.png` | Colour chosen, awaiting Confirm |
-| `log-locked.png` | Saved, fifteen-minute rest |
-| `alarm-hourly.png` | Hourly check-in alarm |
-| `today.png` | Day report, hour strip and tablet schedule |
-| `today-filling.png` | Filling in a missed hour |
-| `month.png` | Squares chart, one week |
-| `month-30.png` | Squares chart, one month |
-| `menu.png` | Menu |
-| `profile.png` | Patient details |
+| `welcome.png` | Scene 1 |
+| `log.png` | Scenes 2, 6, 8 |
+| `colours.png` | Scenes 3, 4, 5 |
+| `log-selected.png` | Scene 6 |
+| `alarm-hourly.png` | Scene 7 |
+| `today.png` | Scene 7 |
+
+Also in `screenshots/`, unused by this cut but useful for a printed handout: `waking.png`,
+`setup.png`, `log-locked.png`, `today-filling.png`, `month.png`, `month-30.png`, `menu.png`,
+`profile.png`.
+
+All screenshots are captured from the live app at the current palette. If the palette ever changes
+again, re-shoot them — a patient following a video whose colours do not match their screen is worse
+off than one with no video.

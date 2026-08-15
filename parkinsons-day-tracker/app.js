@@ -17,33 +17,34 @@
   // Bump with every deploy, together with CACHE and the ?v= query strings.
   // Shown in the menu so a device can be identified at a glance — an installed
   // PWA silently running an old build is otherwise invisible.
-  var APP_VERSION = "v6";
+  var APP_VERSION = "v7";
 
   var S = {
     appName: "Day Tracker",
 
-    // Colour states
-    redName: "Red — you are off",
-    redShort: "Red",
-    redDesc: "Stiff, frozen or slow",
-    redFull:
+    // The three states. Stored as off / on / extra — the clinical state, never
+    // the colour — so the palette can change without touching data.
+    offName: "Red — you are off",
+    offShort: "Red",
+    offDesc: "Stiff, frozen or slow",
+    offFull:
       "Stiff or frozen. Hard to get up from a chair or from bed. Movements feel slow. Or a shaking tremor.",
-    redExample:
+    offExample:
       "Your feet feel stuck to the floor, or you need help to stand up. That is red.",
 
-    yellowName: "Yellow — you are on",
-    yellowShort: "Yellow",
-    yellowDesc: "Moving and working easily",
-    yellowFull:
+    onName: "Green — you are on",
+    onShort: "Green",
+    onDesc: "Moving and working easily",
+    onFull:
       "You get up, walk and do all your work fairly easily. You do not need anyone's help.",
-    yellowExample: "This is your good period. Most of the day should be yellow.",
+    onExample: "This is your good period. Most of the day should be green.",
 
-    greenName: "Green — too much",
-    greenShort: "Green",
-    greenDesc: "Extra movements you cannot control",
-    greenFull:
+    extraName: "Blue — too much",
+    extraShort: "Blue",
+    extraDesc: "Extra movements you cannot control",
+    extraFull:
       "Extra movements you cannot control, getting in the way of what you are doing.",
-    greenExample:
+    extraExample:
       "Your body, head or arms move on their own, so eating or sitting still is difficult.",
 
     // Welcome
@@ -208,9 +209,9 @@
     restOfDayTitle: "The rest of the day",
     restOfDayFine: "The hours I did not fill were fine",
     restOfDayNote:
-      "Marks every empty hour up to now as yellow. Only press this if that is true — an hour left blank tells the doctor more than a wrong colour.",
+      "Marks every empty hour up to now as green. Only press this if that is true — an hour left blank tells the doctor more than a wrong colour.",
     restOfDayDone: function (n) {
-      return n + (n === 1 ? " hour" : " hours") + " marked yellow";
+      return n + (n === 1 ? " hour" : " hours") + " marked green";
     },
     restOfDayNothing: "No empty hours to fill",
     cancelFill: "Never mind",
@@ -239,13 +240,31 @@
     { name: "Amantadine", times: ["08:00", "14:00"], dose: "1 tablet", note: "2× daily" }
   ];
 
-  var COLOURS = ["red", "yellow", "green"];
+  /* The stored vocabulary is clinical, not chromatic. Entries record off / on /
+   * extra; the palette below is presentation only and can be re-themed without
+   * migrating a single row.
+   *
+   * On is GREEN and dyskinesia is INDIGO, deliberately. Everyone arrives
+   * expecting a traffic light, and an earlier scheme where green meant
+   * "too much movement" invited a patient having a good day to press green —
+   * which reads on the chart as peak-dose dyskinesia and argues for cutting
+   * levodopa in someone who is doing fine. Wrong-direction error, caused by
+   * nothing but colour convention.
+   *
+   * Indigo rather than black for extra: the chart draws tablet times as dark
+   * vertical lines through the cells, and black cells would swallow them
+   * exactly where peak-dose clustering needs to be read.
+   */
+  var STATES = ["off", "on", "extra"];
 
-  var COLOUR_META = {
-    red: { name: S.redName, short: S.redShort, desc: S.redDesc, full: S.redFull, art: "assets/red-freezing.png" },
-    yellow: { name: S.yellowName, short: S.yellowShort, desc: S.yellowDesc, full: S.yellowFull, art: "assets/yellow-standing.png" },
-    green: { name: S.greenName, short: S.greenShort, desc: S.greenDesc, full: S.greenFull, art: "assets/green-dyskinesia.png" }
+  var STATE_META = {
+    off: { name: S.offName, short: S.offShort, desc: S.offDesc, full: S.offFull, art: "assets/off-freezing.png" },
+    on: { name: S.onName, short: S.onShort, desc: S.onDesc, full: S.onFull, art: "assets/on-standing.png" },
+    extra: { name: S.extraName, short: S.extraShort, desc: S.extraDesc, full: S.extraFull, art: "assets/extra-dyskinesia.png" }
   };
+
+  // Old colour-named values, for migrating data written before v7.
+  var LEGACY_STATE = { red: "off", yellow: "on", green: "extra" };
 
   var LOCK_MINUTES = 15;
   var SNOOZE_MINUTES = 10;
@@ -369,11 +388,11 @@
         if (edits.length) {
           // Latest assertion wins. Appended in order, so the last one is newest.
           var winner = edits[edits.length - 1];
-          out[k][h] = { colours: winner.color ? [winner.color] : [], late: true };
+          out[k][h] = { colours: winner.state ? [winner.state] : [], late: true };
         } else {
-          var seen = COLOURS.filter(function (c) {
+          var seen = STATES.filter(function (c) {
             return list.some(function (e) {
-              return e.color === c;
+              return e.state === c;
             });
           });
           out[k][h] = {
@@ -395,7 +414,7 @@
     Object.keys(resolved).forEach(function (k) {
       Object.keys(resolved[k]).forEach(function (h) {
         resolved[k][h].colours.forEach(function (c) {
-          out.push({ color: c, dayKey: k, hour: +h, late: resolved[k][h].late });
+          out.push({ state: c, dayKey: k, hour: +h, late: resolved[k][h].late });
         });
       });
     });
@@ -490,23 +509,23 @@
     dayKeys.forEach(function (k) {
       set[k] = true;
     });
-    var counts = { red: 0, yellow: 0, green: 0 };
+    var counts = { off: 0, on: 0, extra: 0 };
     var total = 0;
     // Count resolved hours, not raw rows — otherwise a corrected hour would be
     // counted twice, once as its old colour.
     effectiveEntries(data.entries).forEach(function (e) {
       if (!set[e.dayKey]) return;
-      if (counts[e.color] === undefined) return;
-      counts[e.color]++;
+      if (counts[e.state] === undefined) return;
+      counts[e.state]++;
       total++;
     });
     return {
       counts: counts,
       total: total,
       pct: {
-        red: total ? Math.round((counts.red / total) * 100) : 0,
-        yellow: total ? Math.round((counts.yellow / total) * 100) : 0,
-        green: total ? Math.round((counts.green / total) * 100) : 0
+        off: total ? Math.round((counts.off / total) * 100) : 0,
+        on: total ? Math.round((counts.on / total) * 100) : 0,
+        extra: total ? Math.round((counts.extra / total) * 100) : 0
       }
     };
   }
@@ -641,13 +660,25 @@
     }
 
     base.tablets = tablets;
-    // A cleared hour is recorded as an edit carrying color:null, so null is
+    // A cleared hour is recorded as an edit carrying state:null, so null is
     // valid but only on an edit row.
-    base.entries = Array.isArray(d.entries) ? d.entries.filter(function (e) {
-      if (!e || typeof e.ts !== "number") return false;
-      if (COLOURS.indexOf(e.color) !== -1) return true;
-      return e.color === null && !!e.edit;
-    }) : [];
+    //
+    // Rows written before v7 carry `color: "red"|"yellow"|"green"`. Translate
+    // them to the clinical vocabulary on load; a patient's history survives the
+    // palette change untouched.
+    base.entries = Array.isArray(d.entries) ? d.entries.reduce(function (acc, e) {
+      if (!e || typeof e.ts !== "number") return acc;
+      var row = { ts: e.ts };
+      if (e.state !== undefined) row.state = e.state;
+      else if (e.color !== undefined) row.state = e.color === null ? null : LEGACY_STATE[e.color];
+      else return acc;
+      if (row.state !== null && STATES.indexOf(row.state) === -1) return acc;
+      if (row.state === null && !e.edit) return acc;
+      if (e.enteredTs) row.enteredTs = e.enteredTs;
+      if (e.edit) row.edit = true;
+      acc.push(row);
+      return acc;
+    }, []) : [];
     base.takes = Array.isArray(d.takes) ? d.takes.filter(function (t) {
       return t && typeof t.ts === "number";
     }) : [];
@@ -772,12 +803,12 @@
   }
 
   /* ---------- Writes ---------- */
-  function logColour(colour) {
+  function logState(state) {
     var now = Date.now();
-    data.entries.push({ color: colour, ts: now });
+    data.entries.push({ state: state, ts: now });
     data.lockUntil = now + LOCK_MINUTES * 60000;
     save();
-    showToast(S.recordedAt(COLOUR_META[colour].short, clockLabel(now)));
+    showToast(S.recordedAt(STATE_META[state].short, clockLabel(now)));
   }
 
   /* Filling in an hour appends an assertion; it never rewrites a row. `ts` is
@@ -786,13 +817,13 @@
    * gap between ts and enteredTs is what tells the doctor this was recalled
    * rather than logged live. Same day only — overnight recall is not reliable
    * enough to be worth recording. */
-  function assertHour(hour, colour) {
+  function assertHour(hour, state) {
     var now = Date.now();
     var slot = new Date(now);
     slot.setHours(hour, 0, 0, 0);
     if (slot.getTime() > now) return false; // never the future
     data.entries.push({
-      color: colour,
+      state: state,
       ts: slot.getTime(),
       enteredTs: now,
       edit: true
@@ -813,23 +844,23 @@
       '<div class="pop">' +
       "<h1>" + S.welcomeTitle + "</h1>" +
       '<div class="video-wrap">' +
-      '<video id="intro" controls playsinline preload="auto" crossorigin="anonymous" src="assets/doctor-intro.mp4?v=6">' +
-      '<track kind="subtitles" srclang="en" label="English" src="assets/captions-en.vtt?v=6"' +
+      '<video id="intro" controls playsinline preload="auto" crossorigin="anonymous" src="assets/doctor-intro.mp4?v=7">' +
+      '<track kind="subtitles" srclang="en" label="English" src="assets/captions-en.vtt?v=7"' +
       (data.settings.captions ? " default" : "") +
       " />" +
       "</video>" +
       "</div>" +
       '<div class="stack">' +
       '<button class="btn-secondary" data-act="play-video" style="min-height:60px">' + S.playVideo + "</button>" +
-      '<button class="btn-primary" data-act="go" data-view="stepRed">' + S.next + "</button>" +
+      '<button class="btn-primary" data-act="go" data-view="stepOff">' + S.next + "</button>" +
       "</div></div>"
     );
   }
 
   function screenStep(colour, nextView) {
-    var m = COLOUR_META[colour];
-    var backLabel = fromMenu && colour === "green" ? S.backToMenu : S.next;
-    var nextAttr = fromMenu && colour === "green" ? "menu" : nextView;
+    var m = STATE_META[colour];
+    var backLabel = fromMenu && colour === "extra" ? S.backToMenu : S.next;
+    var nextAttr = fromMenu && colour === "extra" ? "menu" : nextView;
     return (
       '<div class="step pop">' +
       '<div class="panel panel-' + colour + '">' +
@@ -852,8 +883,8 @@
     return (
       '<div class="pop">' +
       "<h1>" + S.coloursTitle + "</h1>" +
-      COLOURS.map(function (c) {
-        var m = COLOUR_META[c];
+      STATES.map(function (c) {
+        var m = STATE_META[c];
         return (
           '<div class="panel panel-' + c + '" style="margin-bottom:14px;padding:20px">' +
           '<div style="display:flex;align-items:center;gap:16px">' +
@@ -871,7 +902,7 @@
   }
 
   function exampleFor(colour) {
-    return colour === "red" ? S.redExample : colour === "yellow" ? S.yellowExample : S.greenExample;
+    return colour === "off" ? S.offExample : colour === "on" ? S.onExample : S.extraExample;
   }
 
   function screenStepAlarms() {
@@ -993,9 +1024,9 @@
   }
 
   function colourButton(colour, act) {
-    var m = COLOUR_META[colour];
+    var m = STATE_META[colour];
     return (
-      '<button class="colour-btn ' + colour + '" data-act="' + act + '" data-colour="' + colour + '">' +
+      '<button class="colour-btn ' + colour + '" data-act="' + act + '" data-state="' + colour + '">' +
       '<img src="' + m.art + '" alt="" />' +
       "<span><span class=\"name\">" + esc(m.short) + '</span><span class="desc">' + esc(m.desc) + "</span></span>" +
       "</button>"
@@ -1013,7 +1044,7 @@
       if (dayKey(e.ts) !== dk) return;
       var h = new Date(e.ts).getHours();
       if (!byHour[h]) byHour[h] = {};
-      byHour[h][e.color] = true;
+      byHour[h][e.state] = true;
     });
     return (
       '<div class="today-strip">' +
@@ -1021,7 +1052,7 @@
       '<div class="today-strip-cells">' +
       hours
         .map(function (h) {
-          var present = COLOURS.filter(function (c) {
+          var present = STATES.filter(function (c) {
             return byHour[h] && byHour[h][c];
           });
           return '<div class="mini-cell" style="' + cellStyle(present) + '" title="' + hourLabel(h) + '"></div>';
@@ -1056,14 +1087,14 @@
 
     if (isLocked(data.lockUntil, now)) {
       var last = data.entries[data.entries.length - 1];
-      var colour = last ? COLOUR_META[last.color].short.toLowerCase() : "a colour";
+      var colour = last ? STATE_META[last.state].short.toLowerCase() : "a colour";
       body =
-        '<div class="panel panel-' + (last ? last.color : "accent") + ' selected-panel pop" style="flex:1 1 auto;display:flex;flex-direction:column;justify-content:center">' +
+        '<div class="panel panel-' + (last ? last.state : "accent") + ' selected-panel pop" style="flex:1 1 auto;display:flex;flex-direction:column;justify-content:center">' +
         "<h2>" + S.saved + "</h2>" +
         '<p style="font-size:20px">' + esc(S.lockLine(colour, lockMinutesLeft(data.lockUntil, now))) + "</p>" +
         "</div>";
     } else if (selected) {
-      var m = COLOUR_META[selected];
+      var m = STATE_META[selected];
       body =
         '<div class="panel panel-' + selected + ' selected-panel pop" style="flex:1 1 auto;display:flex;flex-direction:column;justify-content:center">' +
         "<h2>" + S.selectedPrefix + esc(m.short.toLowerCase()) + "</h2>" +
@@ -1074,7 +1105,7 @@
     } else {
       body =
         '<div class="colour-buttons">' +
-        COLOURS.map(function (c) {
+        STATES.map(function (c) {
           return colourButton(c, "select");
         }).join("") +
         "</div>";
@@ -1156,7 +1187,7 @@
     var hours = wakingHours(data.waking);
     var resolved = resolveHours(data.entries)[dk] || {};
 
-    var counts = { red: 0, yellow: 0, green: 0 };
+    var counts = { off: 0, on: 0, extra: 0 };
     var logged = 0;
     hours.forEach(function (h) {
       if (!resolved[h] || !resolved[h].colours.length) return;
@@ -1226,10 +1257,10 @@
         '<div class="card pop" style="margin-top:12px">' +
         '<h2 style="font-size:24px;margin-bottom:12px">' + esc(S.fillPrompt(hourLabel(fillHour))) + "</h2>" +
         '<div class="fill-choices">' +
-        COLOURS.map(function (c) {
+        STATES.map(function (c) {
           return (
-            '<button class="fill-btn ' + c + '" data-act="fill-colour" data-colour="' + c + '">' +
-            esc(COLOUR_META[c].short) + "</button>"
+            '<button class="fill-btn ' + c + '" data-act="fill-colour" data-state="' + c + '">' +
+            esc(STATE_META[c].short) + "</button>"
           );
         }).join("") +
         "</div>" +
@@ -1264,9 +1295,9 @@
       "</div>" +
       '<p class="muted">' + header + "</p>" +
       '<div class="tiles">' +
-      '<div class="tile red"><span class="big">' + counts.red + '</span><span class="label">' + S.off + "</span></div>" +
-      '<div class="tile yellow"><span class="big">' + counts.yellow + '</span><span class="label">' + S.normal + "</span></div>" +
-      '<div class="tile green"><span class="big">' + counts.green + '</span><span class="label">' + S.extra + "</span></div>" +
+      '<div class="tile off"><span class="big">' + counts.off + '</span><span class="label">' + S.off + "</span></div>" +
+      '<div class="tile on"><span class="big">' + counts.on + '</span><span class="label">' + S.normal + "</span></div>" +
+      '<div class="tile extra"><span class="big">' + counts.extra + '</span><span class="label">' + S.extra + "</span></div>" +
       "</div>" +
       '<div class="section-label">' + S.hourByHour + "</div>" +
       '<p class="muted" style="font-size:15px;margin:-4px 0 10px">' +
@@ -1285,7 +1316,7 @@
   /** Solid fill, or a diagonal split when an hour holds more than one colour (§9). */
   function cellStyle(colours) {
     if (!colours.length) return "";
-    var vars = { red: "var(--red-fill)", yellow: "var(--yellow-fill)", green: "var(--green-fill)" };
+    var vars = { off: "var(--off-fill)", on: "var(--on-fill)", extra: "var(--extra-fill)" };
     if (colours.length === 1) {
       return "background:" + vars[colours[0]] + ";border-color:" + vars[colours[0]] + ";";
     }
@@ -1371,9 +1402,9 @@
 
     var legend =
       '<div class="legend">' +
-      '<span class="legend-item"><span class="swatch red"></span>' + S.off + "</span>" +
-      '<span class="legend-item"><span class="swatch yellow"></span>' + S.normal + "</span>" +
-      '<span class="legend-item"><span class="swatch green"></span>' + S.extra + "</span>" +
+      '<span class="legend-item"><span class="swatch off"></span>' + S.off + "</span>" +
+      '<span class="legend-item"><span class="swatch on"></span>' + S.normal + "</span>" +
+      '<span class="legend-item"><span class="swatch extra"></span>' + S.extra + "</span>" +
       '<span class="legend-item"><span class="swatch unlogged"></span>' + S.notLogged + "</span>" +
       '<span class="legend-item"><span class="swatch split"></span>' + S.multiple + "</span>" +
       '<span class="legend-item"><span class="swatch late"></span>' + S.filledLater + "</span>" +
@@ -1394,9 +1425,9 @@
       '<p class="muted" style="font-size:15px;margin:-4px 0 12px">' +
       esc(S.showingWindow(rows.length, chartRange)) + "</p>" +
       '<div class="tiles">' +
-      '<div class="tile red"><span class="big">' + stats.pct.red + '%</span><span class="label">' + S.off + "</span></div>" +
-      '<div class="tile yellow"><span class="big">' + stats.pct.yellow + '%</span><span class="label">' + S.normal + "</span></div>" +
-      '<div class="tile green"><span class="big">' + stats.pct.green + '%</span><span class="label">' + S.extra + "</span></div>" +
+      '<div class="tile off"><span class="big">' + stats.pct.off + '%</span><span class="label">' + S.off + "</span></div>" +
+      '<div class="tile on"><span class="big">' + stats.pct.on + '%</span><span class="label">' + S.normal + "</span></div>" +
+      '<div class="tile extra"><span class="big">' + stats.pct.extra + '%</span><span class="label">' + S.extra + "</span></div>" +
       "</div>" +
       (stats.total === 0 ? '<p class="muted">' + S.noDataYet + "</p>" : "") +
       '<div class="chart-scroll"><div class="chart">' + head + body + "</div>" + legend + "</div>" +
@@ -1410,9 +1441,9 @@
   var SCRIPT_SECTIONS = [
     ["Opening · 15s", "This app helps me see how your Parkinson's medicine is working through the day. It takes a few seconds each time."],
     ["What it asks · 20s", "Every hour while you are awake, it will ask you one question: how are you feeling right now? You answer with one of three colours."],
-    ["Red · 30s", S.redFull + " " + S.redExample],
-    ["Yellow · 20s", S.yellowFull + " " + S.yellowExample],
-    ["Green · 25s", S.greenFull + " " + S.greenExample],
+    ["Red · 30s", S.offFull + " " + S.offExample],
+    ["Green · 20s", S.onFull + " " + S.onExample],
+    ["Blue · 25s", S.extraFull + " " + S.extraExample],
     ["Tablets and alarms · 20s", "The app will also remind you at each tablet time. Press 'I have taken it' after you take the tablet, so I know the timing."],
     ["Close · 10s", "Bring the phone to your next visit. I will look at the chart and adjust your medicine."]
   ];
@@ -1472,7 +1503,7 @@
         '<p class="center" style="font-size:20px">' + S.lockedDuringAlarm + "</p>" +
         '<button class="btn-primary" data-act="dismiss-alarm">' + S.dismiss + "</button>";
     } else if (alarmSelected) {
-      var m = COLOUR_META[alarmSelected];
+      var m = STATE_META[alarmSelected];
       inner =
         '<div class="panel panel-' + alarmSelected + ' selected-panel">' +
         "<h2>" + S.selectedPrefix + esc(m.short.toLowerCase()) + "</h2>" +
@@ -1483,7 +1514,7 @@
     } else {
       inner =
         '<div class="pic-buttons">' +
-        COLOURS.map(function (c) {
+        STATES.map(function (c) {
           return colourButton(c, "select-alarm");
         }).join("") +
         "</div>" +
@@ -1503,14 +1534,14 @@
 
   var SCREENS = {
     welcome: screenWelcome,
-    stepRed: function () {
-      return screenStep("red", "stepYellow");
+    stepOff: function () {
+      return screenStep("off", "stepOn");
     },
-    stepYellow: function () {
-      return screenStep("yellow", "stepGreen");
+    stepOn: function () {
+      return screenStep("on", "stepExtra");
     },
-    stepGreen: function () {
-      return screenStep("green", "stepAlarms");
+    stepExtra: function () {
+      return screenStep("extra", "stepAlarms");
     },
     stepAlarms: screenStepAlarms,
     colours: screenColours,
@@ -1578,7 +1609,7 @@
         break;
 
       case "select":
-        selected = el.getAttribute("data-colour");
+        selected = el.getAttribute("data-state");
         render();
         break;
 
@@ -1589,14 +1620,14 @@
 
       case "confirm":
         if (selected) {
-          logColour(selected);
+          logState(selected);
           selected = null;
         }
         render();
         break;
 
       case "select-alarm":
-        alarmSelected = el.getAttribute("data-colour");
+        alarmSelected = el.getAttribute("data-state");
         render();
         break;
 
@@ -1607,7 +1638,7 @@
 
       case "confirm-alarm":
         if (alarmSelected) {
-          logColour(alarmSelected);
+          logState(alarmSelected);
           alarmSelected = null;
         }
         alarm = null;
@@ -1648,8 +1679,8 @@
 
       case "fill-colour":
         if (fillHour !== null) {
-          assertHour(fillHour, el.getAttribute("data-colour"));
-          showToast(S.recordedAt(COLOUR_META[el.getAttribute("data-colour")].short, hourLabel(fillHour)));
+          assertHour(fillHour, el.getAttribute("data-state"));
+          showToast(S.recordedAt(STATE_META[el.getAttribute("data-state")].short, hourLabel(fillHour)));
           fillHour = null;
         }
         render();
@@ -1676,7 +1707,7 @@
         wh.forEach(function (h) {
           if (h > nowH) return;
           if (res[h] && res[h].colours.length) return;
-          if (assertHour(h, "yellow")) filled++;
+          if (assertHour(h, "on")) filled++;
         });
         showToast(filled ? S.restOfDayDone(filled) : S.restOfDayNothing);
         render();
@@ -1894,7 +1925,7 @@
 
   // Screens that must never be interrupted: an alarm navigates to `log` and
   // would discard half-typed tablet timings (§8).
-  var PROTECTED = ["welcome", "stepRed", "stepYellow", "stepGreen", "stepAlarms", "waking", "setup", "profile"];
+  var PROTECTED = ["welcome", "stepOff", "stepOn", "stepExtra", "stepAlarms", "waking", "setup", "profile"];
   // Only these views show live data worth refreshing on the tick (§11.3).
   var LIVE = ["log", "today", "month"];
 
