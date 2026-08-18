@@ -17,7 +17,7 @@
   // Bump with every deploy, together with CACHE and the ?v= query strings.
   // Shown in the menu so a device can be identified at a glance — an installed
   // PWA silently running an old build is otherwise invisible.
-  var APP_VERSION = "v12";
+  var APP_VERSION = "v13";
 
   /* Strings are per language. English is the base; every other language is an
    * OVERRIDE MAP merged over it, so a missing or not-yet-translated key falls
@@ -155,7 +155,6 @@
     normal: "Normal",
     extra: "Extra",
     notLogged: "Not logged",
-    multiple: "More than one in that hour",
     tabletTaken: "Tablet taken",
     tabletNotConfirmed: "Tablet time not confirmed",
     noDataYet: "Nothing logged yet. Press a colour on the home screen to start.",
@@ -201,7 +200,6 @@
       return "How were you at " + hour + "?";
     },
     fillHint: "Tap any hour to fill it in or change it.",
-    filledLater: "Filled in later",
     clearHour: "Clear this hour",
     prevDay: "◀",
     nextDay: "▶",
@@ -413,7 +411,6 @@
     normal: "ठीक",
     extra: "ज़्यादा",
     notLogged: "दर्ज नहीं",
-    multiple: "उस घंटे में एक से ज़्यादा",
     tabletTaken: "गोली ली गई",
     tabletNotConfirmed: "गोली का समय पक्का नहीं",
     noDataYet: "अभी कुछ दर्ज नहीं हुआ। शुरू करने के लिए होम स्क्रीन पर रंग दबाएँ।",
@@ -422,7 +419,6 @@
       return hour + " बजे आप कैसे थे?";
     },
     fillHint: "किसी भी घंटे को भरने या बदलने के लिए उस पर दबाएँ।",
-    filledLater: "बाद में भरा गया",
     clearHour: "इस घंटे को खाली करें",
     today: "आज",
     yesterday: "कल",
@@ -535,7 +531,6 @@
     normal: "ठीक",
     extra: "जास्त",
     notLogged: "नोंद नाही",
-    multiple: "त्या तासात एकापेक्षा जास्त",
     tabletTaken: "गोळी घेतली",
     tabletNotConfirmed: "गोळीची वेळ नक्की नाही",
     noDataYet: "अजून काही नोंदवलेलं नाही. सुरू करण्यासाठी होम स्क्रीनवर रंग दाबा.",
@@ -544,7 +539,6 @@
       return hour + " वाजता तुम्हाला कसं वाटत होतं?";
     },
     fillHint: "कोणताही तास भरण्यासाठी किंवा बदलण्यासाठी त्यावर दाबा.",
-    filledLater: "नंतर भरलेलं",
     clearHour: "हा तास रिकामा करा",
     today: "आज",
     yesterday: "काल",
@@ -657,7 +651,6 @@
     normal: "ઠીક",
     extra: "વધુ",
     notLogged: "નોંધ નથી",
-    multiple: "એ કલાકમાં એકથી વધુ",
     tabletTaken: "ગોળી લીધી",
     tabletNotConfirmed: "ગોળીનો સમય નક્કી નથી",
     noDataYet: "હજી કંઈ નોંધાયું નથી. શરૂ કરવા હોમ સ્ક્રીન પર રંગ દબાવો.",
@@ -666,7 +659,6 @@
       return hour + " વાગ્યે તમને કેવું હતું?";
     },
     fillHint: "કોઈ પણ કલાક ભરવા કે બદલવા તેના પર દબાવો.",
-    filledLater: "પછીથી ભરેલું",
     clearHour: "આ કલાક ખાલી કરો",
     today: "આજે",
     yesterday: "ગઈકાલે",
@@ -779,7 +771,6 @@
     normal: "சரி",
     extra: "அதிகம்",
     notLogged: "பதிவு இல்லை",
-    multiple: "அந்த மணி நேரத்தில் ஒன்றுக்கு மேற்பட்டவை",
     tabletTaken: "மாத்திரை எடுக்கப்பட்டது",
     tabletNotConfirmed: "மாத்திரை நேரம் உறுதிப்படுத்தப்படவில்லை",
     noDataYet: "இன்னும் எதுவும் பதிவாகவில்லை. தொடங்க முகப்புத் திரையில் ஒரு நிறத்தை அழுத்துங்கள்.",
@@ -788,7 +779,6 @@
       return hour + " மணிக்கு உங்களுக்கு எப்படி இருந்தது?";
     },
     fillHint: "எந்த மணி நேரத்தையும் நிரப்ப அல்லது மாற்ற அதை அழுத்துங்கள்.",
-    filledLater: "பின்னர் நிரப்பப்பட்டது",
     clearHour: "இந்த மணி நேரத்தை காலி செய்",
     today: "இன்று",
     yesterday: "நேற்று",
@@ -901,7 +891,6 @@
     normal: "బాగుంది",
     extra: "ఎక్కువ",
     notLogged: "నమోదు కాలేదు",
-    multiple: "ఆ గంటలో ఒకటి కంటే ఎక్కువ",
     tabletTaken: "మాత్ర వేసుకున్నారు",
     tabletNotConfirmed: "మాత్ర సమయం నిర్ధారణ కాలేదు",
     noDataYet: "ఇంకా ఏమీ నమోదు కాలేదు. మొదలుపెట్టడానికి హోమ్ స్క్రీన్‌లో ఒక రంగు నొక్కండి.",
@@ -910,7 +899,6 @@
       return hour + " గంటలకు మీకు ఎలా ఉండేది?";
     },
     fillHint: "ఏ గంటనైనా నింపడానికి లేదా మార్చడానికి దానిపై నొక్కండి.",
-    filledLater: "తర్వాత నింపినది",
     clearHour: "ఈ గంటను ఖాళీ చేయి",
     today: "ఈ రోజు",
     yesterday: "నిన్న",
@@ -1023,7 +1011,6 @@
     normal: "ಸರಿ",
     extra: "ಹೆಚ್ಚು",
     notLogged: "ದಾಖಲಾಗಿಲ್ಲ",
-    multiple: "ಆ ಗಂಟೆಯಲ್ಲಿ ಒಂದಕ್ಕಿಂತ ಹೆಚ್ಚು",
     tabletTaken: "ಮಾತ್ರೆ ತೆಗೆದುಕೊಂಡರು",
     tabletNotConfirmed: "ಮಾತ್ರೆ ಸಮಯ ಖಚಿತವಾಗಿಲ್ಲ",
     noDataYet: "ಇನ್ನೂ ಏನೂ ದಾಖಲಾಗಿಲ್ಲ. ಶುರು ಮಾಡಲು ಮುಖಪುಟದಲ್ಲಿ ಒಂದು ಬಣ್ಣ ಒತ್ತಿ.",
@@ -1032,7 +1019,6 @@
       return hour + " ಗಂಟೆಗೆ ನಿಮಗೆ ಹೇಗಿತ್ತು?";
     },
     fillHint: "ಯಾವುದೇ ಗಂಟೆಯನ್ನು ಭರ್ತಿ ಮಾಡಲು ಅಥವಾ ಬದಲಿಸಲು ಅದನ್ನು ಒತ್ತಿ.",
-    filledLater: "ನಂತರ ಭರ್ತಿ ಮಾಡಿದ್ದು",
     clearHour: "ಈ ಗಂಟೆಯನ್ನು ಖಾಲಿ ಮಾಡಿ",
     today: "ಇಂದು",
     yesterday: "ನಿನ್ನೆ",
@@ -1145,7 +1131,6 @@
     normal: "ശരി",
     extra: "കൂടുതൽ",
     notLogged: "രേഖപ്പെടുത്തിയിട്ടില്ല",
-    multiple: "ആ മണിക്കൂറിൽ ഒന്നിലധികം",
     tabletTaken: "ഗുളിക കഴിച്ചു",
     tabletNotConfirmed: "ഗുളികയുടെ സമയം ഉറപ്പിച്ചിട്ടില്ല",
     noDataYet: "ഇതുവരെ ഒന്നും രേഖപ്പെടുത്തിയിട്ടില്ല. തുടങ്ങാൻ ഹോം സ്ക്രീനിൽ ഒരു നിറം അമർത്തുക.",
@@ -1154,7 +1139,6 @@
       return hour + " ന് നിങ്ങൾക്ക് എങ്ങനെയായിരുന്നു?";
     },
     fillHint: "ഏത് മണിക്കൂറും പൂരിപ്പിക്കാനോ മാറ്റാനോ അതിൽ അമർത്തുക.",
-    filledLater: "പിന്നീട് പൂരിപ്പിച്ചത്",
     clearHour: "ഈ മണിക്കൂർ ഒഴിവാക്കുക",
     today: "ഇന്ന്",
     yesterday: "ഇന്നലെ",
@@ -1363,19 +1347,22 @@
         if (edits.length) {
           // Latest assertion wins. Appended in order, so the last one is newest.
           var winner = edits[edits.length - 1];
-          out[k][h] = { colours: winner.state ? [winner.state] : [], late: true };
+          out[k][h] = { colours: winner.state ? [winner.state] : [] };
         } else {
           var seen = STATES.filter(function (c) {
             return list.some(function (e) {
               return e.state === c;
             });
           });
-          out[k][h] = {
-            colours: seen,
-            late: list.every(function (e) {
-              return !!e.enteredTs;
-            })
-          };
+          // One square, one colour. Where an hour holds more than one state the
+          // WORST wins — off over dyskinesia over on. Losing an off period
+          // inside an otherwise good hour is the error that changes a
+          // prescription; losing a good half-hour inside a bad one is not.
+          var priority = ["off", "extra", "on"];
+          var winner2 = priority.filter(function (c) {
+            return seen.indexOf(c) !== -1;
+          })[0];
+          out[k][h] = { colours: winner2 ? [winner2] : [] };
         }
       });
     });
@@ -2403,7 +2390,6 @@
         var editable = isToday && !isFuture(h);
         var classes =
           "hour-cell" +
-          (cell && cell.late ? " late" : "") +
           (isFuture(h) ? " future" : "") +
           (fillHour === h ? " picking" : "") +
           (editable ? " hour-tap" : "");
@@ -2511,20 +2497,11 @@
     );
   }
 
-  /** Solid fill, or a diagonal split when an hour holds more than one colour (§9). */
+  /** Solid fill for the hour's state, or nothing when the hour is unlogged. */
   function cellStyle(colours) {
     if (!colours.length) return "";
     var vars = { off: "var(--off-fill)", on: "var(--on-fill)", extra: "var(--extra-fill)" };
-    if (colours.length === 1) {
-      return "background:" + vars[colours[0]] + ";border-color:" + vars[colours[0]] + ";";
-    }
-    var step = 100 / colours.length;
-    var stops = colours
-      .map(function (c, i) {
-        return vars[c] + " " + i * step + "% " + (i + 1) * step + "%";
-      })
-      .join(", ");
-    return "background:linear-gradient(135deg, " + stops + ");border-color:var(--color-neutral-500);";
+    return "background:" + vars[colours[0]] + ";border-color:" + vars[colours[0]] + ";";
   }
 
   function screenMonth() {
@@ -2557,9 +2534,8 @@
               ? hourLabel(c.hour) + " — " + c.colours.join(" + ")
               : hourLabel(c.hour) + " — " + S.notLogged;
             return (
-              '<div class="chart-cell' + (c.late && c.colours.length ? " late" : "") + '" style="' +
-              cellStyle(c.colours) + '" title="' + esc(title) + (c.late && c.colours.length ? " · " + S.filledLater : "") +
-              '"></div>'
+              '<div class="chart-cell" style="' + cellStyle(c.colours) +
+              '" title="' + esc(title) + '"></div>'
             );
           })
           .join("");

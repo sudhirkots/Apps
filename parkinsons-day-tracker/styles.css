@@ -4,13 +4,13 @@
 /* ---------- Fonts (bundled; the app must look identical offline) ---------- */
 @font-face {
   font-family: "Caprasimo";
-  src: url("assets/fonts/caprasimo.woff2?v=12") format("woff2");
+  src: url("assets/fonts/caprasimo.woff2?v=13") format("woff2");
   font-weight: 400;
   font-display: swap;
 }
 @font-face {
   font-family: "Figtree";
-  src: url("assets/fonts/figtree-variable.woff2?v=12") format("woff2");
+  src: url("assets/fonts/figtree-variable.woff2?v=13") format("woff2");
   font-weight: 300 900;
   font-display: swap;
 }
@@ -801,33 +801,6 @@ button.hour-cell {
   border-style: dashed;
 }
 
-/* A filled-in-later hour carries a dot, so recalled data never passes as
-   real-time data on the doctor's chart. */
-.hour-cell.late,
-.chart-cell.late {
-  position: relative;
-}
-
-.hour-cell.late::after,
-.chart-cell.late::after {
-  content: "";
-  position: absolute;
-  right: 2px;
-  bottom: 2px;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.85);
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.28);
-}
-
-.chart-cell.late::after {
-  width: 4px;
-  height: 4px;
-  right: 1px;
-  bottom: 1px;
-}
-
 .fill-choices {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -876,23 +849,6 @@ button.hour-cell {
 .day-nav-label {
   font-family: var(--font-heading);
   font-size: 20px;
-}
-
-.swatch.late {
-  background: var(--on-fill);
-  position: relative;
-}
-
-.swatch.late::after {
-  content: "";
-  position: absolute;
-  right: 1px;
-  bottom: 1px;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
 }
 
 .hour-label {
@@ -1047,9 +1003,6 @@ button.hour-cell {
 }
 .swatch.unlogged {
   background: var(--unlogged-fill);
-}
-.swatch.split {
-  background: linear-gradient(135deg, var(--off-fill) 50%, var(--on-fill) 50%);
 }
 .swatch.line {
   background: var(--color-text);

@@ -127,8 +127,13 @@ hour, and a vertical line through the squares at every tablet.
 - **Solid line** — a tablet the patient confirmed taking, drawn at its true minute within the hour.
 - **Faint dashed line** — a scheduled dose time that passed with no confirmation. Only drawn for
   times already past; a dashed line for a dose still to come today would be misleading.
-- **Diagonally split square** — more than one state was logged in that hour. A red inside an
-  otherwise green hour is never overwritten, because losing it would misread the day.
+- **One square, one colour.** Where an hour holds more than one state the worst one wins — off over
+  dyskinesia over on. Losing an off period inside an otherwise good hour is the error that changes a
+  prescription; losing a good half-hour inside a bad one is not. (Earlier builds drew a diagonal
+  split; removed in v13 along with the filled-in-later dot, to leave the squares uncluttered.)
+
+  `enteredTs` is still recorded on every hour filled in from memory — the distinction between recall
+  and real-time logging is preserved in the data, it is simply no longer drawn.
 
 What the patterns mean:
 
