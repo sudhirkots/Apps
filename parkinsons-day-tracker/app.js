@@ -17,7 +17,7 @@
   // Bump with every deploy, together with CACHE and the ?v= query strings.
   // Shown in the menu so a device can be identified at a glance — an installed
   // PWA silently running an old build is otherwise invisible.
-  var APP_VERSION = "v15";
+  var APP_VERSION = "v17";
 
   /* Strings are per language. English is the base; every other language is an
    * OVERRIDE MAP merged over it, so a missing or not-yet-translated key falls
@@ -2571,8 +2571,18 @@
      * that nothing on screen otherwise explains. Percentage tiles are gone for
      * the same reason — a screen of caption text pushes the squares themselves
      * off a phone. */
+    /* The full key, kept OUT of the chart container so it reads as a separate
+     * thing rather than a caption on the squares. On a phone it sits under the
+     * chart; given the width of a tablet or a printed page it moves alongside. */
     var legend =
-      '<div class="legend legend-min">' +
+      '<div class="chart-key">' +
+      reportStates()
+        .map(function (s) {
+          var label = { off: S.off, on: S.normal, extra: S.extra }[s];
+          return '<span class="legend-item"><span class="swatch ' + s + '"></span>' + label + "</span>";
+        })
+        .join("") +
+      '<span class="legend-item"><span class="swatch unlogged"></span>' + S.notLogged + "</span>" +
       '<span class="legend-item"><span class="swatch line" style="height:16px"></span>' +
       S.tabletTaken + "</span>" +
       '<span class="legend-item"><span class="swatch dashed" style="height:16px"></span>' +
@@ -2591,7 +2601,8 @@
       // same thing without a line of text above the chart.
       (stats.total === 0 ? '<p class="muted">' + S.noDataYet + "</p>" : "") +
       '<div class="chart-middle">' +
-      '<div class="chart-scroll"><div class="chart">' + head + body + "</div>" + legend + "</div>" +
+      '<div class="chart-scroll"><div class="chart">' + head + body + "</div></div>" +
+      legend +
       "</div>" +
       '<nav class="chart-bar">' +
       '<button data-act="range" data-days="7" aria-pressed="' + (chartRange === 7) + '">' + S.week + "</button>" +

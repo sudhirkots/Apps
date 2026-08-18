@@ -4,13 +4,13 @@
 /* ---------- Fonts (bundled; the app must look identical offline) ---------- */
 @font-face {
   font-family: "Caprasimo";
-  src: url("assets/fonts/caprasimo.woff2?v=15") format("woff2");
+  src: url("assets/fonts/caprasimo.woff2?v=17") format("woff2");
   font-weight: 400;
   font-display: swap;
 }
 @font-face {
   font-family: "Figtree";
-  src: url("assets/fonts/figtree-variable.woff2?v=15") format("woff2");
+  src: url("assets/fonts/figtree-variable.woff2?v=17") format("woff2");
   font-weight: 300 900;
   font-display: swap;
 }
@@ -970,12 +970,25 @@ button.hour-cell {
   font-size: 15px;
 }
 
-/* The on-screen legend is deliberately two items on one line. */
-.legend-min {
-  gap: 6px 18px;
-  margin-top: 10px;
+/* The key. Deliberately its own block, separated from the chart card, so it
+   reads as a key rather than a caption on the squares. Two columns on a phone
+   so six items take three lines instead of six. */
+.chart-key {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 14px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-divider);
   font-size: 14px;
   color: var(--color-neutral-700);
+  flex: none;
+}
+
+.chart-key .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
 }
 
 .legend-item {
@@ -1123,6 +1136,7 @@ button.hour-cell {
   }
 
   .chart,
+  .chart-key,
   .card,
   .tiles {
     break-inside: avoid;
@@ -1135,5 +1149,33 @@ button.hour-cell {
   .hour-cell {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+  }
+}
+
+/* ---------- Wide screens: the key moves beside the chart ----------
+   Last in the file on purpose. These override .chart-middle's own display,
+   and at equal specificity the later rule wins. */
+@media (min-width: 760px) {
+  /* The chart screen is the one place worth more than the 560px reading width
+     the rest of the app is held to — squares and a key side by side need it. */
+  #app:has(.chart-screen) {
+    max-width: 960px;
+  }
+
+  .chart-middle {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 200px;
+    gap: 22px;
+    align-items: center;
+  }
+
+  .chart-key {
+    grid-template-columns: 1fr;
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+    border-left: 1px solid var(--color-divider);
+    padding-left: 18px;
+    align-self: center;
   }
 }
