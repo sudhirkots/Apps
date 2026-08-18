@@ -1,0 +1,87 @@
+DAY TRACKER — TRANSLATION CHECK
+മലയാളം (Malayalam)
+
+The app asks a Parkinson's patient one question every hour: how are
+you feeling right now? They answer by tapping a colour. These are the
+words that explain the colours.
+
+Please read each one against the English above it. Reply with the
+NUMBER and your correction. Anything you do not mention stays as it is.
+
+What matters is not grammar but sense: whether a patient would
+understand it the same way a doctor means it.
+
+==========================================================
+RED — the medicine is not working
+==========================================================
+
+1. HEADING
+   (the title of this colour, shown above the explanation)
+   English:  Red — you are off
+   Current:  ചുവപ്പ് — മരുന്നിന്റെ ഫലം ഇല്ല
+
+2. BUTTON
+   (the short line on the button the patient taps every hour — must stay short)
+   English:  Stiff, frozen or slow
+   Current:  മുറുക്കം, ഉറഞ്ഞുപോകൽ അല്ലെങ്കിൽ മന്ദത
+
+3. DEFINITION
+   (the main explanation of what this colour means)
+   English:  Stiff or frozen. Hard to get up from a chair or from bed. Movements feel slow. Or a shaking tremor.
+   Current:  മുറുക്കം അല്ലെങ്കിൽ ഉറഞ്ഞുപോയതു പോലെ. കസേരയിൽ നിന്നോ കിടക്കയിൽ നിന്നോ എഴുന്നേൽക്കാൻ പ്രയാസം. ചലനങ്ങൾ മന്ദം. അല്ലെങ്കിൽ വിറയൽ.
+
+4. EXAMPLE
+   (a concrete illustration, shown in italics under the definition)
+   English:  Your feet feel stuck to the floor, or you need help to stand up. That is red.
+   Current:  കാലുകൾ നിലത്ത് ഒട്ടിപ്പിടിച്ചതു പോലെ തോന്നും, അല്ലെങ്കിൽ എഴുന്നേൽക്കാൻ സഹായം വേണം. അതാണ് ചുവപ്പ്.
+
+==========================================================
+GREEN — the medicine is working
+==========================================================
+
+5. HEADING
+   (the title of this colour, shown above the explanation)
+   English:  Green — you are on
+   Current:  പച്ച — മരുന്ന് പ്രവർത്തിക്കുന്നു
+
+6. BUTTON
+   (the short line on the button the patient taps every hour — must stay short)
+   English:  Moving and working easily
+   Current:  എളുപ്പത്തിൽ നടക്കാനും ജോലി ചെയ്യാനും
+
+7. DEFINITION
+   (the main explanation of what this colour means)
+   English:  You get up, walk and do all your work fairly easily. You do not need anyone's help.
+   Current:  നിങ്ങൾ എഴുന്നേൽക്കുന്നു, നടക്കുന്നു, നിങ്ങളുടെ ജോലികൾ എളുപ്പത്തിൽ ചെയ്യുന്നു. ആരുടെയും സഹായം വേണ്ട.
+
+8. EXAMPLE
+   (a concrete illustration, shown in italics under the definition)
+   English:  This is your good period. Most of the day should be green.
+   Current:  ഇത് നിങ്ങളുടെ നല്ല സമയമാണ്. ദിവസത്തിന്റെ ഭൂരിഭാഗവും പച്ചയായിരിക്കണം.
+
+==========================================================
+BLUE — too much movement
+==========================================================
+
+9. HEADING
+   (the title of this colour, shown above the explanation)
+   English:  Blue — too much
+   Current:  നീല — അമിതമായ ചലനം
+
+10. BUTTON
+   (the short line on the button the patient taps every hour — must stay short)
+   English:  Extra movements you cannot control
+   Current:  തനിയെ സംഭവിക്കുന്ന ചലനങ്ങൾ
+
+11. DEFINITION
+   (the main explanation of what this colour means)
+   English:  Extra movements you cannot control, getting in the way of what you are doing.
+   Current:  നിങ്ങളുടെ നിയന്ത്രണത്തിലില്ലാത്ത അധിക ചലനങ്ങൾ, അവ നിങ്ങളുടെ ജോലിക്ക് തടസ്സമാകുന്നു.
+
+12. EXAMPLE
+   (a concrete illustration, shown in italics under the definition)
+   English:  Your body, head or arms move on their own, so eating or sitting still is difficult.
+   Current:  ശരീരം, തല അല്ലെങ്കിൽ കൈകൾ തനിയെ ചലിക്കുന്നു, അതിനാൽ ഭക്ഷണം കഴിക്കാനോ അനങ്ങാതെ ഇരിക്കാനോ പ്രയാസം.
+
+==========================================================
+End. 12 items.

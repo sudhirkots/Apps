@@ -1,0 +1,87 @@
+DAY TRACKER — TRANSLATION CHECK
+हिंदी (Hindi)
+
+The app asks a Parkinson's patient one question every hour: how are
+you feeling right now? They answer by tapping a colour. These are the
+words that explain the colours.
+
+Please read each one against the English above it. Reply with the
+NUMBER and your correction. Anything you do not mention stays as it is.
+
+What matters is not grammar but sense: whether a patient would
+understand it the same way a doctor means it.
+
+==========================================================
+RED — the medicine is not working
+==========================================================
+
+1. HEADING
+   (the title of this colour, shown above the explanation)
+   English:  Red — you are off
+   Current:  लाल — दवा का असर नहीं है
+
+2. BUTTON
+   (the short line on the button the patient taps every hour — must stay short)
+   English:  Stiff, frozen or slow
+   Current:  अकड़न, जकड़न या धीमापन
+
+3. DEFINITION
+   (the main explanation of what this colour means)
+   English:  Stiff or frozen. Hard to get up from a chair or from bed. Movements feel slow. Or a shaking tremor.
+   Current:  अकड़न या जकड़न। कुर्सी या बिस्तर से उठना मुश्किल। चलने-फिरने में धीमापन। या कँपकँपी।
+
+4. EXAMPLE
+   (a concrete illustration, shown in italics under the definition)
+   English:  Your feet feel stuck to the floor, or you need help to stand up. That is red.
+   Current:  पैर ज़मीन से चिपके हुए लगते हैं, या उठने के लिए किसी की मदद चाहिए। यही लाल है।
+
+==========================================================
+GREEN — the medicine is working
+==========================================================
+
+5. HEADING
+   (the title of this colour, shown above the explanation)
+   English:  Green — you are on
+   Current:  हरा — दवा का असर है
+
+6. BUTTON
+   (the short line on the button the patient taps every hour — must stay short)
+   English:  Moving and working easily
+   Current:  आराम से चलना-फिरना और काम करना
+
+7. DEFINITION
+   (the main explanation of what this colour means)
+   English:  You get up, walk and do all your work fairly easily. You do not need anyone's help.
+   Current:  आप उठते हैं, चलते हैं और अपना काम आसानी से करते हैं। किसी की मदद नहीं चाहिए।
+
+8. EXAMPLE
+   (a concrete illustration, shown in italics under the definition)
+   English:  This is your good period. Most of the day should be green.
+   Current:  यह आपका अच्छा समय है। दिन का ज़्यादातर हिस्सा हरा होना चाहिए।
+
+==========================================================
+BLUE — too much movement
+==========================================================
+
+9. HEADING
+   (the title of this colour, shown above the explanation)
+   English:  Blue — too much
+   Current:  नीला — बहुत ज़्यादा हलचल
+
+10. BUTTON
+   (the short line on the button the patient taps every hour — must stay short)
+   English:  Extra movements you cannot control
+   Current:  अपने आप होने वाली हलचल
+
+11. DEFINITION
+   (the main explanation of what this colour means)
+   English:  Extra movements you cannot control, getting in the way of what you are doing.
+   Current:  ऐसी हलचल जो आपके काबू में नहीं है और आपके काम में रुकावट डालती है।
+
+12. EXAMPLE
+   (a concrete illustration, shown in italics under the definition)
+   English:  Your body, head or arms move on their own, so eating or sitting still is difficult.
+   Current:  शरीर, सिर या हाथ अपने आप हिलते हैं, जिससे खाना या स्थिर बैठना मुश्किल होता है।
+
+==========================================================
+End. 12 items.
