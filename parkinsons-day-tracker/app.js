@@ -17,7 +17,7 @@
   // Bump with every deploy, together with CACHE and the ?v= query strings.
   // Shown in the menu so a device can be identified at a glance — an installed
   // PWA silently running an old build is otherwise invisible.
-  var APP_VERSION = "v21";
+  var APP_VERSION = "v22";
 
   /* Strings are per language. English is the base; every other language is an
    * OVERRIDE MAP merged over it, so a missing or not-yet-translated key falls
@@ -436,7 +436,7 @@
 
     offName: "लाल — औषधाचा परिणाम नाही",
     offShort: "लाल",
-    offDesc: "शरीराचा कड़कपणा, ताठरता, संथपणा",
+    offDesc: "शरीराचा कडकपणा, ताठरता, संथपणा",
     offFull:
       "ताठरपणा किंवा जखडल्यासारखं. खुर्चीतून किंवा अंथरुणातून उठणं कठीण. हालचाली मंद. किंवा कंप.",
     offExample: "पाय जमिनीला चिकटल्यासारखे वाटतात, किंवा उठायला मदत लागते. हेच लाल.",

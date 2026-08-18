@@ -2,16 +2,16 @@
  * Precache the shell so the app opens with no connection.
  * Bump CACHE and the ?v= query strings together whenever an asset changes. */
 
-var CACHE = "day-tracker-v21";
+var CACHE = "day-tracker-v22";
 
 var SHELL = [
   "./",
   "./index.html",
-  "./styles.css?v=21",
-  "./app.js?v=21",
-  "./manifest.webmanifest?v=21",
-  "./assets/fonts/caprasimo.woff2?v=21",
-  "./assets/fonts/figtree-variable.woff2?v=21",
+  "./styles.css?v=22",
+  "./app.js?v=22",
+  "./manifest.webmanifest?v=22",
+  "./assets/fonts/caprasimo.woff2?v=22",
+  "./assets/fonts/figtree-variable.woff2?v=22",
   "./assets/off-freezing.png",
   "./assets/on-standing.png",
   "./assets/extra-dyskinesia.png",
