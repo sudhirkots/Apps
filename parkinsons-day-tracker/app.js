@@ -17,7 +17,7 @@
   // Bump with every deploy, together with CACHE and the ?v= query strings.
   // Shown in the menu so a device can be identified at a glance — an installed
   // PWA silently running an old build is otherwise invisible.
-  var APP_VERSION = "v14";
+  var APP_VERSION = "v15";
 
   /* Strings are per language. English is the base; every other language is an
    * OVERRIDE MAP merged over it, so a missing or not-yet-translated key falls
@@ -167,15 +167,6 @@
     coloursTitle: "What the colours mean",
 
     // Chart range label
-    showingDays: function (n) {
-      return "Showing " + n + (n === 1 ? " day" : " days") + " with entries";
-    },
-    showingWindow: function (n, win) {
-      return (
-        "Showing " + n + (n === 1 ? " day" : " days") +
-        " with entries, from the last " + win + " days"
-      );
-    },
 
     // Tablet presets
     presetsLabel: "COMMON TABLETS — TAP TO FILL",
@@ -2594,10 +2585,10 @@
      * (see NAV_VIEWS) so there is never a second bar competing with it. */
     return (
       '<div class="chart-screen pop">' +
-      // Days with nothing logged are skipped (§9), so with sparse data both
-      // ranges can render the same rows. Say the window out loud, or the
-      // toggle reads as broken.
-      '<p class="muted chart-caption">' + esc(S.showingWindow(rows.length, chartRange)) + "</p>" +
+      // No caption. It existed only to prove the week/month toggle was doing
+      // something when sparse data made both ranges render the same rows; the
+      // toggle now shows its own pressed state in the bar below, which says the
+      // same thing without a line of text above the chart.
       (stats.total === 0 ? '<p class="muted">' + S.noDataYet + "</p>" : "") +
       '<div class="chart-middle">' +
       '<div class="chart-scroll"><div class="chart">' + head + body + "</div>" + legend + "</div>" +

@@ -4,13 +4,13 @@
 /* ---------- Fonts (bundled; the app must look identical offline) ---------- */
 @font-face {
   font-family: "Caprasimo";
-  src: url("assets/fonts/caprasimo.woff2?v=14") format("woff2");
+  src: url("assets/fonts/caprasimo.woff2?v=15") format("woff2");
   font-weight: 400;
   font-display: swap;
 }
 @font-face {
   font-family: "Figtree";
-  src: url("assets/fonts/figtree-variable.woff2?v=14") format("woff2");
+  src: url("assets/fonts/figtree-variable.woff2?v=15") format("woff2");
   font-weight: 300 900;
   font-display: swap;
 }
@@ -1028,12 +1028,6 @@ button.hour-cell {
   min-height: calc(100dvh - 32px);
 }
 
-.chart-caption {
-  font-size: 14px;
-  margin: 0 0 8px;
-  flex: none;
-}
-
 .chart-middle {
   flex: 1 1 auto;
   display: flex;
@@ -1110,7 +1104,6 @@ button.hour-cell {
   button,
   .nav-bar,
   .chart-bar,
-  .chart-caption,
   .toggle,
   .btn-primary,
   .btn-secondary,
