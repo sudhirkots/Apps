@@ -4,13 +4,13 @@
 /* ---------- Fonts (bundled; the app must look identical offline) ---------- */
 @font-face {
   font-family: "Caprasimo";
-  src: url("assets/fonts/caprasimo.woff2?v=8") format("woff2");
+  src: url("assets/fonts/caprasimo.woff2?v=9") format("woff2");
   font-weight: 400;
   font-display: swap;
 }
 @font-face {
   font-family: "Figtree";
-  src: url("assets/fonts/figtree-variable.woff2?v=8") format("woff2");
+  src: url("assets/fonts/figtree-variable.woff2?v=9") format("woff2");
   font-weight: 300 900;
   font-display: swap;
 }
@@ -501,6 +501,27 @@ button:focus-visible {
   color: #fff;
 }
 
+/* Eight languages: two columns so the list fits a small phone without
+   scrolling. Someone who cannot read the interface cannot be expected to
+   discover that the list continues below the fold. */
+.lang-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.lang-btn {
+  min-height: 66px;
+  border-radius: 22px;
+  background: var(--color-surface);
+  font-size: 20px;
+  padding: 10px 8px;
+  /* Each name is in its own script, so it must render in that script's font
+     rather than the language currently selected. */
+  font-family: system-ui, "Noto Sans Devanagari", "Noto Sans Gujarati", "Noto Sans Tamil",
+    "Noto Sans Telugu", "Noto Sans Kannada", "Noto Sans Malayalam", sans-serif;
+}
+
 .lang-on {
   background: var(--color-accent);
   color: #fff;
@@ -514,25 +535,43 @@ button:focus-visible {
    with Caprasimo's weight. */
 :root[data-lang="hi"],
 :root[data-lang="mr"],
-:root[data-lang="gu"] {
-  --font-heading: "Noto Sans Devanagari", "Noto Sans Gujarati", system-ui, sans-serif;
-  --font-body: "Noto Sans Devanagari", "Noto Sans Gujarati", system-ui, sans-serif;
+:root[data-lang="gu"],
+:root[data-lang="ta"],
+:root[data-lang="te"],
+:root[data-lang="kn"],
+:root[data-lang="ml"] {
+  --font-heading: "Noto Sans Devanagari", "Noto Sans Gujarati", "Noto Sans Tamil",
+    "Noto Sans Telugu", "Noto Sans Kannada", "Noto Sans Malayalam", system-ui, sans-serif;
+  --font-body: "Noto Sans Devanagari", "Noto Sans Gujarati", "Noto Sans Tamil",
+    "Noto Sans Telugu", "Noto Sans Kannada", "Noto Sans Malayalam", system-ui, sans-serif;
 }
 
 /* Indic scripts sit taller than Latin; give them a little more room so
    ascenders and matras are not clipped by tight line heights. */
 :root[data-lang="hi"] body,
 :root[data-lang="mr"] body,
-:root[data-lang="gu"] body {
+:root[data-lang="gu"] body,
+:root[data-lang="ta"] body,
+:root[data-lang="te"] body,
+:root[data-lang="kn"] body,
+:root[data-lang="ml"] body {
   line-height: 1.65;
 }
 
 :root[data-lang="hi"] h1,
 :root[data-lang="mr"] h1,
 :root[data-lang="gu"] h1,
+:root[data-lang="ta"] h1,
+:root[data-lang="te"] h1,
+:root[data-lang="kn"] h1,
+:root[data-lang="ml"] h1,
 :root[data-lang="hi"] h2,
 :root[data-lang="mr"] h2,
-:root[data-lang="gu"] h2 {
+:root[data-lang="gu"] h2,
+:root[data-lang="ta"] h2,
+:root[data-lang="te"] h2,
+:root[data-lang="kn"] h2,
+:root[data-lang="ml"] h2 {
   line-height: 1.3;
 }
 

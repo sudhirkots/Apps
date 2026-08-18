@@ -17,7 +17,7 @@
   // Bump with every deploy, together with CACHE and the ?v= query strings.
   // Shown in the menu so a device can be identified at a glance — an installed
   // PWA silently running an old build is otherwise invisible.
-  var APP_VERSION = "v8";
+  var APP_VERSION = "v9";
 
   /* Strings are per language. English is the base; every other language is an
    * OVERRIDE MAP merged over it, so a missing or not-yet-translated key falls
@@ -706,6 +706,514 @@
     languageHint: "આ પછીથી મેનુમાંથી બદલી શકાય છે."
   };
 
+  LANGS.ta = {
+    langName: "தமிழ்",
+
+    offName: "சிவப்பு — மருந்தின் வேலை இல்லை",
+    offShort: "சிவப்பு",
+    offDesc: "விறைப்பு, உறைவு அல்லது மந்தம்",
+    offFull:
+      "விறைப்பு அல்லது உறைந்தது போல். நாற்காலியிலிருந்தோ படுக்கையிலிருந்தோ எழுவது கடினம். அசைவுகள் மெதுவாக. அல்லது நடுக்கம்.",
+    offExample: "கால்கள் தரையில் ஒட்டிக்கொண்டது போல் இருக்கும், அல்லது எழ உதவி தேவைப்படும். அதுதான் சிவப்பு.",
+
+    onName: "பச்சை — மருந்து வேலை செய்கிறது",
+    onShort: "பச்சை",
+    onDesc: "எளிதாக நடமாடுதல், வேலை செய்தல்",
+    onFull: "நீங்கள் எழுந்து நடந்து உங்கள் வேலைகளை எளிதாகச் செய்கிறீர்கள். யாருடைய உதவியும் தேவையில்லை.",
+    onExample: "இது உங்கள் நல்ல நேரம். நாளின் பெரும்பகுதி பச்சையாக இருக்க வேண்டும்.",
+
+    extraName: "நீலம் — மிக அதிக அசைவு",
+    extraShort: "நீலம்",
+    extraDesc: "தானாக நிகழும் அசைவுகள்",
+    extraFull: "உங்கள் கட்டுப்பாட்டில் இல்லாத கூடுதல் அசைவுகள், அவை உங்கள் வேலைக்கு இடையூறாக இருக்கும்.",
+    extraExample: "உடல், தலை அல்லது கைகள் தானாக அசைகின்றன, அதனால் சாப்பிடுவதோ அமைதியாக உட்காருவதோ கடினம்.",
+
+    welcomeTitle: "உங்கள் மருத்துவர் விளக்குகிறார்",
+    playVideo: "வீடியோவை இயக்கு",
+    next: "அடுத்து",
+
+    alarmsTitle: "அலாரம் ஒலிக்கும்",
+    alarmsLine1: "நீங்கள் விழித்திருக்கும் வரை ஒவ்வொரு மணி நேரமும் — ஒரு நிறத்தைக் கேட்க.",
+    alarmsLine2: "ஒவ்வொரு மாத்திரை நேரத்திலும், அதை எடுக்க நினைவூட்ட.",
+    alarmsLine3: "அலாரத்திற்குக் காத்திராமல் எப்போது வேண்டுமானாலும் நிறத்தை அழுத்தலாம்.",
+
+    wakingTitle: "நீங்கள் எப்போது விழித்திருக்கிறீர்கள்?",
+    wakeStart: "நான் எழுவது",
+    wakeEnd: "நான் தூங்கச் செல்வது",
+
+    logQuestion: "இப்போது உங்களுக்கு எப்படி இருக்கிறது?",
+    menu: "பட்டி",
+    selectedPrefix: "தேர்ந்தெடுத்தது ",
+    confirm: "உறுதி செய்",
+    changeAnswer: "பதிலை மாற்று",
+    saved: "சேமிக்கப்பட்டது",
+    lockLine: function (colour, mins) {
+      return "நீங்கள் இப்போதுதான் " + colour + " பதிவு செய்தீர்கள். " + mins + " நிமிடங்களில் மீண்டும் பதிவு செய்யலாம்.";
+    },
+    recordedAt: function (colour, time) {
+      return colour + " — " + time + " மணிக்கு பதிவு";
+    },
+
+    checkIn: " · சரிபார்ப்பு",
+    notNow: "இப்போது வேண்டாம்",
+    tabletTime: " · மாத்திரை நேரம்",
+    takeTablet: function (dose, name) {
+      return name + " — " + dose + " எடுத்துக் கொள்ளுங்கள்";
+    },
+    tabletBody: "இப்போதே, இதே நேரத்தில் எடுத்துக் கொள்ளுங்கள். தினமும் இதே நேரத்தை வைத்திருங்கள்.",
+    haveTaken: "நான் எடுத்துக் கொண்டேன்",
+    snooze: "10 நிமிடங்களில் நினைவூட்டு",
+    lockedDuringAlarm: "நீங்கள் இப்போதுதான் ஒரு நிறத்தைப் பதிவு செய்தீர்கள், இப்போது ஒன்றும் செய்யத் தேவையில்லை.",
+    dismiss: "மூடு",
+
+    menuVideo: "வீடியோவை மீண்டும் பார்",
+    menuColours: "நிறங்களின் பொருள்",
+    menuWaking: "விழிப்பு நேரம்",
+    menuProfile: "உங்கள் விவரங்கள்",
+    menuTablets: "மாத்திரை நேரங்களை மாற்று",
+    menuToday: "இன்றைய அறிக்கை",
+    menuMonth: "எல்லா நாட்களும் — விளக்கப்படம்",
+    menuExport: "காப்புப் படிவத்தைச் சேமி",
+    menuImport: "காப்புப் படிவத்தைத் திற",
+    menuLanguage: "மொழி",
+    backToLogging: "பதிவு செய்யத் திரும்பு",
+    backToMenu: "பட்டிக்குத் திரும்பு",
+    noProfile: "நோயாளியின் விவரங்கள் இன்னும் நிரப்பப்படவில்லை",
+
+    profileTitle: "உங்கள் விவரங்கள்",
+    pName: "பெயர்",
+    pAge: "வயது",
+    pYear: "எந்த ஆண்டு கண்டறியப்பட்டது",
+    pDoctor: "மருத்துவர்",
+    pNotes: "வேறு ஏதேனும் குறிப்பு",
+
+    todayTitle: "இன்றைய அறிக்கை",
+    hourByHour: "மணி வாரியாக",
+    tabletSchedule: "மாத்திரை நேரங்கள்",
+    markTaken: "எடுத்தேன்",
+    takenAt: function (t) {
+      return t + " மணிக்கு எடுத்தது";
+    },
+    print: "அச்சிடு / சேமி",
+    entries: " பதிவுகள்",
+    monthTitle: "எல்லா நாட்களும்",
+    week: "1 வாரம்",
+    month: "1 மாதம்",
+    off: "வேலை இல்லை",
+    normal: "சரி",
+    extra: "அதிகம்",
+    notLogged: "பதிவு இல்லை",
+    multiple: "அந்த மணி நேரத்தில் ஒன்றுக்கு மேற்பட்டவை",
+    tabletTaken: "மாத்திரை எடுக்கப்பட்டது",
+    tabletNotConfirmed: "மாத்திரை நேரம் உறுதிப்படுத்தப்படவில்லை",
+    noDataYet: "இன்னும் எதுவும் பதிவாகவில்லை. தொடங்க முகப்புத் திரையில் ஒரு நிறத்தை அழுத்துங்கள்.",
+
+    fillPrompt: function (hour) {
+      return hour + " மணிக்கு உங்களுக்கு எப்படி இருந்தது?";
+    },
+    fillHint: "எந்த மணி நேரத்தையும் நிரப்ப அல்லது மாற்ற அதை அழுத்துங்கள்.",
+    filledLater: "பின்னர் நிரப்பப்பட்டது",
+    clearHour: "இந்த மணி நேரத்தை காலி செய்",
+    today: "இன்று",
+    yesterday: "நேற்று",
+    restOfDayTitle: "நாளின் மீதி",
+    restOfDayFine: "நான் நிரப்பாத மணி நேரங்கள் நன்றாக இருந்தன",
+    restOfDayNote:
+      "இதுவரை உள்ள எல்லா காலி மணி நேரங்களையும் பச்சையாக்கும். இது உண்மையாக இருந்தால் மட்டும் அழுத்துங்கள் — காலி மணி நேரம் தவறான நிறத்தை விட மேல்.",
+    cancelFill: "வேண்டாம்",
+    pastDayReadOnly: "இந்த நாள் முடிந்துவிட்டது, இனி மாற்ற முடியாது.",
+
+    endOfDayKicker: "தூங்கும் முன்",
+    endOfDayTitle: "இன்றைய மீதி மணி நேரங்களை நிரப்பவா?",
+    endOfDayBody: "இன்றைய சில மணி நேரங்கள் இன்னும் காலியாக உள்ளன. நினைவிருக்கும் போதே நிரப்பலாம்.",
+    endOfDayGo: "இன்று நிரப்பு",
+    endOfDaySkip: "காலியாக விடு",
+
+    languageTitle: "எந்த மொழி?",
+    languageHint: "இதை பின்னர் பட்டியிலிருந்து மாற்றலாம்."
+  };
+
+  LANGS.te = {
+    langName: "తెలుగు",
+
+    offName: "ఎరుపు — మందు పని చేయడం లేదు",
+    offShort: "ఎరుపు",
+    offDesc: "బిగుసుకుపోవడం, కదలలేకపోవడం లేదా నెమ్మది",
+    offFull:
+      "బిగుసుకుపోవడం లేదా కదలలేకపోవడం. కుర్చీ నుంచి లేదా మంచం నుంచి లేవడం కష్టం. కదలికలు నెమ్మది. లేదా వణుకు.",
+    offExample: "కాళ్లు నేలకు అతుక్కుపోయినట్టు అనిపిస్తుంది, లేదా లేవడానికి సాయం కావాలి. అదే ఎరుపు.",
+
+    onName: "ఆకుపచ్చ — మందు పని చేస్తోంది",
+    onShort: "ఆకుపచ్చ",
+    onDesc: "సులభంగా కదలడం, పని చేయడం",
+    onFull: "మీరు లేస్తారు, నడుస్తారు, మీ పనులు సులభంగా చేసుకుంటారు. ఎవరి సాయం అవసరం లేదు.",
+    onExample: "ఇది మీ మంచి సమయం. రోజులో ఎక్కువ భాగం ఆకుపచ్చగా ఉండాలి.",
+
+    extraName: "నీలం — మరీ ఎక్కువ కదలిక",
+    extraShort: "నీలం",
+    extraDesc: "వాటంతట అవే జరిగే కదలికలు",
+    extraFull: "మీ అదుపులో లేని అదనపు కదలికలు, అవి మీ పనికి అడ్డుపడతాయి.",
+    extraExample: "శరీరం, తల లేదా చేతులు వాటంతట అవే కదులుతాయి, దాంతో తినడం లేదా కదలకుండా కూర్చోవడం కష్టం.",
+
+    welcomeTitle: "మీ డాక్టర్ వివరిస్తున్నారు",
+    playVideo: "వీడియో ప్లే చేయండి",
+    next: "తర్వాత",
+
+    alarmsTitle: "అలారం మోగుతుంది",
+    alarmsLine1: "మీరు మేల్కొని ఉన్నంత సేపు ప్రతి గంటకు — ఒక రంగు అడగడానికి.",
+    alarmsLine2: "ప్రతి మాత్ర సమయంలో, ఆ మాత్ర వేసుకోవడం గుర్తు చేయడానికి.",
+    alarmsLine3: "అలారం కోసం ఎదురు చూడకుండా ఎప్పుడైనా రంగు నొక్కవచ్చు.",
+
+    wakingTitle: "మీరు ఎప్పుడు మేల్కొని ఉంటారు?",
+    wakeStart: "నేను లేచేది",
+    wakeEnd: "నేను పడుకునేది",
+
+    logQuestion: "ఇప్పుడు మీకు ఎలా ఉంది?",
+    menu: "మెనూ",
+    selectedPrefix: "ఎంచుకున్నది ",
+    confirm: "నిర్ధారించండి",
+    changeAnswer: "సమాధానం మార్చండి",
+    saved: "భద్రపరిచాం",
+    lockLine: function (colour, mins) {
+      return "మీరు ఇప్పుడే " + colour + " నమోదు చేశారు. " + mins + " నిమిషాల తర్వాత మళ్లీ నమోదు చేయవచ్చు.";
+    },
+    recordedAt: function (colour, time) {
+      return colour + " — " + time + " కి నమోదు";
+    },
+
+    checkIn: " · తనిఖీ",
+    notNow: "ఇప్పుడు వద్దు",
+    tabletTime: " · మాత్ర సమయం",
+    takeTablet: function (dose, name) {
+      return name + " — " + dose + " వేసుకోండి";
+    },
+    tabletBody: "ఇప్పుడే, ఇదే సమయానికి వేసుకోండి. ప్రతి రోజూ ఇదే సమయం ఉంచండి.",
+    haveTaken: "నేను వేసుకున్నాను",
+    snooze: "10 నిమిషాల తర్వాత గుర్తు చేయి",
+    lockedDuringAlarm: "మీరు ఇప్పుడే ఒక రంగు నమోదు చేశారు, కాబట్టి ఇప్పుడు ఏమీ చేయనవసరం లేదు.",
+    dismiss: "మూసివేయి",
+
+    menuVideo: "వీడియో మళ్లీ చూడండి",
+    menuColours: "రంగుల అర్థం",
+    menuWaking: "మేల్కొనే సమయం",
+    menuProfile: "మీ వివరాలు",
+    menuTablets: "మాత్రల సమయాలు మార్చండి",
+    menuToday: "ఈ రోజు నివేదిక",
+    menuMonth: "అన్ని రోజులు — చార్ట్",
+    menuExport: "బ్యాకప్ ఫైల్ భద్రపరచండి",
+    menuImport: "బ్యాకప్ ఫైల్ తెరవండి",
+    menuLanguage: "భాష",
+    backToLogging: "తిరిగి నమోదుకు",
+    backToMenu: "మెనూకు తిరిగి",
+    noProfile: "రోగి వివరాలు ఇంకా నింపలేదు",
+
+    profileTitle: "మీ వివరాలు",
+    pName: "పేరు",
+    pAge: "వయసు",
+    pYear: "ఏ సంవత్సరంలో నిర్ధారణ అయింది",
+    pDoctor: "డాక్టర్",
+    pNotes: "ఇంకేమైనా రాయాలంటే",
+
+    todayTitle: "ఈ రోజు నివేదిక",
+    hourByHour: "గంట గంటకు",
+    tabletSchedule: "మాత్రల సమయాలు",
+    markTaken: "వేసుకున్నాను",
+    takenAt: function (t) {
+      return t + " కి వేసుకున్నారు";
+    },
+    print: "ప్రింట్ / భద్రపరచు",
+    entries: " నమోదులు",
+    monthTitle: "అన్ని రోజులు",
+    week: "1 వారం",
+    month: "1 నెల",
+    off: "పని చేయడం లేదు",
+    normal: "బాగుంది",
+    extra: "ఎక్కువ",
+    notLogged: "నమోదు కాలేదు",
+    multiple: "ఆ గంటలో ఒకటి కంటే ఎక్కువ",
+    tabletTaken: "మాత్ర వేసుకున్నారు",
+    tabletNotConfirmed: "మాత్ర సమయం నిర్ధారణ కాలేదు",
+    noDataYet: "ఇంకా ఏమీ నమోదు కాలేదు. మొదలుపెట్టడానికి హోమ్ స్క్రీన్‌లో ఒక రంగు నొక్కండి.",
+
+    fillPrompt: function (hour) {
+      return hour + " గంటలకు మీకు ఎలా ఉండేది?";
+    },
+    fillHint: "ఏ గంటనైనా నింపడానికి లేదా మార్చడానికి దానిపై నొక్కండి.",
+    filledLater: "తర్వాత నింపినది",
+    clearHour: "ఈ గంటను ఖాళీ చేయి",
+    today: "ఈ రోజు",
+    yesterday: "నిన్న",
+    restOfDayTitle: "రోజులో మిగిలినది",
+    restOfDayFine: "నేను నింపని గంటలు బాగానే ఉన్నాయి",
+    restOfDayNote:
+      "ఇప్పటివరకు ఉన్న అన్ని ఖాళీ గంటలను ఆకుపచ్చ చేస్తుంది. ఇది నిజమైతేనే నొక్కండి — ఖాళీ గంట తప్పు రంగు కంటే మేలు.",
+    cancelFill: "వద్దులే",
+    pastDayReadOnly: "ఈ రోజు పూర్తయింది, ఇక మార్చలేరు.",
+
+    endOfDayKicker: "పడుకునే ముందు",
+    endOfDayTitle: "ఈ రోజు మిగిలిన గంటలు నింపాలా?",
+    endOfDayBody: "ఈ రోజు కొన్ని గంటలు ఇంకా ఖాళీగా ఉన్నాయి. గుర్తున్నప్పుడే నింపవచ్చు.",
+    endOfDayGo: "ఈ రోజు నింపు",
+    endOfDaySkip: "ఖాళీగా వదిలేయి",
+
+    languageTitle: "ఏ భాష?",
+    languageHint: "దీన్ని తర్వాత మెనూ నుంచి మార్చవచ్చు."
+  };
+
+  LANGS.kn = {
+    langName: "ಕನ್ನಡ",
+
+    offName: "ಕೆಂಪು — ಔಷಧದ ಪರಿಣಾಮ ಇಲ್ಲ",
+    offShort: "ಕೆಂಪು",
+    offDesc: "ಬಿಗಿತ, ಸ್ತಬ್ಧತೆ ಅಥವಾ ನಿಧಾನ",
+    offFull:
+      "ಬಿಗಿತ ಅಥವಾ ಸ್ತಬ್ಧವಾದಂತೆ. ಕುರ್ಚಿಯಿಂದ ಅಥವಾ ಹಾಸಿಗೆಯಿಂದ ಏಳುವುದು ಕಷ್ಟ. ಚಲನೆ ನಿಧಾನ. ಅಥವಾ ನಡುಕ.",
+    offExample: "ಕಾಲುಗಳು ನೆಲಕ್ಕೆ ಅಂಟಿಕೊಂಡಂತೆ ಅನಿಸುತ್ತದೆ, ಅಥವಾ ಏಳಲು ಸಹಾಯ ಬೇಕಾಗುತ್ತದೆ. ಅದೇ ಕೆಂಪು.",
+
+    onName: "ಹಸಿರು — ಔಷಧ ಕೆಲಸ ಮಾಡುತ್ತಿದೆ",
+    onShort: "ಹಸಿರು",
+    onDesc: "ಸುಲಭವಾಗಿ ಓಡಾಟ ಮತ್ತು ಕೆಲಸ",
+    onFull: "ನೀವು ಏಳುತ್ತೀರಿ, ನಡೆಯುತ್ತೀರಿ ಮತ್ತು ನಿಮ್ಮ ಕೆಲಸಗಳನ್ನು ಸುಲಭವಾಗಿ ಮಾಡುತ್ತೀರಿ. ಯಾರ ಸಹಾಯವೂ ಬೇಕಿಲ್ಲ.",
+    onExample: "ಇದು ನಿಮ್ಮ ಒಳ್ಳೆಯ ಸಮಯ. ದಿನದ ಹೆಚ್ಚಿನ ಭಾಗ ಹಸಿರಾಗಿರಬೇಕು.",
+
+    extraName: "ನೀಲಿ — ತುಂಬಾ ಹೆಚ್ಚು ಚಲನೆ",
+    extraShort: "ನೀಲಿ",
+    extraDesc: "ತಾನಾಗಿಯೇ ಆಗುವ ಚಲನೆ",
+    extraFull: "ನಿಮ್ಮ ಹಿಡಿತದಲ್ಲಿಲ್ಲದ ಹೆಚ್ಚುವರಿ ಚಲನೆಗಳು, ಅವು ನಿಮ್ಮ ಕೆಲಸಕ್ಕೆ ಅಡ್ಡಿಯಾಗುತ್ತವೆ.",
+    extraExample: "ದೇಹ, ತಲೆ ಅಥವಾ ಕೈಗಳು ತಾವಾಗಿಯೇ ಅಲುಗಾಡುತ್ತವೆ, ಇದರಿಂದ ಊಟ ಮಾಡುವುದು ಅಥವಾ ಸುಮ್ಮನೆ ಕೂರುವುದು ಕಷ್ಟ.",
+
+    welcomeTitle: "ನಿಮ್ಮ ವೈದ್ಯರು ವಿವರಿಸುತ್ತಿದ್ದಾರೆ",
+    playVideo: "ವೀಡಿಯೊ ಪ್ಲೇ ಮಾಡಿ",
+    next: "ಮುಂದೆ",
+
+    alarmsTitle: "ಅಲಾರಂ ಮೊಳಗುತ್ತದೆ",
+    alarmsLine1: "ನೀವು ಎಚ್ಚರವಿರುವಷ್ಟು ಹೊತ್ತು ಪ್ರತಿ ಗಂಟೆಗೆ — ಒಂದು ಬಣ್ಣ ಕೇಳಲು.",
+    alarmsLine2: "ಪ್ರತಿ ಮಾತ್ರೆಯ ಸಮಯದಲ್ಲಿ, ಆ ಮಾತ್ರೆ ತೆಗೆದುಕೊಳ್ಳಲು ನೆನಪಿಸಲು.",
+    alarmsLine3: "ಅಲಾರಂಗೆ ಕಾಯದೆ ಯಾವಾಗ ಬೇಕಾದರೂ ಬಣ್ಣ ಒತ್ತಬಹುದು.",
+
+    wakingTitle: "ನೀವು ಯಾವಾಗ ಎಚ್ಚರವಿರುತ್ತೀರಿ?",
+    wakeStart: "ನಾನು ಏಳುವುದು",
+    wakeEnd: "ನಾನು ಮಲಗುವುದು",
+
+    logQuestion: "ಈಗ ನಿಮಗೆ ಹೇಗಿದೆ?",
+    menu: "ಮೆನು",
+    selectedPrefix: "ಆಯ್ಕೆ ಮಾಡಿದ್ದು ",
+    confirm: "ಖಚಿತಪಡಿಸಿ",
+    changeAnswer: "ಉತ್ತರ ಬದಲಿಸಿ",
+    saved: "ಉಳಿಸಲಾಗಿದೆ",
+    lockLine: function (colour, mins) {
+      return "ನೀವು ಈಗಷ್ಟೇ " + colour + " ದಾಖಲಿಸಿದ್ದೀರಿ. " + mins + " ನಿಮಿಷಗಳ ನಂತರ ಮತ್ತೆ ದಾಖಲಿಸಬಹುದು.";
+    },
+    recordedAt: function (colour, time) {
+      return colour + " — " + time + " ಕ್ಕೆ ದಾಖಲು";
+    },
+
+    checkIn: " · ಪರಿಶೀಲನೆ",
+    notNow: "ಈಗ ಬೇಡ",
+    tabletTime: " · ಮಾತ್ರೆ ಸಮಯ",
+    takeTablet: function (dose, name) {
+      return name + " — " + dose + " ತೆಗೆದುಕೊಳ್ಳಿ";
+    },
+    tabletBody: "ಈಗಲೇ, ಇದೇ ಸಮಯಕ್ಕೆ ತೆಗೆದುಕೊಳ್ಳಿ. ಪ್ರತಿದಿನ ಇದೇ ಸಮಯ ಇಟ್ಟುಕೊಳ್ಳಿ.",
+    haveTaken: "ನಾನು ತೆಗೆದುಕೊಂಡಿದ್ದೇನೆ",
+    snooze: "10 ನಿಮಿಷಗಳ ನಂತರ ನೆನಪಿಸಿ",
+    lockedDuringAlarm: "ನೀವು ಈಗಷ್ಟೇ ಬಣ್ಣ ದಾಖಲಿಸಿದ್ದೀರಿ, ಆದ್ದರಿಂದ ಈಗ ಏನೂ ಮಾಡಬೇಕಿಲ್ಲ.",
+    dismiss: "ಮುಚ್ಚಿ",
+
+    menuVideo: "ವೀಡಿಯೊ ಮತ್ತೆ ನೋಡಿ",
+    menuColours: "ಬಣ್ಣಗಳ ಅರ್ಥ",
+    menuWaking: "ಎಚ್ಚರದ ಸಮಯ",
+    menuProfile: "ನಿಮ್ಮ ವಿವರಗಳು",
+    menuTablets: "ಮಾತ್ರೆಗಳ ಸಮಯ ಬದಲಿಸಿ",
+    menuToday: "ಇಂದಿನ ವರದಿ",
+    menuMonth: "ಎಲ್ಲಾ ದಿನಗಳು — ಚಾರ್ಟ್",
+    menuExport: "ಬ್ಯಾಕಪ್ ಫೈಲ್ ಉಳಿಸಿ",
+    menuImport: "ಬ್ಯಾಕಪ್ ಫೈಲ್ ತೆರೆಯಿರಿ",
+    menuLanguage: "ಭಾಷೆ",
+    backToLogging: "ಮತ್ತೆ ದಾಖಲಿಸಲು",
+    backToMenu: "ಮೆನುಗೆ ಹಿಂತಿರುಗಿ",
+    noProfile: "ರೋಗಿಯ ವಿವರಗಳನ್ನು ಇನ್ನೂ ಭರ್ತಿ ಮಾಡಿಲ್ಲ",
+
+    profileTitle: "ನಿಮ್ಮ ವಿವರಗಳು",
+    pName: "ಹೆಸರು",
+    pAge: "ವಯಸ್ಸು",
+    pYear: "ಯಾವ ವರ್ಷ ಪತ್ತೆಯಾಯಿತು",
+    pDoctor: "ವೈದ್ಯರು",
+    pNotes: "ಇನ್ನೇನಾದರೂ ಬರೆಯಬೇಕಿದ್ದರೆ",
+
+    todayTitle: "ಇಂದಿನ ವರದಿ",
+    hourByHour: "ಗಂಟೆಗೊಮ್ಮೆ",
+    tabletSchedule: "ಮಾತ್ರೆಗಳ ಸಮಯ",
+    markTaken: "ತೆಗೆದುಕೊಂಡೆ",
+    takenAt: function (t) {
+      return t + " ಕ್ಕೆ ತೆಗೆದುಕೊಂಡರು";
+    },
+    print: "ಮುದ್ರಿಸಿ / ಉಳಿಸಿ",
+    entries: " ದಾಖಲೆಗಳು",
+    monthTitle: "ಎಲ್ಲಾ ದಿನಗಳು",
+    week: "1 ವಾರ",
+    month: "1 ತಿಂಗಳು",
+    off: "ಪರಿಣಾಮ ಇಲ್ಲ",
+    normal: "ಸರಿ",
+    extra: "ಹೆಚ್ಚು",
+    notLogged: "ದಾಖಲಾಗಿಲ್ಲ",
+    multiple: "ಆ ಗಂಟೆಯಲ್ಲಿ ಒಂದಕ್ಕಿಂತ ಹೆಚ್ಚು",
+    tabletTaken: "ಮಾತ್ರೆ ತೆಗೆದುಕೊಂಡರು",
+    tabletNotConfirmed: "ಮಾತ್ರೆ ಸಮಯ ಖಚಿತವಾಗಿಲ್ಲ",
+    noDataYet: "ಇನ್ನೂ ಏನೂ ದಾಖಲಾಗಿಲ್ಲ. ಶುರು ಮಾಡಲು ಮುಖಪುಟದಲ್ಲಿ ಒಂದು ಬಣ್ಣ ಒತ್ತಿ.",
+
+    fillPrompt: function (hour) {
+      return hour + " ಗಂಟೆಗೆ ನಿಮಗೆ ಹೇಗಿತ್ತು?";
+    },
+    fillHint: "ಯಾವುದೇ ಗಂಟೆಯನ್ನು ಭರ್ತಿ ಮಾಡಲು ಅಥವಾ ಬದಲಿಸಲು ಅದನ್ನು ಒತ್ತಿ.",
+    filledLater: "ನಂತರ ಭರ್ತಿ ಮಾಡಿದ್ದು",
+    clearHour: "ಈ ಗಂಟೆಯನ್ನು ಖಾಲಿ ಮಾಡಿ",
+    today: "ಇಂದು",
+    yesterday: "ನಿನ್ನೆ",
+    restOfDayTitle: "ದಿನದ ಉಳಿದ ಭಾಗ",
+    restOfDayFine: "ನಾನು ಭರ್ತಿ ಮಾಡದ ಗಂಟೆಗಳು ಚೆನ್ನಾಗಿದ್ದವು",
+    restOfDayNote:
+      "ಇಲ್ಲಿಯವರೆಗಿನ ಎಲ್ಲಾ ಖಾಲಿ ಗಂಟೆಗಳನ್ನು ಹಸಿರು ಮಾಡುತ್ತದೆ. ಇದು ನಿಜವಾಗಿದ್ದರೆ ಮಾತ್ರ ಒತ್ತಿ — ಖಾಲಿ ಗಂಟೆ ತಪ್ಪು ಬಣ್ಣಕ್ಕಿಂತ ಒಳ್ಳೆಯದು.",
+    cancelFill: "ಬೇಡ",
+    pastDayReadOnly: "ಈ ದಿನ ಮುಗಿದಿದೆ ಮತ್ತು ಈಗ ಬದಲಾಯಿಸಲಾಗದು.",
+
+    endOfDayKicker: "ಮಲಗುವ ಮೊದಲು",
+    endOfDayTitle: "ಇಂದಿನ ಉಳಿದ ಗಂಟೆಗಳನ್ನು ಭರ್ತಿ ಮಾಡುವುದೇ?",
+    endOfDayBody: "ಇಂದಿನ ಕೆಲವು ಗಂಟೆಗಳು ಇನ್ನೂ ಖಾಲಿ ಇವೆ. ನೆನಪಿರುವಾಗಲೇ ಭರ್ತಿ ಮಾಡಬಹುದು.",
+    endOfDayGo: "ಇಂದು ಭರ್ತಿ ಮಾಡಿ",
+    endOfDaySkip: "ಖಾಲಿ ಬಿಡಿ",
+
+    languageTitle: "ಯಾವ ಭಾಷೆ?",
+    languageHint: "ಇದನ್ನು ನಂತರ ಮೆನುವಿನಿಂದ ಬದಲಾಯಿಸಬಹುದು."
+  };
+
+  LANGS.ml = {
+    langName: "മലയാളം",
+
+    offName: "ചുവപ്പ് — മരുന്നിന്റെ ഫലം ഇല്ല",
+    offShort: "ചുവപ്പ്",
+    offDesc: "മുറുക്കം, ഉറഞ്ഞുപോകൽ അല്ലെങ്കിൽ മന്ദത",
+    offFull:
+      "മുറുക്കം അല്ലെങ്കിൽ ഉറഞ്ഞുപോയതു പോലെ. കസേരയിൽ നിന്നോ കിടക്കയിൽ നിന്നോ എഴുന്നേൽക്കാൻ പ്രയാസം. ചലനങ്ങൾ മന്ദം. അല്ലെങ്കിൽ വിറയൽ.",
+    offExample: "കാലുകൾ നിലത്ത് ഒട്ടിപ്പിടിച്ചതു പോലെ തോന്നും, അല്ലെങ്കിൽ എഴുന്നേൽക്കാൻ സഹായം വേണം. അതാണ് ചുവപ്പ്.",
+
+    onName: "പച്ച — മരുന്ന് പ്രവർത്തിക്കുന്നു",
+    onShort: "പച്ച",
+    onDesc: "എളുപ്പത്തിൽ നടക്കാനും ജോലി ചെയ്യാനും",
+    onFull: "നിങ്ങൾ എഴുന്നേൽക്കുന്നു, നടക്കുന്നു, നിങ്ങളുടെ ജോലികൾ എളുപ്പത്തിൽ ചെയ്യുന്നു. ആരുടെയും സഹായം വേണ്ട.",
+    onExample: "ഇത് നിങ്ങളുടെ നല്ല സമയമാണ്. ദിവസത്തിന്റെ ഭൂരിഭാഗവും പച്ചയായിരിക്കണം.",
+
+    extraName: "നീല — അമിതമായ ചലനം",
+    extraShort: "നീല",
+    extraDesc: "തനിയെ സംഭവിക്കുന്ന ചലനങ്ങൾ",
+    extraFull: "നിങ്ങളുടെ നിയന്ത്രണത്തിലില്ലാത്ത അധിക ചലനങ്ങൾ, അവ നിങ്ങളുടെ ജോലിക്ക് തടസ്സമാകുന്നു.",
+    extraExample: "ശരീരം, തല അല്ലെങ്കിൽ കൈകൾ തനിയെ ചലിക്കുന്നു, അതിനാൽ ഭക്ഷണം കഴിക്കാനോ അനങ്ങാതെ ഇരിക്കാനോ പ്രയാസം.",
+
+    welcomeTitle: "നിങ്ങളുടെ ഡോക്ടർ വിശദീകരിക്കുന്നു",
+    playVideo: "വീഡിയോ പ്ലേ ചെയ്യുക",
+    next: "അടുത്തത്",
+
+    alarmsTitle: "അലാറം മുഴങ്ങും",
+    alarmsLine1: "നിങ്ങൾ ഉണർന്നിരിക്കുന്ന സമയത്ത് ഓരോ മണിക്കൂറിലും — ഒരു നിറം ചോദിക്കാൻ.",
+    alarmsLine2: "ഓരോ ഗുളികയുടെ സമയത്തും, അത് കഴിക്കാൻ ഓർമ്മിപ്പിക്കാൻ.",
+    alarmsLine3: "അലാറത്തിനായി കാത്തിരിക്കാതെ എപ്പോൾ വേണമെങ്കിലും നിറം അമർത്താം.",
+
+    wakingTitle: "നിങ്ങൾ എപ്പോൾ ഉണർന്നിരിക്കുന്നു?",
+    wakeStart: "ഞാൻ എഴുന്നേൽക്കുന്നത്",
+    wakeEnd: "ഞാൻ ഉറങ്ങാൻ പോകുന്നത്",
+
+    logQuestion: "ഇപ്പോൾ നിങ്ങൾക്ക് എങ്ങനെയുണ്ട്?",
+    menu: "മെനു",
+    selectedPrefix: "തിരഞ്ഞെടുത്തത് ",
+    confirm: "ഉറപ്പിക്കുക",
+    changeAnswer: "ഉത്തരം മാറ്റുക",
+    saved: "സൂക്ഷിച്ചു",
+    lockLine: function (colour, mins) {
+      return "നിങ്ങൾ ഇപ്പോൾ " + colour + " രേഖപ്പെടുത്തി. " + mins + " മിനിറ്റിനു ശേഷം വീണ്ടും രേഖപ്പെടുത്താം.";
+    },
+    recordedAt: function (colour, time) {
+      return colour + " — " + time + " ന് രേഖപ്പെടുത്തി";
+    },
+
+    checkIn: " · പരിശോധന",
+    notNow: "ഇപ്പോൾ വേണ്ട",
+    tabletTime: " · ഗുളികയുടെ സമയം",
+    takeTablet: function (dose, name) {
+      return name + " — " + dose + " കഴിക്കുക";
+    },
+    tabletBody: "ഇപ്പോൾ തന്നെ, ഈ സമയത്ത് കഴിക്കുക. എല്ലാ ദിവസവും ഇതേ സമയം സൂക്ഷിക്കുക.",
+    haveTaken: "ഞാൻ കഴിച്ചു",
+    snooze: "10 മിനിറ്റിനു ശേഷം ഓർമ്മിപ്പിക്കുക",
+    lockedDuringAlarm: "നിങ്ങൾ ഇപ്പോൾ ഒരു നിറം രേഖപ്പെടുത്തി, അതിനാൽ ഇപ്പോൾ ഒന്നും ചെയ്യേണ്ടതില്ല.",
+    dismiss: "അടയ്ക്കുക",
+
+    menuVideo: "വീഡിയോ വീണ്ടും കാണുക",
+    menuColours: "നിറങ്ങളുടെ അർത്ഥം",
+    menuWaking: "ഉണർന്നിരിക്കുന്ന സമയം",
+    menuProfile: "നിങ്ങളുടെ വിവരങ്ങൾ",
+    menuTablets: "ഗുളികകളുടെ സമയം മാറ്റുക",
+    menuToday: "ഇന്നത്തെ റിപ്പോർട്ട്",
+    menuMonth: "എല്ലാ ദിവസങ്ങളും — ചാർട്ട്",
+    menuExport: "ബാക്കപ്പ് ഫയൽ സൂക്ഷിക്കുക",
+    menuImport: "ബാക്കപ്പ് ഫയൽ തുറക്കുക",
+    menuLanguage: "ഭാഷ",
+    backToLogging: "വീണ്ടും രേഖപ്പെടുത്താൻ",
+    backToMenu: "മെനുവിലേക്ക് മടങ്ങുക",
+    noProfile: "രോഗിയുടെ വിവരങ്ങൾ ഇതുവരെ പൂരിപ്പിച്ചിട്ടില്ല",
+
+    profileTitle: "നിങ്ങളുടെ വിവരങ്ങൾ",
+    pName: "പേര്",
+    pAge: "വയസ്സ്",
+    pYear: "ഏത് വർഷം കണ്ടെത്തി",
+    pDoctor: "ഡോക്ടർ",
+    pNotes: "മറ്റെന്തെങ്കിലും എഴുതാനുണ്ടെങ്കിൽ",
+
+    todayTitle: "ഇന്നത്തെ റിപ്പോർട്ട്",
+    hourByHour: "മണിക്കൂർ തോറും",
+    tabletSchedule: "ഗുളികകളുടെ സമയം",
+    markTaken: "കഴിച്ചു",
+    takenAt: function (t) {
+      return t + " ന് കഴിച്ചു";
+    },
+    print: "പ്രിന്റ് / സൂക്ഷിക്കുക",
+    entries: " രേഖകൾ",
+    monthTitle: "എല്ലാ ദിവസങ്ങളും",
+    week: "1 ആഴ്ച",
+    month: "1 മാസം",
+    off: "ഫലം ഇല്ല",
+    normal: "ശരി",
+    extra: "കൂടുതൽ",
+    notLogged: "രേഖപ്പെടുത്തിയിട്ടില്ല",
+    multiple: "ആ മണിക്കൂറിൽ ഒന്നിലധികം",
+    tabletTaken: "ഗുളിക കഴിച്ചു",
+    tabletNotConfirmed: "ഗുളികയുടെ സമയം ഉറപ്പിച്ചിട്ടില്ല",
+    noDataYet: "ഇതുവരെ ഒന്നും രേഖപ്പെടുത്തിയിട്ടില്ല. തുടങ്ങാൻ ഹോം സ്ക്രീനിൽ ഒരു നിറം അമർത്തുക.",
+
+    fillPrompt: function (hour) {
+      return hour + " ന് നിങ്ങൾക്ക് എങ്ങനെയായിരുന്നു?";
+    },
+    fillHint: "ഏത് മണിക്കൂറും പൂരിപ്പിക്കാനോ മാറ്റാനോ അതിൽ അമർത്തുക.",
+    filledLater: "പിന്നീട് പൂരിപ്പിച്ചത്",
+    clearHour: "ഈ മണിക്കൂർ ഒഴിവാക്കുക",
+    today: "ഇന്ന്",
+    yesterday: "ഇന്നലെ",
+    restOfDayTitle: "ദിവസത്തിന്റെ ബാക്കി",
+    restOfDayFine: "ഞാൻ പൂരിപ്പിക്കാത്ത മണിക്കൂറുകൾ കുഴപ്പമില്ലായിരുന്നു",
+    restOfDayNote:
+      "ഇതുവരെയുള്ള എല്ലാ ഒഴിഞ്ഞ മണിക്കൂറുകളും പച്ചയാക്കും. ഇത് ശരിയാണെങ്കിൽ മാത്രം അമർത്തുക — ഒഴിഞ്ഞ മണിക്കൂർ തെറ്റായ നിറത്തേക്കാൾ ഭേദമാണ്.",
+    cancelFill: "വേണ്ട",
+    pastDayReadOnly: "ഈ ദിവസം കഴിഞ്ഞു, ഇനി മാറ്റാൻ കഴിയില്ല.",
+
+    endOfDayKicker: "ഉറങ്ങുന്നതിന് മുമ്പ്",
+    endOfDayTitle: "ഇന്നത്തെ ബാക്കി മണിക്കൂറുകൾ പൂരിപ്പിക്കണോ?",
+    endOfDayBody: "ഇന്നത്തെ ചില മണിക്കൂറുകൾ ഇപ്പോഴും ഒഴിഞ്ഞുകിടക്കുന്നു. ഓർമ്മയുള്ളപ്പോൾ തന്നെ പൂരിപ്പിക്കാം.",
+    endOfDayGo: "ഇന്ന് പൂരിപ്പിക്കുക",
+    endOfDaySkip: "ഒഴിഞ്ഞു കിടക്കട്ടെ",
+
+    languageTitle: "ഏത് ഭാഷ?",
+    languageHint: "ഇത് പിന്നീട് മെനുവിൽ നിന്ന് മാറ്റാം."
+  };
+
   // Active strings. Replaced wholesale by setLang(); never reference LANGS.en
   // directly outside setLang, or a translated build will show English.
   var S = LANGS.en;
@@ -1355,8 +1863,8 @@
       '<div class="pop">' +
       "<h1>" + S.welcomeTitle + "</h1>" +
       '<div class="video-wrap">' +
-      '<video id="intro" controls playsinline preload="auto" crossorigin="anonymous" src="assets/doctor-intro.mp4?v=8">' +
-      '<track kind="subtitles" srclang="en" label="English" src="assets/captions-en.vtt?v=8"' +
+      '<video id="intro" controls playsinline preload="auto" crossorigin="anonymous" src="assets/doctor-intro.mp4?v=9">' +
+      '<track kind="subtitles" srclang="en" label="English" src="assets/captions-en.vtt?v=9"' +
       (data.settings.captions ? " default" : "") +
       " />" +
       "</video>" +
@@ -1420,13 +1928,16 @@
     return (
       '<div class="step pop">' +
       "<h1>" + S.languageTitle + "</h1>" +
-      '<div class="stack">' +
+      // Two columns: eight languages in one column overflows a small phone, and
+      // this screen must not scroll — a patient who cannot read the list cannot
+      // be expected to discover that it continues below the fold.
+      '<div class="lang-grid">' +
       Object.keys(LANGS)
         .map(function (code) {
           var on = data.settings.lang === code;
           return (
-            '<button class="btn-menu' + (on ? " lang-on" : "") + '" data-act="set-lang" data-code="' +
-            code + '" style="text-align:center;font-size:22px">' + esc(LANGS[code].langName) + "</button>"
+            '<button class="lang-btn' + (on ? " lang-on" : "") + '" data-act="set-lang" data-code="' +
+            code + '" lang="' + code + '">' + esc(LANGS[code].langName) + "</button>"
           );
         })
         .join("") +

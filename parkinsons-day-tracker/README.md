@@ -91,21 +91,24 @@ one question per screen.
 
 ## Languages
 
-English, Hindi, Marathi and Gujarati. The language question is the first screen on a fresh install,
-with each option written in its own script so it needs no translation to be found.
+English, Hindi, Marathi, Gujarati, Tamil, Telugu, Kannada and Malayalam. The language question is the
+first screen on a fresh install, with each option written in its own script so it needs no
+translation to be found. Eight options are laid out two-up, because a single column overflows a
+375×667 phone and someone who cannot read the interface cannot be expected to discover that the list
+continues below the fold.
 
 Every language is an **override map merged over English**, so a missing key falls back to English
 rather than rendering blank. Only the patient-facing surface is translated; the staff wizard stays in
 English, since clinic staff enter drug names and dosing in English anyway.
 
-**The Hindi, Marathi and Gujarati strings are drafts and have not been clinically reviewed.** They
+**All seven non-English translations are drafts and have not been clinically reviewed.** They
 must be read by a clinician who speaks the language before any patient sees them. The risk is not
 grammar — it is a word like "off" or "stiff" landing with the wrong clinical sense and quietly
 changing what gets logged.
 
-The bundled fonts are Latin-only, so Devanagari and Gujarati fall through to the phone's own fonts
-(Android and iOS both ship Noto for these). Those scripts also get a looser line height, because
-matras clip at the Latin default.
+The bundled fonts are Latin-only, so every Indic script falls through to the phone's own fonts
+(Android and iOS both ship Noto for all of these). Those scripts also get a looser line height,
+because matras and vowel signs clip at the Latin default.
 
 ---
 
