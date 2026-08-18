@@ -17,7 +17,7 @@
   // Bump with every deploy, together with CACHE and the ?v= query strings.
   // Shown in the menu so a device can be identified at a glance — an installed
   // PWA silently running an old build is otherwise invisible.
-  var APP_VERSION = "v19";
+  var APP_VERSION = "v20";
 
   /* Strings are per language. English is the base; every other language is an
    * OVERRIDE MAP merged over it, so a missing or not-yet-translated key falls
@@ -435,20 +435,20 @@
 
     offName: "लाल — औषधाचा परिणाम नाही",
     offShort: "लाल",
-    offDesc: "ताठरपणा, जखडणे किंवा मंदपणा",
+    offDesc: "शरीराचा कड़कपणा, ताठरता, संथपणा",
     offFull:
       "ताठरपणा किंवा जखडल्यासारखं. खुर्चीतून किंवा अंथरुणातून उठणं कठीण. हालचाली मंद. किंवा कंप.",
     offExample: "पाय जमिनीला चिकटल्यासारखे वाटतात, किंवा उठायला मदत लागते. हेच लाल.",
 
     onName: "हिरवा — औषध काम करत आहे",
     onShort: "हिरवा",
-    onDesc: "सहज हालचाल आणि कामं",
+    onDesc: "शरीराची सहज आणि सुरळीत हालचाल",
     onFull: "तुम्ही उठता, चालता आणि तुमची कामं सहज करता. कोणाच्या मदतीची गरज नाही.",
     onExample: "हा तुमचा चांगला काळ आहे. दिवसाचा बहुतेक भाग हिरवा असायला हवा.",
 
     extraName: "निळा — खूप जास्त हालचाल",
     extraShort: "निळा",
-    extraDesc: "आपोआप होणाऱ्या हालचाली",
+    extraDesc: "शरीराची अनियंत्रित हालचाल",
     extraFull: "तुमच्या ताब्यात नसलेल्या जास्तीच्या हालचाली, ज्या कामात अडथळा आणतात.",
     extraExample: "शरीर, डोकं किंवा हात आपोआप हलतात, त्यामुळे जेवणं किंवा स्थिर बसणं कठीण होतं.",
     next: "पुढे",
