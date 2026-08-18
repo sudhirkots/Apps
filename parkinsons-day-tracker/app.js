@@ -17,7 +17,7 @@
   // Bump with every deploy, together with CACHE and the ?v= query strings.
   // Shown in the menu so a device can be identified at a glance — an installed
   // PWA silently running an old build is otherwise invisible.
-  var APP_VERSION = "v20";
+  var APP_VERSION = "v21";
 
   /* Strings are per language. English is the base; every other language is an
    * OVERRIDE MAP merged over it, so a missing or not-yet-translated key falls
@@ -367,6 +367,7 @@
     lockedDuringAlarm: "आपने अभी-अभी रंग दर्ज किया है, इसलिए अभी कुछ करने की ज़रूरत नहीं।",
     dismiss: "बंद करें",
     menuColours: "रंगों का मतलब",
+    coloursTitle: "रंगों का मतलब",
     menuWaking: "जागने का समय",
     menuProfile: "आपकी जानकारी",
     menuTablets: "गोलियों का समय बदलें",
@@ -487,6 +488,7 @@
     lockedDuringAlarm: "तुम्ही आत्ताच रंग नोंदवला आहे, त्यामुळे आता काही करायची गरज नाही.",
     dismiss: "बंद करा",
     menuColours: "रंगांचा अर्थ",
+    coloursTitle: "रंगांचा अर्थ",
     menuWaking: "जागण्याची वेळ",
     menuProfile: "तुमची माहिती",
     menuTablets: "गोळ्यांच्या वेळा बदला",
@@ -607,6 +609,7 @@
     lockedDuringAlarm: "તમે હમણાં જ રંગ નોંધ્યો છે, તેથી અત્યારે કંઈ કરવાની જરૂર નથી.",
     dismiss: "બંધ કરો",
     menuColours: "રંગોનો અર્થ",
+    coloursTitle: "રંગોનો અર્થ",
     menuWaking: "જાગવાનો સમય",
     menuProfile: "તમારી માહિતી",
     menuTablets: "ગોળીઓનો સમય બદલો",
@@ -727,6 +730,7 @@
     lockedDuringAlarm: "நீங்கள் இப்போதுதான் ஒரு நிறத்தைப் பதிவு செய்தீர்கள், இப்போது ஒன்றும் செய்யத் தேவையில்லை.",
     dismiss: "மூடு",
     menuColours: "நிறங்களின் பொருள்",
+    coloursTitle: "நிறங்களின் பொருள்",
     menuWaking: "விழிப்பு நேரம்",
     menuProfile: "உங்கள் விவரங்கள்",
     menuTablets: "மாத்திரை நேரங்களை மாற்று",
@@ -847,6 +851,7 @@
     lockedDuringAlarm: "మీరు ఇప్పుడే ఒక రంగు నమోదు చేశారు, కాబట్టి ఇప్పుడు ఏమీ చేయనవసరం లేదు.",
     dismiss: "మూసివేయి",
     menuColours: "రంగుల అర్థం",
+    coloursTitle: "రంగుల అర్థం",
     menuWaking: "మేల్కొనే సమయం",
     menuProfile: "మీ వివరాలు",
     menuTablets: "మాత్రల సమయాలు మార్చండి",
@@ -967,6 +972,7 @@
     lockedDuringAlarm: "ನೀವು ಈಗಷ್ಟೇ ಬಣ್ಣ ದಾಖಲಿಸಿದ್ದೀರಿ, ಆದ್ದರಿಂದ ಈಗ ಏನೂ ಮಾಡಬೇಕಿಲ್ಲ.",
     dismiss: "ಮುಚ್ಚಿ",
     menuColours: "ಬಣ್ಣಗಳ ಅರ್ಥ",
+    coloursTitle: "ಬಣ್ಣಗಳ ಅರ್ಥ",
     menuWaking: "ಎಚ್ಚರದ ಸಮಯ",
     menuProfile: "ನಿಮ್ಮ ವಿವರಗಳು",
     menuTablets: "ಮಾತ್ರೆಗಳ ಸಮಯ ಬದಲಿಸಿ",
@@ -1087,6 +1093,7 @@
     lockedDuringAlarm: "നിങ്ങൾ ഇപ്പോൾ ഒരു നിറം രേഖപ്പെടുത്തി, അതിനാൽ ഇപ്പോൾ ഒന്നും ചെയ്യേണ്ടതില്ല.",
     dismiss: "അടയ്ക്കുക",
     menuColours: "നിറങ്ങളുടെ അർത്ഥം",
+    coloursTitle: "നിറങ്ങളുടെ അർത്ഥം",
     menuWaking: "ഉണർന്നിരിക്കുന്ന സമയം",
     menuProfile: "നിങ്ങളുടെ വിവരങ്ങൾ",
     menuTablets: "ഗുളികകളുടെ സമയം മാറ്റുക",
@@ -1209,6 +1216,7 @@
     dismiss: "বন্ধ করুন",
 
     menuColours: "রঙের অর্থ",
+    coloursTitle: "রঙের অর্থ",
     menuWaking: "জেগে থাকার সময়",
     menuProfile: "আপনার তথ্য",
     menuTablets: "ওষুধের সময় বদলান",
