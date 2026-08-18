@@ -17,7 +17,7 @@
   // Bump with every deploy, together with CACHE and the ?v= query strings.
   // Shown in the menu so a device can be identified at a glance — an installed
   // PWA silently running an old build is otherwise invisible.
-  var APP_VERSION = "v23";
+  var APP_VERSION = "v24";
 
   /* Strings are per language. English is the base; every other language is an
    * OVERRIDE MAP merged over it, so a missing or not-yet-translated key falls
@@ -451,7 +451,7 @@
     extraShort: "निळा",
     extraDesc: "शरीराची अनियंत्रित हालचाल",
     extraFull: "तुमच्या ताब्यात नसलेल्या जास्तीच्या हालचाली, ज्या कामात अडथळा आणतात.",
-    extraExample: "शरीर, डोकं किंवा हात आपोआप हलतात, त्यामुळे जेवणं किंवा स्थिर बसणं कठीण होतं.",
+    extraExample: "शरीर, डोकं किंवा हात-पाय आपल्या हालतात, जरूर नसताना. त्यामुळे जेवण किंवा स्थिर बसणे कठीण होते.",
     next: "पुढे",
 
     alarmsTitle: "अलार्म वाजेल",
