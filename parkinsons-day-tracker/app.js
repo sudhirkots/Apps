@@ -17,7 +17,7 @@
   // Bump with every deploy, together with CACHE and the ?v= query strings.
   // Shown in the menu so a device can be identified at a glance — an installed
   // PWA silently running an old build is otherwise invisible.
-  var APP_VERSION = "v13";
+  var APP_VERSION = "v14";
 
   /* Strings are per language. English is the base; every other language is an
    * OVERRIDE MAP merged over it, so a missing or not-yet-translated key falls
@@ -2588,24 +2588,26 @@
       S.tabletNotConfirmed + "</span>" +
       "</div>";
 
+    /* The chart owns this screen. No heading — the only thing worth looking at
+     * is the squares, and a title just pushes them down. Every control lives in
+     * one bar at the foot, and the standard navigation bar is suppressed here
+     * (see NAV_VIEWS) so there is never a second bar competing with it. */
     return (
-      '<div class="pop">' +
-      "<h1>" + S.monthTitle + "</h1>" +
-      '<div class="toggle">' +
-      '<button data-act="range" data-days="7" aria-pressed="' + (chartRange === 7) + '">' + S.week + "</button>" +
-      '<button data-act="range" data-days="30" aria-pressed="' + (chartRange === 30) + '">' + S.month + "</button>" +
-      "</div>" +
+      '<div class="chart-screen pop">' +
       // Days with nothing logged are skipped (§9), so with sparse data both
       // ranges can render the same rows. Say the window out loud, or the
       // toggle reads as broken.
-      '<p class="muted" style="font-size:15px;margin:-4px 0 12px">' +
-      esc(S.showingWindow(rows.length, chartRange)) + "</p>" +
+      '<p class="muted chart-caption">' + esc(S.showingWindow(rows.length, chartRange)) + "</p>" +
       (stats.total === 0 ? '<p class="muted">' + S.noDataYet + "</p>" : "") +
+      '<div class="chart-middle">' +
       '<div class="chart-scroll"><div class="chart">' + head + body + "</div>" + legend + "</div>" +
-      '<div class="stack" style="margin-top:18px">' +
-      '<button class="btn-secondary" data-act="print">' + S.print + "</button>" +
-      '<button class="btn-primary" data-act="go" data-view="menu">' + S.backToMenu + "</button>" +
-      "</div></div>"
+      "</div>" +
+      '<nav class="chart-bar">' +
+      '<button data-act="range" data-days="7" aria-pressed="' + (chartRange === 7) + '">' + S.week + "</button>" +
+      '<button data-act="range" data-days="30" aria-pressed="' + (chartRange === 30) + '">' + S.month + "</button>" +
+      '<button data-act="print">' + S.print + "</button>" +
+      '<button data-act="go" data-view="menu">' + S.menu + "</button>" +
+      "</nav></div>"
     );
   }
 
@@ -2704,7 +2706,9 @@
 
   // Screens the nav bar may sit under. It must never appear during onboarding
   // or over a half-filled form, where a stray tap would discard typed timings.
-  var NAV_VIEWS = ["log", "month", "today", "menu", "colours"];
+  // The chart screen carries its own bar, so the standard navigation bar is
+  // suppressed there — two bars stacked at the foot of a phone is one too many.
+  var NAV_VIEWS = ["log", "today", "menu", "colours"];
 
   function render() {
     var builder = SCREENS[view] || screenLog;

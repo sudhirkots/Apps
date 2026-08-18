@@ -4,13 +4,13 @@
 /* ---------- Fonts (bundled; the app must look identical offline) ---------- */
 @font-face {
   font-family: "Caprasimo";
-  src: url("assets/fonts/caprasimo.woff2?v=13") format("woff2");
+  src: url("assets/fonts/caprasimo.woff2?v=14") format("woff2");
   font-weight: 400;
   font-display: swap;
 }
 @font-face {
   font-family: "Figtree";
-  src: url("assets/fonts/figtree-variable.woff2?v=13") format("woff2");
+  src: url("assets/fonts/figtree-variable.woff2?v=14") format("woff2");
   font-weight: 300 900;
   font-display: swap;
 }
@@ -1019,6 +1019,52 @@ button.hour-cell {
   );
 }
 
+/* ---------- Chart screen ----------
+   The squares are the artefact; everything else is a control. The chart takes
+   the whole middle of the screen and the controls sit in one bar at the foot. */
+.chart-screen {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100dvh - 32px);
+}
+
+.chart-caption {
+  font-size: 14px;
+  margin: 0 0 8px;
+  flex: none;
+}
+
+.chart-middle {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+}
+
+.chart-bar {
+  flex: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-top: 14px;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.chart-bar button {
+  min-height: 58px;
+  border-radius: 18px;
+  background: var(--color-surface);
+  font-size: 16px;
+  padding: 8px 6px;
+}
+
+.chart-bar button[aria-pressed="true"] {
+  background: var(--color-accent);
+  color: #fff;
+  font-weight: 600;
+}
+
 /* ---------- Range toggle ---------- */
 .toggle {
   display: flex;
@@ -1063,6 +1109,8 @@ button.hour-cell {
 
   button,
   .nav-bar,
+  .chart-bar,
+  .chart-caption,
   .toggle,
   .btn-primary,
   .btn-secondary,
