@@ -4,13 +4,13 @@
 /* ---------- Fonts (bundled; the app must look identical offline) ---------- */
 @font-face {
   font-family: "Caprasimo";
-  src: url("assets/fonts/caprasimo.woff2?v=17") format("woff2");
+  src: url("assets/fonts/caprasimo.woff2?v=18") format("woff2");
   font-weight: 400;
   font-display: swap;
 }
 @font-face {
   font-family: "Figtree";
-  src: url("assets/fonts/figtree-variable.woff2?v=17") format("woff2");
+  src: url("assets/fonts/figtree-variable.woff2?v=18") format("woff2");
   font-weight: 300 900;
   font-display: swap;
 }
@@ -519,7 +519,7 @@ button:focus-visible {
   /* Each name is in its own script, so it must render in that script's font
      rather than the language currently selected. */
   font-family: system-ui, "Noto Sans Devanagari", "Noto Sans Gujarati", "Noto Sans Tamil",
-    "Noto Sans Telugu", "Noto Sans Kannada", "Noto Sans Malayalam", sans-serif;
+    "Noto Sans Telugu", "Noto Sans Kannada", "Noto Sans Malayalam", "Noto Sans Bengali", sans-serif;
 }
 
 .lang-on {
@@ -539,11 +539,14 @@ button:focus-visible {
 :root[data-lang="ta"],
 :root[data-lang="te"],
 :root[data-lang="kn"],
-:root[data-lang="ml"] {
+:root[data-lang="ml"],
+:root[data-lang="bn"] {
   --font-heading: "Noto Sans Devanagari", "Noto Sans Gujarati", "Noto Sans Tamil",
-    "Noto Sans Telugu", "Noto Sans Kannada", "Noto Sans Malayalam", system-ui, sans-serif;
+    "Noto Sans Telugu", "Noto Sans Kannada", "Noto Sans Malayalam", "Noto Sans Bengali",
+    system-ui, sans-serif;
   --font-body: "Noto Sans Devanagari", "Noto Sans Gujarati", "Noto Sans Tamil",
-    "Noto Sans Telugu", "Noto Sans Kannada", "Noto Sans Malayalam", system-ui, sans-serif;
+    "Noto Sans Telugu", "Noto Sans Kannada", "Noto Sans Malayalam", "Noto Sans Bengali",
+    system-ui, sans-serif;
 }
 
 /* Indic scripts sit taller than Latin; give them a little more room so
@@ -554,7 +557,8 @@ button:focus-visible {
 :root[data-lang="ta"] body,
 :root[data-lang="te"] body,
 :root[data-lang="kn"] body,
-:root[data-lang="ml"] body {
+:root[data-lang="ml"] body,
+:root[data-lang="bn"] body {
   line-height: 1.65;
 }
 
@@ -571,7 +575,9 @@ button:focus-visible {
 :root[data-lang="ta"] h2,
 :root[data-lang="te"] h2,
 :root[data-lang="kn"] h2,
-:root[data-lang="ml"] h2 {
+:root[data-lang="ml"] h2,
+:root[data-lang="bn"] h1,
+:root[data-lang="bn"] h2 {
   line-height: 1.3;
 }
 

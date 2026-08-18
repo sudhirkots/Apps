@@ -17,7 +17,7 @@
   // Bump with every deploy, together with CACHE and the ?v= query strings.
   // Shown in the menu so a device can be identified at a glance — an installed
   // PWA silently running an old build is otherwise invisible.
-  var APP_VERSION = "v17";
+  var APP_VERSION = "v18";
 
   /* Strings are per language. English is the base; every other language is an
    * OVERRIDE MAP merged over it, so a missing or not-yet-translated key falls
@@ -1148,6 +1148,128 @@
 
     languageTitle: "ഏത് ഭാഷ?",
     languageHint: "ഇത് പിന്നീട് മെനുവിൽ നിന്ന് മാറ്റാം."
+  };
+
+  LANGS.bn = {
+    langName: "বাংলা",
+
+    offName: "লাল — ওষুধের কাজ হচ্ছে না",
+    offShort: "লাল",
+    offDesc: "শক্ত হয়ে যাওয়া, আটকে যাওয়া বা ধীরগতি",
+    offFull:
+      "শক্ত হয়ে যাওয়া বা আটকে যাওয়ার মতো। চেয়ার বা বিছানা থেকে উঠতে কষ্ট। নড়াচড়া ধীর। অথবা কাঁপুনি।",
+    offExample: "পা যেন মেঝেতে আটকে আছে মনে হয়, বা উঠতে কারও সাহায্য লাগে। সেটাই লাল।",
+
+    onName: "সবুজ — ওষুধ কাজ করছে",
+    onShort: "সবুজ",
+    onDesc: "সহজে চলাফেরা ও কাজ",
+    onFull: "আপনি উঠছেন, হাঁটছেন এবং নিজের কাজ সহজেই করছেন। কারও সাহায্য লাগছে না।",
+    onExample: "এটি আপনার ভালো সময়। দিনের বেশির ভাগ সময় সবুজ থাকা উচিত।",
+
+    extraName: "নীল — খুব বেশি নড়াচড়া",
+    extraShort: "নীল",
+    extraDesc: "নিজে থেকেই হওয়া নড়াচড়া",
+    extraFull: "আপনার নিয়ন্ত্রণের বাইরে বাড়তি নড়াচড়া, যা আপনার কাজে বাধা দেয়।",
+    extraExample: "শরীর, মাথা বা হাত নিজে থেকেই নড়ে, ফলে খাওয়া বা স্থির হয়ে বসা কঠিন হয়।",
+
+    next: "পরবর্তী",
+
+    alarmsTitle: "অ্যালার্ম বাজবে",
+    alarmsLine1: "আপনি জেগে থাকা অবস্থায় প্রতি ঘণ্টায় — একটি রঙ জিজ্ঞাসা করার জন্য।",
+    alarmsLine2: "এবং প্রতিটি ওষুধের সময়ে, সেই ওষুধ খাওয়ার কথা মনে করিয়ে দিতে।",
+    alarmsLine3: "অ্যালার্মের অপেক্ষা না করে যেকোনো সময় রঙ চাপতে পারেন।",
+
+    wakingTitle: "আপনি কখন জেগে থাকেন?",
+    wakeStart: "আমি উঠি",
+    wakeEnd: "আমি ঘুমাতে যাই",
+
+    logQuestion: "এখন আপনার কেমন লাগছে?",
+    menu: "মেনু",
+    selectedPrefix: "বেছে নেওয়া হয়েছে ",
+    confirm: "নিশ্চিত করুন",
+    changeAnswer: "উত্তর বদলান",
+    saved: "সংরক্ষিত হয়েছে",
+    lockLine: function (colour, mins) {
+      return "আপনি এইমাত্র " + colour + " লিখেছেন। " + mins + " মিনিট পরে আবার লিখতে পারবেন।";
+    },
+    recordedAt: function (colour, time) {
+      return colour + " — " + time + " এ লেখা হয়েছে";
+    },
+
+    checkIn: " · যাচাই",
+    notNow: "এখন নয়",
+    tabletTime: " · ওষুধের সময়",
+    takeTablet: function (dose, name) {
+      return name + " — " + dose + " খান";
+    },
+    tabletBody: "এখনই, এই সময়েই খান। প্রতিদিন একই সময় রাখুন।",
+    haveTaken: "আমি খেয়ে নিয়েছি",
+    snooze: "১০ মিনিট পরে মনে করিয়ে দিন",
+    lockedDuringAlarm: "আপনি এইমাত্র একটি রঙ লিখেছেন, তাই এখন কিছু করার নেই।",
+    dismiss: "বন্ধ করুন",
+
+    menuColours: "রঙের অর্থ",
+    menuWaking: "জেগে থাকার সময়",
+    menuProfile: "আপনার তথ্য",
+    menuTablets: "ওষুধের সময় বদলান",
+    menuToday: "আজকের রিপোর্ট",
+    menuMonth: "সব দিন — চার্ট",
+    menuExport: "ব্যাকআপ ফাইল সংরক্ষণ করুন",
+    menuImport: "ব্যাকআপ ফাইল খুলুন",
+    menuLanguage: "ভাষা",
+    backToLogging: "আবার লেখায় ফিরুন",
+    backToMenu: "মেনুতে ফিরুন",
+    noProfile: "রোগীর তথ্য এখনও ভরা হয়নি",
+
+    profileTitle: "আপনার তথ্য",
+    pName: "নাম",
+    pAge: "বয়স",
+    pYear: "কোন বছরে ধরা পড়ে",
+    pDoctor: "ডাক্তার",
+    pNotes: "আর কিছু লেখার থাকলে",
+
+    todayTitle: "আজকের রিপোর্ট",
+    hourByHour: "ঘণ্টা ধরে",
+    tabletSchedule: "ওষুধের সময়",
+    markTaken: "খেয়েছি",
+    takenAt: function (t) {
+      return t + " এ খাওয়া হয়েছে";
+    },
+    print: "প্রিন্ট / সংরক্ষণ",
+    entries: " টি নথি",
+    monthTitle: "সব দিন",
+    week: "১ সপ্তাহ",
+    month: "১ মাস",
+    off: "কাজ হচ্ছে না",
+    normal: "ঠিক আছে",
+    extra: "বেশি",
+    notLogged: "লেখা হয়নি",
+    tabletTaken: "ওষুধ খাওয়া হয়েছে",
+    tabletNotConfirmed: "ওষুধের সময় নিশ্চিত নয়",
+    noDataYet: "এখনও কিছু লেখা হয়নি। শুরু করতে হোম স্ক্রিনে একটি রঙ চাপুন।",
+
+    fillPrompt: function (hour) {
+      return hour + " এ আপনার কেমন ছিল?";
+    },
+    fillHint: "যেকোনো ঘণ্টা ভরতে বা বদলাতে সেটির উপর চাপুন।",
+    clearHour: "এই ঘণ্টাটি খালি করুন",
+    today: "আজ",
+    yesterday: "গতকাল",
+    restOfDayTitle: "দিনের বাকি অংশ",
+    restOfDayFine: "যে ঘণ্টাগুলো ভরিনি সেগুলো ভালোই ছিল",
+    restOfDayNote:
+      "এখন পর্যন্ত সব খালি ঘণ্টা সবুজ করে দেবে। সত্যি হলে তবেই চাপুন — খালি ঘণ্টা ভুল রঙের চেয়ে ভালো।",
+    cancelFill: "থাক",
+    pastDayReadOnly: "এই দিনটি শেষ হয়ে গেছে, আর বদলানো যাবে না।",
+
+    endOfDayKicker: "ঘুমানোর আগে",
+    endOfDayTitle: "আজকের বাকি ঘণ্টাগুলো ভরবেন?",
+    endOfDayBody: "আজকের কিছু ঘণ্টা এখনও খালি। মনে থাকতে থাকতেই ভরে নিতে পারেন।",
+    endOfDayGo: "আজ ভরুন",
+    endOfDaySkip: "খালি থাকতে দিন",
+
+    languageTitle: "কোন ভাষা?",
+    languageHint: "এটি পরে মেনু থেকে বদলানো যাবে।"
   };
 
   // Active strings. Replaced wholesale by setLang(); never reference LANGS.en

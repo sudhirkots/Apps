@@ -98,7 +98,7 @@ one question per screen.
 
 ## Languages
 
-English, Hindi, Marathi, Gujarati, Tamil, Telugu, Kannada and Malayalam. The language question is the
+English, Hindi, Marathi, Gujarati, Tamil, Telugu, Kannada, Malayalam and Bengali. The language question is the
 first screen on a fresh install, with each option written in its own script so it needs no
 translation to be found. Eight options are laid out two-up, because a single column overflows a
 375×667 phone and someone who cannot read the interface cannot be expected to discover that the list
@@ -108,7 +108,7 @@ Every language is an **override map merged over English**, so a missing key fall
 rather than rendering blank. Only the patient-facing surface is translated; the staff wizard stays in
 English, since clinic staff enter drug names and dosing in English anyway.
 
-**All seven non-English translations are drafts and have not been clinically reviewed.** They
+**All eight non-English translations are drafts and have not been clinically reviewed.** They
 must be read by a clinician who speaks the language before any patient sees them. The risk is not
 grammar — it is a word like "off" or "stiff" landing with the wrong clinical sense and quietly
 changing what gets logged.
