@@ -1,0 +1,3 @@
+# wrangler local state and caches — never commit; the account cache holds
+# the Cloudflare account id and this repository is public.
+.wrangler/
