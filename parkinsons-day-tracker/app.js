@@ -17,7 +17,7 @@
   // Bump with every deploy, together with CACHE and the ?v= query strings.
   // Shown in the menu so a device can be identified at a glance — an installed
   // PWA silently running an old build is otherwise invisible.
-  var APP_VERSION = "v18";
+  var APP_VERSION = "v19";
 
   /* Strings are per language. English is the base; every other language is an
    * OVERRIDE MAP merged over it, so a missing or not-yet-translated key falls
@@ -555,20 +555,20 @@
 
     offName: "લાલ — દવાની અસર નથી",
     offShort: "લાલ",
-    offDesc: "જકડાવું, થીજી જવું કે ધીમાપણું",
+    offDesc: "જકડાવું, અક્કડ કે ધીમા થઇ જવું",
     offFull:
       "જકડાઈ જવું કે થીજી જવું. ખુરશી કે પથારીમાંથી ઊઠવું મુશ્કેલ. હલનચલન ધીમું. અથવા ધ્રુજારી.",
     offExample: "પગ જમીન સાથે ચોંટી ગયા હોય એવું લાગે, અથવા ઊઠવા મદદ જોઈએ. એ જ લાલ.",
 
     onName: "લીલો — દવા કામ કરે છે",
     onShort: "લીલો",
-    onDesc: "સહેલાઈથી હરવું-ફરવું અને કામ",
+    onDesc: "સહેલાઈથી હરવું-ફરવું અને કામ કરી શકવું",
     onFull: "તમે ઊઠો છો, ચાલો છો અને તમારું કામ સહેલાઈથી કરો છો. કોઈની મદદની જરૂર નથી.",
     onExample: "આ તમારો સારો સમય છે. દિવસનો મોટા ભાગનો સમય લીલો હોવો જોઈએ.",
 
     extraName: "વાદળી — વધુ પડતી હલનચલન",
     extraShort: "વાદળી",
-    extraDesc: "જાતે થતી હલનચલન",
+    extraDesc: "વધારે પડતું હલન-ચલન જે તમે સંભાળી ના શકો",
     extraFull: "તમારા કાબૂ બહારની વધારાની હલનચલન, જે તમારા કામમાં નડે છે.",
     extraExample: "શરીર, માથું કે હાથ જાતે હલે છે, જેથી ખાવું કે સ્થિર બેસવું મુશ્કેલ થાય છે.",
     next: "આગળ",
