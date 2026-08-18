@@ -17,7 +17,7 @@
   // Bump with every deploy, together with CACHE and the ?v= query strings.
   // Shown in the menu so a device can be identified at a glance — an installed
   // PWA silently running an old build is otherwise invisible.
-  var APP_VERSION = "v10";
+  var APP_VERSION = "v11";
 
   /* Strings are per language. English is the base; every other language is an
    * OVERRIDE MAP merged over it, so a missing or not-yet-translated key falls
@@ -240,6 +240,8 @@
     tabletNumber: function (n) {
       return "Tablet " + n;
     },
+    wakingStaffHint:
+      "Ask the patient. The app only asks for a colour between these hours, and these also set the suggested tablet times.",
     askName: "What is the tablet called?",
     askNameHint: "Write the name once. It is not asked again.",
     askDose: "How much is taken each time?",
@@ -1907,7 +1909,7 @@
       '<p class="example">' + S.alarmsLine3 + "</p>" +
       "</div>" +
       '<div style="margin-top:18px">' +
-      '<button class="btn-primary" data-act="go" data-view="waking">' + S.next + "</button>" +
+      '<button class="btn-primary" data-act="go" data-view="setup">' + S.next + "</button>" +
       "</div></div>"
     );
   }
@@ -1941,7 +1943,7 @@
    * staff to parse the whole structure before typing anything, which is the
    * wrong shape for dictation from a prescription.
    */
-  var SETUP_STAGES = ["intro", "name", "dose", "freq", "times", "more", "dysk", "review"];
+  var SETUP_STAGES = ["intro", "waking", "name", "dose", "freq", "times", "more", "dysk", "review"];
 
   function blankTablet() {
     return { name: "", dose: "1 tablet", times: ["08:00"] };
@@ -2001,6 +2003,18 @@
           '<div class="card"><p style="margin:0">' + esc(S.setupFootnote) + "</p></div>",
           { hideBack: true, nextLabel: S.staffBegin }
         );
+
+      case "waking":
+        // Asked before the tablets, because it also decides the suggested
+        // dose times further down the wizard.
+        return wizardStep(S.wakingTitle, S.wakingStaffHint,
+          '<div class="card">' +
+          '<div class="field"><label>' + S.wakeStart + "</label>" +
+          '<input type="time" data-field="wakeStart" value="' + esc(data.waking.start) + '" /></div>' +
+          '<div class="field"><label>' + S.wakeEnd + "</label>" +
+          '<input type="time" data-field="wakeEnd" value="' + esc(data.waking.end) + '" /></div>' +
+          "</div>",
+          {});
 
       case "name":
         return wizardStep(S.askName, S.askNameHint,
@@ -2584,20 +2598,10 @@
       })
     );
 
-    var legend =
-      '<div class="legend">' +
-      reportStates()
-        .map(function (s) {
-          var label = { off: S.off, on: S.normal, extra: S.extra }[s];
-          return '<span class="legend-item"><span class="swatch ' + s + '"></span>' + label + "</span>";
-        })
-        .join("") +
-      '<span class="legend-item"><span class="swatch unlogged"></span>' + S.notLogged + "</span>" +
-      '<span class="legend-item"><span class="swatch split"></span>' + S.multiple + "</span>" +
-      '<span class="legend-item"><span class="swatch late"></span>' + S.filledLater + "</span>" +
-      '<span class="legend-item"><span class="swatch line" style="height:18px"></span>' + S.tabletTaken + "</span>" +
-      '<span class="legend-item"><span class="swatch dashed" style="height:18px"></span>' + S.tabletNotConfirmed + "</span>" +
-      "</div>";
+    /* No legend, no percentage tiles. The chart is read by the doctor, who does
+     * not need "Off" and "Normal" spelled out under it, and a screen of caption
+     * text pushes the squares themselves off a phone. Both are a few lines to
+     * restore if a colleague ever needs them. */
 
     return (
       '<div class="pop">' +
@@ -2611,9 +2615,8 @@
       // toggle reads as broken.
       '<p class="muted" style="font-size:15px;margin:-4px 0 12px">' +
       esc(S.showingWindow(rows.length, chartRange)) + "</p>" +
-      tilesHtml(stats.pct, "%") +
       (stats.total === 0 ? '<p class="muted">' + S.noDataYet + "</p>" : "") +
-      '<div class="chart-scroll"><div class="chart">' + head + body + "</div>" + legend + "</div>" +
+      '<div class="chart-scroll"><div class="chart">' + head + body + "</div></div>" +
       '<div class="stack" style="margin-top:18px">' +
       '<button class="btn-secondary" data-act="print">' + S.print + "</button>" +
       '<button class="btn-primary" data-act="go" data-view="menu">' + S.backToMenu + "</button>" +
@@ -2977,9 +2980,10 @@
         wt.name = wp.name;
         wt.dose = wp.dose;
         wt.times = wp.times.slice();
-        // A preset carries dose and timings too, so those questions are already
-        // answered — jump past them rather than making staff confirm twice.
-        setupStage = "more";
+        // A preset PREFILLS; it does not answer. Carry on through dose,
+        // frequency and times so staff can change any of them — a patient's
+        // real regimen rarely matches the common pattern exactly.
+        setupStage = "dose";
         render();
         break;
 

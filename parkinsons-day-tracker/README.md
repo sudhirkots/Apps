@@ -85,6 +85,13 @@ per screen, one tablet at a time — name, dose, how many times a day, then the 
 shaped for someone dictating a regimen they already know, not for a patient discovering the app.
 Choosing a preset fills dose and timings too and skips those questions.
 
+Waking hours are the first question, asked of the patient by staff — they bound the hourly alarm
+window and also decide the suggested dose times later in the wizard.
+
+Presets **prefill but do not skip**. Choosing one fills the name, dose and timings and then still
+walks through dose, frequency and times, because a patient's real regimen rarely matches the common
+pattern exactly.
+
 The last question asks whether to track dyskinesia. Then a review card list, which is also where
 Menu → Change tablet timings lands — editing an existing regimen in place beats walking back through
 one question per screen.
@@ -135,6 +142,11 @@ What the patterns mean:
 
 That last row is the one that saves prescriptions. Check the lines before concluding the regimen has
 failed.
+
+The chart screen shows the chart and nothing else — no percentage tiles, no legend. It is read by
+the treating doctor, who does not need "Off" and "Normal" captioned underneath, and a screen of
+explanatory text pushes the squares themselves off a phone. Both are a few lines to restore if a
+colleague ever needs them.
 
 Both the day report and the chart have a "Print / save" button that produces a clean, colour-exact
 page for the notes.
