@@ -17,7 +17,7 @@
   // Bump with every deploy, together with CACHE and the ?v= query strings.
   // Shown in the menu so a device can be identified at a glance — an installed
   // PWA silently running an old build is otherwise invisible.
-  var APP_VERSION = "v22";
+  var APP_VERSION = "v23";
 
   /* Strings are per language. English is the base; every other language is an
    * OVERRIDE MAP merged over it, so a missing or not-yet-translated key falls
@@ -444,7 +444,7 @@
     onName: "हिरवा — औषध काम करत आहे",
     onShort: "हिरवा",
     onDesc: "शरीराची सहज आणि सुरळीत हालचाल",
-    onFull: "तुम्ही उठता, चालता आणि तुमची कामं सहज करता. कोणाच्या मदतीची गरज नाही.",
+    onFull: "तुम्ही कोणत्याही मदती शिवाय सहज उठता, चालता आणि तुमची नियमित कामे सूरळीत करु शकता",
     onExample: "हा तुमचा चांगला काळ आहे. दिवसाचा बहुतेक भाग हिरवा असायला हवा.",
 
     extraName: "निळा — खूप जास्त हालचाल",
