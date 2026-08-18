@@ -1,18 +1,17 @@
 /* Day Tracker service worker.
- * Precache the shell so the app opens with no connection. The doctor's video is
- * ~18 MB — it is cached at runtime on first play, never precached (BUILDSPEC §12).
+ * Precache the shell so the app opens with no connection.
  * Bump CACHE and the ?v= query strings together whenever an asset changes. */
 
-var CACHE = "day-tracker-v9";
+var CACHE = "day-tracker-v10";
 
 var SHELL = [
   "./",
   "./index.html",
-  "./styles.css?v=9",
-  "./app.js?v=9",
-  "./manifest.webmanifest?v=9",
-  "./assets/fonts/caprasimo.woff2?v=9",
-  "./assets/fonts/figtree-variable.woff2?v=9",
+  "./styles.css?v=10",
+  "./app.js?v=10",
+  "./manifest.webmanifest?v=10",
+  "./assets/fonts/caprasimo.woff2?v=10",
+  "./assets/fonts/figtree-variable.woff2?v=10",
   "./assets/off-freezing.png",
   "./assets/on-standing.png",
   "./assets/extra-dyskinesia.png",
@@ -49,9 +48,6 @@ self.addEventListener("fetch", function (ev) {
   var url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
 
-  // The video is range-requested; let the network handle it and cache opportunistically.
-  var isVideo = url.pathname.indexOf("doctor-intro.mp4") !== -1;
-
   // index.html carries no version string, so serving it cache-first would pin the
   // app to whichever app.js the stale document references — a new deploy would
   // never arrive. Navigations go network-first and fall back to cache offline.
@@ -84,7 +80,7 @@ self.addEventListener("fetch", function (ev) {
       if (hit) return hit;
       return fetch(req)
         .then(function (res) {
-          if (isVideo || !res || res.status !== 200 || res.type !== "basic") return res;
+          if (!res || res.status !== 200 || res.type !== "basic") return res;
           var copy = res.clone();
           caches.open(CACHE).then(function (cache) {
             cache.put(req, copy);

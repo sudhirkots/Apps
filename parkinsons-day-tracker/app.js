@@ -17,7 +17,7 @@
   // Bump with every deploy, together with CACHE and the ?v= query strings.
   // Shown in the menu so a device can be identified at a glance — an installed
   // PWA silently running an old build is otherwise invisible.
-  var APP_VERSION = "v9";
+  var APP_VERSION = "v10";
 
   /* Strings are per language. English is the base; every other language is an
    * OVERRIDE MAP merged over it, so a missing or not-yet-translated key falls
@@ -55,8 +55,6 @@
       "Your body, head or arms move on their own, so eating or sitting still is difficult.",
 
     // Welcome
-    welcomeTitle: "Your doctor explains",
-    playVideo: "Play the video",
     next: "Next",
 
     // Alarms step
@@ -118,14 +116,12 @@
     dismiss: "Close",
 
     // Menu
-    menuVideo: "Watch the video again",
     menuColours: "What the colours mean",
     menuWaking: "Waking hours",
     menuProfile: "Your details",
     menuTablets: "Change tablet timings",
     menuToday: "Today's report",
     menuMonth: "All days — squares chart",
-    menuScript: "Video script (for the doctor)",
     menuTestAlarm: "Test the alarm screen",
     menuEnableAlarms: "Turn on alarms",
     menuExport: "Save a backup file",
@@ -198,8 +194,6 @@
     todayAtAGlance: "TODAY SO FAR",
 
     // Subtitles
-    ccOn: "Subtitles on",
-    ccOff: "Subtitles off",
 
     // Filling in later
     fillTitle: "Fill in a missed hour",
@@ -346,9 +340,6 @@
     extraFull: "ऐसी हलचल जो आपके काबू में नहीं है और आपके काम में रुकावट डालती है।",
     extraExample:
       "शरीर, सिर या हाथ अपने आप हिलते हैं, जिससे खाना या स्थिर बैठना मुश्किल होता है।",
-
-    welcomeTitle: "आपके डॉक्टर बता रहे हैं",
-    playVideo: "वीडियो चलाएँ",
     next: "आगे",
 
     alarmsTitle: "अलार्म बजेगा",
@@ -384,8 +375,6 @@
     snooze: "10 मिनट बाद याद दिलाएँ",
     lockedDuringAlarm: "आपने अभी-अभी रंग दर्ज किया है, इसलिए अभी कुछ करने की ज़रूरत नहीं।",
     dismiss: "बंद करें",
-
-    menuVideo: "वीडियो फिर से देखें",
     menuColours: "रंगों का मतलब",
     menuWaking: "जागने का समय",
     menuProfile: "आपकी जानकारी",
@@ -473,9 +462,6 @@
     extraDesc: "आपोआप होणाऱ्या हालचाली",
     extraFull: "तुमच्या ताब्यात नसलेल्या जास्तीच्या हालचाली, ज्या कामात अडथळा आणतात.",
     extraExample: "शरीर, डोकं किंवा हात आपोआप हलतात, त्यामुळे जेवणं किंवा स्थिर बसणं कठीण होतं.",
-
-    welcomeTitle: "तुमचे डॉक्टर सांगत आहेत",
-    playVideo: "व्हिडिओ चालू करा",
     next: "पुढे",
 
     alarmsTitle: "अलार्म वाजेल",
@@ -511,8 +497,6 @@
     snooze: "10 मिनिटांनी आठवण करा",
     lockedDuringAlarm: "तुम्ही आत्ताच रंग नोंदवला आहे, त्यामुळे आता काही करायची गरज नाही.",
     dismiss: "बंद करा",
-
-    menuVideo: "व्हिडिओ पुन्हा पाहा",
     menuColours: "रंगांचा अर्थ",
     menuWaking: "जागण्याची वेळ",
     menuProfile: "तुमची माहिती",
@@ -600,9 +584,6 @@
     extraDesc: "જાતે થતી હલનચલન",
     extraFull: "તમારા કાબૂ બહારની વધારાની હલનચલન, જે તમારા કામમાં નડે છે.",
     extraExample: "શરીર, માથું કે હાથ જાતે હલે છે, જેથી ખાવું કે સ્થિર બેસવું મુશ્કેલ થાય છે.",
-
-    welcomeTitle: "તમારા ડૉક્ટર સમજાવે છે",
-    playVideo: "વીડિયો ચલાવો",
     next: "આગળ",
 
     alarmsTitle: "એલાર્મ વાગશે",
@@ -638,8 +619,6 @@
     snooze: "10 મિનિટ પછી યાદ કરાવો",
     lockedDuringAlarm: "તમે હમણાં જ રંગ નોંધ્યો છે, તેથી અત્યારે કંઈ કરવાની જરૂર નથી.",
     dismiss: "બંધ કરો",
-
-    menuVideo: "વીડિયો ફરી જુઓ",
     menuColours: "રંગોનો અર્થ",
     menuWaking: "જાગવાનો સમય",
     menuProfile: "તમારી માહિતી",
@@ -727,9 +706,6 @@
     extraDesc: "தானாக நிகழும் அசைவுகள்",
     extraFull: "உங்கள் கட்டுப்பாட்டில் இல்லாத கூடுதல் அசைவுகள், அவை உங்கள் வேலைக்கு இடையூறாக இருக்கும்.",
     extraExample: "உடல், தலை அல்லது கைகள் தானாக அசைகின்றன, அதனால் சாப்பிடுவதோ அமைதியாக உட்காருவதோ கடினம்.",
-
-    welcomeTitle: "உங்கள் மருத்துவர் விளக்குகிறார்",
-    playVideo: "வீடியோவை இயக்கு",
     next: "அடுத்து",
 
     alarmsTitle: "அலாரம் ஒலிக்கும்",
@@ -765,8 +741,6 @@
     snooze: "10 நிமிடங்களில் நினைவூட்டு",
     lockedDuringAlarm: "நீங்கள் இப்போதுதான் ஒரு நிறத்தைப் பதிவு செய்தீர்கள், இப்போது ஒன்றும் செய்யத் தேவையில்லை.",
     dismiss: "மூடு",
-
-    menuVideo: "வீடியோவை மீண்டும் பார்",
     menuColours: "நிறங்களின் பொருள்",
     menuWaking: "விழிப்பு நேரம்",
     menuProfile: "உங்கள் விவரங்கள்",
@@ -854,9 +828,6 @@
     extraDesc: "వాటంతట అవే జరిగే కదలికలు",
     extraFull: "మీ అదుపులో లేని అదనపు కదలికలు, అవి మీ పనికి అడ్డుపడతాయి.",
     extraExample: "శరీరం, తల లేదా చేతులు వాటంతట అవే కదులుతాయి, దాంతో తినడం లేదా కదలకుండా కూర్చోవడం కష్టం.",
-
-    welcomeTitle: "మీ డాక్టర్ వివరిస్తున్నారు",
-    playVideo: "వీడియో ప్లే చేయండి",
     next: "తర్వాత",
 
     alarmsTitle: "అలారం మోగుతుంది",
@@ -892,8 +863,6 @@
     snooze: "10 నిమిషాల తర్వాత గుర్తు చేయి",
     lockedDuringAlarm: "మీరు ఇప్పుడే ఒక రంగు నమోదు చేశారు, కాబట్టి ఇప్పుడు ఏమీ చేయనవసరం లేదు.",
     dismiss: "మూసివేయి",
-
-    menuVideo: "వీడియో మళ్లీ చూడండి",
     menuColours: "రంగుల అర్థం",
     menuWaking: "మేల్కొనే సమయం",
     menuProfile: "మీ వివరాలు",
@@ -981,9 +950,6 @@
     extraDesc: "ತಾನಾಗಿಯೇ ಆಗುವ ಚಲನೆ",
     extraFull: "ನಿಮ್ಮ ಹಿಡಿತದಲ್ಲಿಲ್ಲದ ಹೆಚ್ಚುವರಿ ಚಲನೆಗಳು, ಅವು ನಿಮ್ಮ ಕೆಲಸಕ್ಕೆ ಅಡ್ಡಿಯಾಗುತ್ತವೆ.",
     extraExample: "ದೇಹ, ತಲೆ ಅಥವಾ ಕೈಗಳು ತಾವಾಗಿಯೇ ಅಲುಗಾಡುತ್ತವೆ, ಇದರಿಂದ ಊಟ ಮಾಡುವುದು ಅಥವಾ ಸುಮ್ಮನೆ ಕೂರುವುದು ಕಷ್ಟ.",
-
-    welcomeTitle: "ನಿಮ್ಮ ವೈದ್ಯರು ವಿವರಿಸುತ್ತಿದ್ದಾರೆ",
-    playVideo: "ವೀಡಿಯೊ ಪ್ಲೇ ಮಾಡಿ",
     next: "ಮುಂದೆ",
 
     alarmsTitle: "ಅಲಾರಂ ಮೊಳಗುತ್ತದೆ",
@@ -1019,8 +985,6 @@
     snooze: "10 ನಿಮಿಷಗಳ ನಂತರ ನೆನಪಿಸಿ",
     lockedDuringAlarm: "ನೀವು ಈಗಷ್ಟೇ ಬಣ್ಣ ದಾಖಲಿಸಿದ್ದೀರಿ, ಆದ್ದರಿಂದ ಈಗ ಏನೂ ಮಾಡಬೇಕಿಲ್ಲ.",
     dismiss: "ಮುಚ್ಚಿ",
-
-    menuVideo: "ವೀಡಿಯೊ ಮತ್ತೆ ನೋಡಿ",
     menuColours: "ಬಣ್ಣಗಳ ಅರ್ಥ",
     menuWaking: "ಎಚ್ಚರದ ಸಮಯ",
     menuProfile: "ನಿಮ್ಮ ವಿವರಗಳು",
@@ -1108,9 +1072,6 @@
     extraDesc: "തനിയെ സംഭവിക്കുന്ന ചലനങ്ങൾ",
     extraFull: "നിങ്ങളുടെ നിയന്ത്രണത്തിലില്ലാത്ത അധിക ചലനങ്ങൾ, അവ നിങ്ങളുടെ ജോലിക്ക് തടസ്സമാകുന്നു.",
     extraExample: "ശരീരം, തല അല്ലെങ്കിൽ കൈകൾ തനിയെ ചലിക്കുന്നു, അതിനാൽ ഭക്ഷണം കഴിക്കാനോ അനങ്ങാതെ ഇരിക്കാനോ പ്രയാസം.",
-
-    welcomeTitle: "നിങ്ങളുടെ ഡോക്ടർ വിശദീകരിക്കുന്നു",
-    playVideo: "വീഡിയോ പ്ലേ ചെയ്യുക",
     next: "അടുത്തത്",
 
     alarmsTitle: "അലാറം മുഴങ്ങും",
@@ -1146,8 +1107,6 @@
     snooze: "10 മിനിറ്റിനു ശേഷം ഓർമ്മിപ്പിക്കുക",
     lockedDuringAlarm: "നിങ്ങൾ ഇപ്പോൾ ഒരു നിറം രേഖപ്പെടുത്തി, അതിനാൽ ഇപ്പോൾ ഒന്നും ചെയ്യേണ്ടതില്ല.",
     dismiss: "അടയ്ക്കുക",
-
-    menuVideo: "വീഡിയോ വീണ്ടും കാണുക",
     menuColours: "നിറങ്ങളുടെ അർത്ഥം",
     menuWaking: "ഉണർന്നിരിക്കുന്ന സമയം",
     menuProfile: "നിങ്ങളുടെ വിവരങ്ങൾ",
@@ -1635,14 +1594,12 @@
       fired: {},
       // Additive to the §6 contract. The Android side may ignore it; it is a
       // presentation preference, never clinical data.
-      // captions default OFF until captions-en.vtt is synced to the real audio —
-      // subtitles that do not match the spoken words are worse than none.
       //
       // navMode defaults ON as of v6: tested on a phone and adopted, superseding
       // the original "no navigation bar" and "history never on the home screen"
       // rules. The toggle stays, so it can be turned off for a patient who
       // mis-taps it.
-      settings: { navMode: true, captions: false, lang: "en", trackDyskinesia: false }
+      settings: { navMode: true, lang: "en", trackDyskinesia: false }
     };
   }
 
@@ -1706,7 +1663,6 @@
     base.fired = pruneFired(d.fired, Date.now());
     if (d.settings) {
       if (typeof d.settings.navMode === "boolean") base.settings.navMode = d.settings.navMode;
-      if (typeof d.settings.captions === "boolean") base.settings.captions = d.settings.captions;
       if (typeof d.settings.lang === "string" && LANGS[d.settings.lang]) base.settings.lang = d.settings.lang;
       if (typeof d.settings.trackDyskinesia === "boolean") base.settings.trackDyskinesia = d.settings.trackDyskinesia;
     }
@@ -1858,28 +1814,15 @@
 
   /* ---------- Screen builders ---------- */
 
-  function screenWelcome() {
-    return (
-      '<div class="pop">' +
-      "<h1>" + S.welcomeTitle + "</h1>" +
-      '<div class="video-wrap">' +
-      '<video id="intro" controls playsinline preload="auto" crossorigin="anonymous" src="assets/doctor-intro.mp4?v=9">' +
-      '<track kind="subtitles" srclang="en" label="English" src="assets/captions-en.vtt?v=9"' +
-      (data.settings.captions ? " default" : "") +
-      " />" +
-      "</video>" +
-      "</div>" +
-      '<div class="stack">' +
-      '<button class="btn-secondary" data-act="play-video" style="min-height:60px">' + S.playVideo + "</button>" +
-      '<button class="btn-primary" data-act="go" data-view="stepOff">' + S.next + "</button>" +
-      "</div></div>"
-    );
-  }
+  /* The doctor's intro video was removed in v10: it taught three colours and the
+   * previous palette, so it actively contradicted the app a patient was holding.
+   * Onboarding now runs language -> the colour screens directly. Re-recording it
+   * against the current two-colour default is a separate job; the script lives in
+   * explainer-video.md. */
 
+  /** One colour per screen during onboarding — one idea at a time (§2.7). */
   function screenStep(colour, nextView) {
     var m = STATE_META[colour];
-    var backLabel = fromMenu && colour === "extra" ? S.backToMenu : S.next;
-    var nextAttr = fromMenu && colour === "extra" ? "menu" : nextView;
     return (
       '<div class="step pop">' +
       '<div class="panel panel-' + colour + '">' +
@@ -1889,12 +1832,12 @@
       '<p class="example">' + esc(exampleFor(colour)) + "</p>" +
       "</div>" +
       '<div style="margin-top:18px">' +
-      '<button class="btn-primary" data-act="go" data-view="' + nextAttr + '">' + backLabel + "</button>" +
+      '<button class="btn-primary" data-act="go" data-view="' + nextView + '">' + S.next + "</button>" +
       "</div></div>"
     );
   }
 
-  /* Revisiting from the menu: all three colours on one scrollable screen.
+  /* Revisiting from the menu: every colour in play on one scrollable screen.
    * Onboarding keeps one-idea-per-screen (§2.7) — a newly-diagnosed patient
    * meeting the states for the first time is a different job from a patient
    * checking "which one was green again?". */
@@ -1944,7 +1887,7 @@
       "</div>" +
       '<p class="muted center" style="margin-top:12px;font-size:15px">' + esc(S.languageHint) + "</p>" +
       '<div style="margin-top:14px">' +
-      '<button class="btn-primary" data-act="go" data-view="' + (fromMenu ? "menu" : "welcome") + '">' +
+      '<button class="btn-primary" data-act="go" data-view="' + (fromMenu ? "menu" : "stepOff") + '">' +
       (fromMenu ? S.backToMenu : S.next) + "</button></div>" +
       "</div>"
     );
@@ -2359,7 +2302,6 @@
       '<div class="pop">' +
       "<h1>" + S.menu + "</h1>" +
       '<p class="muted">' + sub + "</p>" +
-      '<button class="btn-menu" data-act="go" data-view="welcome">' + S.menuVideo + "</button>" +
       '<button class="btn-menu" data-act="go" data-view="colours">' + S.menuColours + "</button>" +
       '<button class="btn-menu" data-act="go" data-view="language">' + S.menuLanguage +
       ' <span style="opacity:0.6">· ' + esc(S.langName) + "</span></button>" +
@@ -2371,7 +2313,6 @@
       '<button class="btn-menu" data-act="go" data-view="setup">' + S.menuTablets + "</button>" +
       '<button class="btn-menu" data-act="go" data-view="today">' + S.menuToday + "</button>" +
       '<button class="btn-menu" data-act="go" data-view="month">' + S.menuMonth + "</button>" +
-      '<button class="btn-menu" data-act="go" data-view="script">' + S.menuScript + "</button>" +
       '<button class="btn-menu" data-act="test-alarm">' + S.menuTestAlarm + "</button>" +
       (canEnable ? '<button class="btn-menu" data-act="enable-alarms">' + S.menuEnableAlarms + "</button>" : "") +
       '<button class="btn-menu" data-act="export">' + S.menuExport + "</button>" +
@@ -2680,31 +2621,6 @@
     );
   }
 
-  var SCRIPT_SECTIONS = [
-    ["Opening · 15s", "This app helps me see how your Parkinson's medicine is working through the day. It takes a few seconds each time."],
-    ["What it asks · 20s", "Every hour while you are awake, it will ask you one question: how are you feeling right now? You answer with one of three colours."],
-    ["Red · 30s", S.offFull + " " + S.offExample],
-    ["Green · 20s", S.onFull + " " + S.onExample],
-    ["Blue · 25s", S.extraFull + " " + S.extraExample],
-    ["Tablets and alarms · 20s", "The app will also remind you at each tablet time. Press 'I have taken it' after you take the tablet, so I know the timing."],
-    ["Close · 10s", "Bring the phone to your next visit. I will look at the chart and adjust your medicine."]
-  ];
-
-  function screenScript() {
-    return (
-      '<div class="pop">' +
-      "<h1>Video script</h1>" +
-      '<p class="muted">Roughly 1:50 in total.</p>' +
-      '<div class="card">' +
-      SCRIPT_SECTIONS.map(function (s) {
-        return '<div class="script-section"><div class="script-time">' + s[0] + "</div><p>" + esc(s[1]) + "</p></div>";
-      }).join("") +
-      "</div>" +
-      '<div style="margin-top:14px"><button class="btn-primary" data-act="go" data-view="menu">' + S.backToMenu + "</button></div>" +
-      "</div>"
-    );
-  }
-
   /* ---------- Alarm overlays ---------- */
 
   function overlayHtml() {
@@ -2775,7 +2691,6 @@
   /* ---------- Render ---------- */
 
   var SCREENS = {
-    welcome: screenWelcome,
     stepOff: function () {
       return screenStep("off", "stepOn");
     },
@@ -2796,13 +2711,12 @@
     menu: screenMenu,
     profile: screenProfile,
     today: screenToday,
-    month: screenMonth,
-    script: screenScript
+    month: screenMonth
   };
 
   // Screens the nav bar may sit under. It must never appear during onboarding
   // or over a half-filled form, where a stray tap would discard typed timings.
-  var NAV_VIEWS = ["log", "month", "today", "menu", "colours", "script"];
+  var NAV_VIEWS = ["log", "month", "today", "menu", "colours"];
 
   function render() {
     var builder = SCREENS[view] || screenLog;
@@ -2836,18 +2750,6 @@
           setupStage = fromMenu && data.tablets.length ? "review" : "intro";
         }
         go(target);
-        break;
-
-      case "play-video":
-        var v = document.getElementById("intro");
-        if (!v) break;
-        var p = v.play();
-        if (p && p.catch) {
-          p.catch(function () {
-            v.muted = true;
-            v.play();
-          });
-        }
         break;
 
       case "open-menu":
@@ -3282,7 +3184,7 @@
 
   // Screens that must never be interrupted: an alarm navigates to `log` and
   // would discard half-typed tablet timings (§8).
-  var PROTECTED = ["language", "welcome", "stepOff", "stepOn", "stepExtra", "stepAlarms", "waking", "setup", "profile"];
+  var PROTECTED = ["language", "stepOff", "stepOn", "stepExtra", "stepAlarms", "waking", "setup", "profile"];
   // Only these views show live data worth refreshing on the tick (§11.3).
   var LIVE = ["log", "today", "month"];
 

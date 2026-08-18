@@ -1,5 +1,20 @@
 # Explainer video — script and production prompt
 
+> **STALE — do not record from this yet.**
+>
+> The intro video was removed from the app in v10, because it taught three
+> colours and the previous palette and so contradicted the app in the patient's
+> hand.
+>
+> This script is still written for **three** colours. The app now defaults to
+> **two** — red and green — with blue added only when the doctor turns on
+> dyskinesia tracking. Scenes 3–5 and the close all need rewriting, and every
+> screenshot in `screenshots/` shows three buttons and the old onboarding.
+>
+> Left in place because the structure, timings and production notes still hold.
+> Say the word and it gets rewritten for two colours, and the screenshots
+> re-shot — possibly one set per language.
+
 One video, for the patient and the caregiver together. It explains what the three colours mean and
 how to answer. **Target: under two minutes.**
 
