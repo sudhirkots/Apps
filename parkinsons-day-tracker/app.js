@@ -17,7 +17,7 @@
   // Bump with every deploy, together with CACHE and the ?v= query strings.
   // Shown in the menu so a device can be identified at a glance — an installed
   // PWA silently running an old build is otherwise invisible.
-  var APP_VERSION = "v11";
+  var APP_VERSION = "v12";
 
   /* Strings are per language. English is the base; every other language is an
    * OVERRIDE MAP merged over it, so a missing or not-yet-translated key falls
@@ -2598,10 +2598,19 @@
       })
     );
 
-    /* No legend, no percentage tiles. The chart is read by the doctor, who does
-     * not need "Off" and "Normal" spelled out under it, and a screen of caption
-     * text pushes the squares themselves off a phone. Both are a few lines to
-     * restore if a colleague ever needs them. */
+    /* One line, two marks. The colour names, "not logged" and the split square
+     * were captioning things that are either self-evident or already known to
+     * the doctor reading this; solid-versus-dashed is the only encoding here
+     * that nothing on screen otherwise explains. Percentage tiles are gone for
+     * the same reason — a screen of caption text pushes the squares themselves
+     * off a phone. */
+    var legend =
+      '<div class="legend legend-min">' +
+      '<span class="legend-item"><span class="swatch line" style="height:16px"></span>' +
+      S.tabletTaken + "</span>" +
+      '<span class="legend-item"><span class="swatch dashed" style="height:16px"></span>' +
+      S.tabletNotConfirmed + "</span>" +
+      "</div>";
 
     return (
       '<div class="pop">' +
@@ -2616,7 +2625,7 @@
       '<p class="muted" style="font-size:15px;margin:-4px 0 12px">' +
       esc(S.showingWindow(rows.length, chartRange)) + "</p>" +
       (stats.total === 0 ? '<p class="muted">' + S.noDataYet + "</p>" : "") +
-      '<div class="chart-scroll"><div class="chart">' + head + body + "</div></div>" +
+      '<div class="chart-scroll"><div class="chart">' + head + body + "</div>" + legend + "</div>" +
       '<div class="stack" style="margin-top:18px">' +
       '<button class="btn-secondary" data-act="print">' + S.print + "</button>" +
       '<button class="btn-primary" data-act="go" data-view="menu">' + S.backToMenu + "</button>" +
