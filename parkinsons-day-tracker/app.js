@@ -17,9 +17,16 @@
   // Bump with every deploy, together with CACHE and the ?v= query strings.
   // Shown in the menu so a device can be identified at a glance — an installed
   // PWA silently running an old build is otherwise invisible.
-  var APP_VERSION = "v7";
+  var APP_VERSION = "v8";
 
-  var S = {
+  /* Strings are per language. English is the base; every other language is an
+   * OVERRIDE MAP merged over it, so a missing or not-yet-translated key falls
+   * back to English rather than rendering blank. A half-translated app is
+   * usable; a blank button is not. */
+  var LANGS = {};
+
+  LANGS.en = {
+    langName: "English",
     appName: "Day Tracker",
 
     // The three states. Stored as off / on / extra — the clinical state, never
@@ -224,7 +231,51 @@
     endOfDayBody:
       "Some hours today are still empty. You can fill them in now, while you still remember. After tonight this day is closed.",
     endOfDayGo: "Fill in today",
-    endOfDaySkip: "Leave them empty"
+    endOfDaySkip: "Leave them empty",
+
+    // ---- Language ----
+    languageTitle: "Which language?",
+    languageHint: "This can be changed later from the menu.",
+    menuLanguage: "Language",
+
+    // ---- Staff setup wizard ----
+    staffTitle: "Set up for the patient",
+    staffIntro:
+      "Fill this in with the patient before handing over the phone. One tablet at a time.",
+    staffBegin: "Start",
+    tabletNumber: function (n) {
+      return "Tablet " + n;
+    },
+    askName: "What is the tablet called?",
+    askNameHint: "Write the name once. It is not asked again.",
+    askDose: "How much is taken each time?",
+    askDoseHint: "For example: 1 tablet, half tablet.",
+    askFreq: "How many times a day?",
+    askFreqHint: "The number of doses in a day.",
+    askTimes: "At what times?",
+    askTimesHint: "Use the patient's usual timings. These repeat every day.",
+    timeN: function (n) {
+      return "Dose " + n;
+    },
+    askMore: "Any other tablet?",
+    addAnotherTablet: "Yes, add another tablet",
+    noMoreTablets: "No, that is all",
+    askDyskinesia: "Track extra movements as well?",
+    dyskinesiaExplain:
+      "By default the patient answers with two colours only — red when off, green when on. Turn this on to add a third colour for dyskinesia, when that is the question you are trying to answer.",
+    dyskinesiaYes: "Yes, add the blue button",
+    dyskinesiaNo: "No, two colours only",
+    reviewTitle: "Check before handing over",
+    reviewNone: "No tablets entered yet.",
+    editTablet: "Edit",
+    handOver: "Save and hand over",
+    backStep: "Back",
+    nextStep: "Next",
+    twoColours: "Two colours — red and green",
+    threeColours: "Three colours — red, green and blue",
+    menuDyskinesia: "Track extra movements",
+    dyskinesiaOn: "On — three colours",
+    dyskinesiaOff: "Off — two colours"
   };
 
   /* Common tablets and dosing patterns (§9 of the review list). Names are the
@@ -255,13 +306,468 @@
    * vertical lines through the cells, and black cells would swallow them
    * exactly where peak-dose clustering needs to be read.
    */
+  /* ---------------------------------------------------------------------
+   * TRANSLATIONS — DRAFT, NOT YET CLINICALLY REVIEWED
+   *
+   * These cover the PATIENT-FACING surface only. The staff setup wizard stays
+   * in English deliberately: it is filled in by clinic staff who write drug
+   * names and dosing in English anyway, and translating it would double the
+   * volume of unreviewed clinical text for no benefit to the patient.
+   *
+   * Any key omitted here falls back to English, so a partial translation is
+   * safe to ship.
+   *
+   * These must be read by a clinician who speaks the language before any
+   * patient sees them. The risk is not grammar — it is a word like "off" or
+   * "stiff" landing with the wrong clinical sense and quietly changing what
+   * gets logged.
+   * ------------------------------------------------------------------- */
+
+  LANGS.hi = {
+    langName: "हिंदी",
+
+    offName: "लाल — दवा का असर नहीं है",
+    offShort: "लाल",
+    offDesc: "अकड़न, जकड़न या धीमापन",
+    offFull:
+      "अकड़न या जकड़न। कुर्सी या बिस्तर से उठना मुश्किल। चलने-फिरने में धीमापन। या कँपकँपी।",
+    offExample:
+      "पैर ज़मीन से चिपके हुए लगते हैं, या उठने के लिए किसी की मदद चाहिए। यही लाल है।",
+
+    onName: "हरा — दवा का असर है",
+    onShort: "हरा",
+    onDesc: "आराम से चलना-फिरना और काम करना",
+    onFull: "आप उठते हैं, चलते हैं और अपना काम आसानी से करते हैं। किसी की मदद नहीं चाहिए।",
+    onExample: "यह आपका अच्छा समय है। दिन का ज़्यादातर हिस्सा हरा होना चाहिए।",
+
+    extraName: "नीला — बहुत ज़्यादा हलचल",
+    extraShort: "नीला",
+    extraDesc: "अपने आप होने वाली हलचल",
+    extraFull: "ऐसी हलचल जो आपके काबू में नहीं है और आपके काम में रुकावट डालती है।",
+    extraExample:
+      "शरीर, सिर या हाथ अपने आप हिलते हैं, जिससे खाना या स्थिर बैठना मुश्किल होता है।",
+
+    welcomeTitle: "आपके डॉक्टर बता रहे हैं",
+    playVideo: "वीडियो चलाएँ",
+    next: "आगे",
+
+    alarmsTitle: "अलार्म बजेगा",
+    alarmsLine1: "जब तक आप जागे हैं, हर घंटे — आपसे एक रंग पूछने के लिए।",
+    alarmsLine2: "और हर गोली के समय पर, वह गोली लेने की याद दिलाने के लिए।",
+    alarmsLine3: "आप अलार्म का इंतज़ार किए बिना, कभी भी रंग दबा सकते हैं।",
+
+    wakingTitle: "आप कब जागते हैं?",
+    wakeStart: "मैं उठता हूँ",
+    wakeEnd: "मैं सोने जाता हूँ",
+
+    logQuestion: "अभी आप कैसा महसूस कर रहे हैं?",
+    menu: "मेन्यू",
+    selectedPrefix: "चुना गया ",
+    confirm: "पक्का करें",
+    changeAnswer: "जवाब बदलें",
+    saved: "सहेज लिया",
+    lockLine: function (colour, mins) {
+      return "आपने अभी " + colour + " दर्ज किया है। आप " + mins + " मिनट बाद फिर दर्ज कर सकते हैं।";
+    },
+    recordedAt: function (colour, time) {
+      return colour + " — " + time + " पर दर्ज";
+    },
+
+    checkIn: " · जाँच",
+    notNow: "अभी नहीं",
+    tabletTime: " · गोली का समय",
+    takeTablet: function (dose, name) {
+      return name + " — " + dose + " लीजिए";
+    },
+    tabletBody: "अभी, इसी समय पर लीजिए। हर दिन यही समय रखिए।",
+    haveTaken: "मैंने ले ली है",
+    snooze: "10 मिनट बाद याद दिलाएँ",
+    lockedDuringAlarm: "आपने अभी-अभी रंग दर्ज किया है, इसलिए अभी कुछ करने की ज़रूरत नहीं।",
+    dismiss: "बंद करें",
+
+    menuVideo: "वीडियो फिर से देखें",
+    menuColours: "रंगों का मतलब",
+    menuWaking: "जागने का समय",
+    menuProfile: "आपकी जानकारी",
+    menuTablets: "गोलियों का समय बदलें",
+    menuToday: "आज की रिपोर्ट",
+    menuMonth: "सभी दिन — चार्ट",
+    menuExport: "बैकअप फ़ाइल सहेजें",
+    menuImport: "बैकअप फ़ाइल खोलें",
+    menuLanguage: "भाषा",
+    backToLogging: "वापस दर्ज करने पर",
+    backToMenu: "मेन्यू पर वापस",
+    noProfile: "मरीज़ की जानकारी अभी नहीं भरी गई",
+
+    profileTitle: "आपकी जानकारी",
+    pName: "नाम",
+    pAge: "उम्र",
+    pYear: "किस साल पता चला",
+    pDoctor: "डॉक्टर",
+    pNotes: "और कुछ लिखना हो तो",
+
+    todayTitle: "आज की रिपोर्ट",
+    hourByHour: "घंटे दर घंटे",
+    tabletSchedule: "गोलियों का समय",
+    markTaken: "ले ली",
+    takenAt: function (t) {
+      return t + " पर ली";
+    },
+    print: "प्रिंट / सहेजें",
+    entries: " बार दर्ज",
+    monthTitle: "सभी दिन",
+    week: "1 हफ़्ता",
+    month: "1 महीना",
+    off: "असर नहीं",
+    normal: "ठीक",
+    extra: "ज़्यादा",
+    notLogged: "दर्ज नहीं",
+    multiple: "उस घंटे में एक से ज़्यादा",
+    tabletTaken: "गोली ली गई",
+    tabletNotConfirmed: "गोली का समय पक्का नहीं",
+    noDataYet: "अभी कुछ दर्ज नहीं हुआ। शुरू करने के लिए होम स्क्रीन पर रंग दबाएँ।",
+
+    fillPrompt: function (hour) {
+      return hour + " बजे आप कैसे थे?";
+    },
+    fillHint: "किसी भी घंटे को भरने या बदलने के लिए उस पर दबाएँ।",
+    filledLater: "बाद में भरा गया",
+    clearHour: "इस घंटे को खाली करें",
+    today: "आज",
+    yesterday: "कल",
+    restOfDayTitle: "बाकी दिन",
+    restOfDayFine: "जो घंटे मैंने नहीं भरे, वे ठीक थे",
+    restOfDayNote:
+      "अभी तक के सभी खाली घंटों को हरा कर देगा। यह तभी दबाएँ जब यह सच हो — खाली घंटा गलत रंग से बेहतर है।",
+    cancelFill: "रहने दें",
+    pastDayReadOnly: "यह दिन पूरा हो चुका है और अब बदला नहीं जा सकता।",
+
+    endOfDayKicker: "सोने से पहले",
+    endOfDayTitle: "आज के बाकी घंटे भर दें?",
+    endOfDayBody: "आज के कुछ घंटे अभी खाली हैं। जब तक याद है, अभी भर सकते हैं।",
+    endOfDayGo: "आज भरें",
+    endOfDaySkip: "खाली रहने दें",
+
+    languageTitle: "कौन सी भाषा?",
+    languageHint: "इसे बाद में मेन्यू से बदला जा सकता है।"
+  };
+
+  LANGS.mr = {
+    langName: "मराठी",
+
+    offName: "लाल — औषधाचा परिणाम नाही",
+    offShort: "लाल",
+    offDesc: "ताठरपणा, जखडणे किंवा मंदपणा",
+    offFull:
+      "ताठरपणा किंवा जखडल्यासारखं. खुर्चीतून किंवा अंथरुणातून उठणं कठीण. हालचाली मंद. किंवा कंप.",
+    offExample: "पाय जमिनीला चिकटल्यासारखे वाटतात, किंवा उठायला मदत लागते. हेच लाल.",
+
+    onName: "हिरवा — औषध काम करत आहे",
+    onShort: "हिरवा",
+    onDesc: "सहज हालचाल आणि कामं",
+    onFull: "तुम्ही उठता, चालता आणि तुमची कामं सहज करता. कोणाच्या मदतीची गरज नाही.",
+    onExample: "हा तुमचा चांगला काळ आहे. दिवसाचा बहुतेक भाग हिरवा असायला हवा.",
+
+    extraName: "निळा — खूप जास्त हालचाल",
+    extraShort: "निळा",
+    extraDesc: "आपोआप होणाऱ्या हालचाली",
+    extraFull: "तुमच्या ताब्यात नसलेल्या जास्तीच्या हालचाली, ज्या कामात अडथळा आणतात.",
+    extraExample: "शरीर, डोकं किंवा हात आपोआप हलतात, त्यामुळे जेवणं किंवा स्थिर बसणं कठीण होतं.",
+
+    welcomeTitle: "तुमचे डॉक्टर सांगत आहेत",
+    playVideo: "व्हिडिओ चालू करा",
+    next: "पुढे",
+
+    alarmsTitle: "अलार्म वाजेल",
+    alarmsLine1: "तुम्ही जागे असताना दर तासाला — तुम्हाला एक रंग विचारण्यासाठी.",
+    alarmsLine2: "आणि प्रत्येक गोळीच्या वेळी, ती गोळी घ्यायची आठवण करण्यासाठी.",
+    alarmsLine3: "अलार्मची वाट न पाहता तुम्ही कधीही रंग दाबू शकता.",
+
+    wakingTitle: "तुम्ही कधी जागे असता?",
+    wakeStart: "मी उठतो",
+    wakeEnd: "मी झोपायला जातो",
+
+    logQuestion: "आत्ता तुम्हाला कसं वाटतंय?",
+    menu: "मेनू",
+    selectedPrefix: "निवडलं ",
+    confirm: "नक्की करा",
+    changeAnswer: "उत्तर बदला",
+    saved: "साठवलं",
+    lockLine: function (colour, mins) {
+      return "तुम्ही आत्ताच " + colour + " नोंदवलं आहे. " + mins + " मिनिटांनी पुन्हा नोंदवू शकता.";
+    },
+    recordedAt: function (colour, time) {
+      return colour + " — " + time + " ला नोंदवलं";
+    },
+
+    checkIn: " · तपासणी",
+    notNow: "आत्ता नको",
+    tabletTime: " · गोळीची वेळ",
+    takeTablet: function (dose, name) {
+      return name + " — " + dose + " घ्या";
+    },
+    tabletBody: "आत्ता, याच वेळी घ्या. दररोज हीच वेळ ठेवा.",
+    haveTaken: "मी घेतली आहे",
+    snooze: "10 मिनिटांनी आठवण करा",
+    lockedDuringAlarm: "तुम्ही आत्ताच रंग नोंदवला आहे, त्यामुळे आता काही करायची गरज नाही.",
+    dismiss: "बंद करा",
+
+    menuVideo: "व्हिडिओ पुन्हा पाहा",
+    menuColours: "रंगांचा अर्थ",
+    menuWaking: "जागण्याची वेळ",
+    menuProfile: "तुमची माहिती",
+    menuTablets: "गोळ्यांच्या वेळा बदला",
+    menuToday: "आजचा अहवाल",
+    menuMonth: "सर्व दिवस — तक्ता",
+    menuExport: "बॅकअप फाइल साठवा",
+    menuImport: "बॅकअप फाइल उघडा",
+    menuLanguage: "भाषा",
+    backToLogging: "पुन्हा नोंदवण्याकडे",
+    backToMenu: "मेनूकडे परत",
+    noProfile: "रुग्णाची माहिती अजून भरलेली नाही",
+
+    profileTitle: "तुमची माहिती",
+    pName: "नाव",
+    pAge: "वय",
+    pYear: "कोणत्या वर्षी निदान झालं",
+    pDoctor: "डॉक्टर",
+    pNotes: "आणखी काही लिहायचं असल्यास",
+
+    todayTitle: "आजचा अहवाल",
+    hourByHour: "तासागणिक",
+    tabletSchedule: "गोळ्यांच्या वेळा",
+    markTaken: "घेतली",
+    takenAt: function (t) {
+      return t + " ला घेतली";
+    },
+    print: "प्रिंट / साठवा",
+    entries: " नोंदी",
+    monthTitle: "सर्व दिवस",
+    week: "1 आठवडा",
+    month: "1 महिना",
+    off: "परिणाम नाही",
+    normal: "ठीक",
+    extra: "जास्त",
+    notLogged: "नोंद नाही",
+    multiple: "त्या तासात एकापेक्षा जास्त",
+    tabletTaken: "गोळी घेतली",
+    tabletNotConfirmed: "गोळीची वेळ नक्की नाही",
+    noDataYet: "अजून काही नोंदवलेलं नाही. सुरू करण्यासाठी होम स्क्रीनवर रंग दाबा.",
+
+    fillPrompt: function (hour) {
+      return hour + " वाजता तुम्हाला कसं वाटत होतं?";
+    },
+    fillHint: "कोणताही तास भरण्यासाठी किंवा बदलण्यासाठी त्यावर दाबा.",
+    filledLater: "नंतर भरलेलं",
+    clearHour: "हा तास रिकामा करा",
+    today: "आज",
+    yesterday: "काल",
+    restOfDayTitle: "दिवसाचा उरलेला भाग",
+    restOfDayFine: "मी न भरलेले तास ठीक होते",
+    restOfDayNote:
+      "आतापर्यंतचे सर्व रिकामे तास हिरवे करेल. हे खरं असेल तरच दाबा — रिकामा तास चुकीच्या रंगापेक्षा बरा.",
+    cancelFill: "राहू द्या",
+    pastDayReadOnly: "हा दिवस संपला आहे आणि आता बदलता येणार नाही.",
+
+    endOfDayKicker: "झोपण्यापूर्वी",
+    endOfDayTitle: "आजचे उरलेले तास भरायचे?",
+    endOfDayBody: "आजचे काही तास अजून रिकामे आहेत. आठवत असताना आत्ता भरू शकता.",
+    endOfDayGo: "आज भरा",
+    endOfDaySkip: "रिकामे राहू द्या",
+
+    languageTitle: "कोणती भाषा?",
+    languageHint: "हे नंतर मेनूमधून बदलता येईल."
+  };
+
+  LANGS.gu = {
+    langName: "ગુજરાતી",
+
+    offName: "લાલ — દવાની અસર નથી",
+    offShort: "લાલ",
+    offDesc: "જકડાવું, થીજી જવું કે ધીમાપણું",
+    offFull:
+      "જકડાઈ જવું કે થીજી જવું. ખુરશી કે પથારીમાંથી ઊઠવું મુશ્કેલ. હલનચલન ધીમું. અથવા ધ્રુજારી.",
+    offExample: "પગ જમીન સાથે ચોંટી ગયા હોય એવું લાગે, અથવા ઊઠવા મદદ જોઈએ. એ જ લાલ.",
+
+    onName: "લીલો — દવા કામ કરે છે",
+    onShort: "લીલો",
+    onDesc: "સહેલાઈથી હરવું-ફરવું અને કામ",
+    onFull: "તમે ઊઠો છો, ચાલો છો અને તમારું કામ સહેલાઈથી કરો છો. કોઈની મદદની જરૂર નથી.",
+    onExample: "આ તમારો સારો સમય છે. દિવસનો મોટા ભાગનો સમય લીલો હોવો જોઈએ.",
+
+    extraName: "વાદળી — વધુ પડતી હલનચલન",
+    extraShort: "વાદળી",
+    extraDesc: "જાતે થતી હલનચલન",
+    extraFull: "તમારા કાબૂ બહારની વધારાની હલનચલન, જે તમારા કામમાં નડે છે.",
+    extraExample: "શરીર, માથું કે હાથ જાતે હલે છે, જેથી ખાવું કે સ્થિર બેસવું મુશ્કેલ થાય છે.",
+
+    welcomeTitle: "તમારા ડૉક્ટર સમજાવે છે",
+    playVideo: "વીડિયો ચલાવો",
+    next: "આગળ",
+
+    alarmsTitle: "એલાર્મ વાગશે",
+    alarmsLine1: "તમે જાગતા હો ત્યાં સુધી દર કલાકે — તમને એક રંગ પૂછવા માટે.",
+    alarmsLine2: "અને દરેક ગોળીના સમયે, એ ગોળી લેવાની યાદ અપાવવા માટે.",
+    alarmsLine3: "એલાર્મની રાહ જોયા વગર તમે ગમે ત્યારે રંગ દબાવી શકો છો.",
+
+    wakingTitle: "તમે ક્યારે જાગો છો?",
+    wakeStart: "હું ઊઠું છું",
+    wakeEnd: "હું સૂવા જાઉં છું",
+
+    logQuestion: "અત્યારે તમને કેવું લાગે છે?",
+    menu: "મેનુ",
+    selectedPrefix: "પસંદ કર્યું ",
+    confirm: "ખાતરી કરો",
+    changeAnswer: "જવાબ બદલો",
+    saved: "સાચવ્યું",
+    lockLine: function (colour, mins) {
+      return "તમે હમણાં જ " + colour + " નોંધ્યું છે. " + mins + " મિનિટ પછી ફરી નોંધી શકશો.";
+    },
+    recordedAt: function (colour, time) {
+      return colour + " — " + time + " વાગ્યે નોંધ્યું";
+    },
+
+    checkIn: " · તપાસ",
+    notNow: "અત્યારે નહીં",
+    tabletTime: " · ગોળીનો સમય",
+    takeTablet: function (dose, name) {
+      return name + " — " + dose + " લો";
+    },
+    tabletBody: "અત્યારે, આ જ સમયે લો. દરરોજ આ જ સમય રાખો.",
+    haveTaken: "મેં લઈ લીધી છે",
+    snooze: "10 મિનિટ પછી યાદ કરાવો",
+    lockedDuringAlarm: "તમે હમણાં જ રંગ નોંધ્યો છે, તેથી અત્યારે કંઈ કરવાની જરૂર નથી.",
+    dismiss: "બંધ કરો",
+
+    menuVideo: "વીડિયો ફરી જુઓ",
+    menuColours: "રંગોનો અર્થ",
+    menuWaking: "જાગવાનો સમય",
+    menuProfile: "તમારી માહિતી",
+    menuTablets: "ગોળીઓનો સમય બદલો",
+    menuToday: "આજનો અહેવાલ",
+    menuMonth: "બધા દિવસ — ચાર્ટ",
+    menuExport: "બૅકઅપ ફાઇલ સાચવો",
+    menuImport: "બૅકઅપ ફાઇલ ખોલો",
+    menuLanguage: "ભાષા",
+    backToLogging: "ફરી નોંધવા પર",
+    backToMenu: "મેનુ પર પાછા",
+    noProfile: "દર્દીની માહિતી હજી ભરી નથી",
+
+    profileTitle: "તમારી માહિતી",
+    pName: "નામ",
+    pAge: "ઉંમર",
+    pYear: "કયા વર્ષે નિદાન થયું",
+    pDoctor: "ડૉક્ટર",
+    pNotes: "બીજું કંઈ લખવું હોય તો",
+
+    todayTitle: "આજનો અહેવાલ",
+    hourByHour: "કલાક પ્રમાણે",
+    tabletSchedule: "ગોળીઓનો સમય",
+    markTaken: "લીધી",
+    takenAt: function (t) {
+      return t + " વાગ્યે લીધી";
+    },
+    print: "પ્રિન્ટ / સાચવો",
+    entries: " નોંધ",
+    monthTitle: "બધા દિવસ",
+    week: "1 અઠવાડિયું",
+    month: "1 મહિનો",
+    off: "અસર નથી",
+    normal: "ઠીક",
+    extra: "વધુ",
+    notLogged: "નોંધ નથી",
+    multiple: "એ કલાકમાં એકથી વધુ",
+    tabletTaken: "ગોળી લીધી",
+    tabletNotConfirmed: "ગોળીનો સમય નક્કી નથી",
+    noDataYet: "હજી કંઈ નોંધાયું નથી. શરૂ કરવા હોમ સ્ક્રીન પર રંગ દબાવો.",
+
+    fillPrompt: function (hour) {
+      return hour + " વાગ્યે તમને કેવું હતું?";
+    },
+    fillHint: "કોઈ પણ કલાક ભરવા કે બદલવા તેના પર દબાવો.",
+    filledLater: "પછીથી ભરેલું",
+    clearHour: "આ કલાક ખાલી કરો",
+    today: "આજે",
+    yesterday: "ગઈકાલે",
+    restOfDayTitle: "દિવસનો બાકીનો ભાગ",
+    restOfDayFine: "મેં ન ભરેલા કલાકો ઠીક હતા",
+    restOfDayNote:
+      "અત્યાર સુધીના બધા ખાલી કલાકોને લીલા કરશે. આ સાચું હોય તો જ દબાવો — ખાલી કલાક ખોટા રંગ કરતાં સારો.",
+    cancelFill: "રહેવા દો",
+    pastDayReadOnly: "આ દિવસ પૂરો થઈ ગયો છે અને હવે બદલી શકાતો નથી.",
+
+    endOfDayKicker: "સૂતા પહેલાં",
+    endOfDayTitle: "આજના બાકીના કલાકો ભરવા છે?",
+    endOfDayBody: "આજના કેટલાક કલાકો હજી ખાલી છે. યાદ હોય ત્યાં સુધી અત્યારે ભરી શકો છો.",
+    endOfDayGo: "આજે ભરો",
+    endOfDaySkip: "ખાલી રહેવા દો",
+
+    languageTitle: "કઈ ભાષા?",
+    languageHint: "આ પછીથી મેનુમાંથી બદલી શકાય છે."
+  };
+
+  // Active strings. Replaced wholesale by setLang(); never reference LANGS.en
+  // directly outside setLang, or a translated build will show English.
+  var S = LANGS.en;
+
   var STATES = ["off", "on", "extra"];
 
-  var STATE_META = {
-    off: { name: S.offName, short: S.offShort, desc: S.offDesc, full: S.offFull, art: "assets/off-freezing.png" },
-    on: { name: S.onName, short: S.onShort, desc: S.onDesc, full: S.onFull, art: "assets/on-standing.png" },
-    extra: { name: S.extraName, short: S.extraShort, desc: S.extraDesc, full: S.extraFull, art: "assets/extra-dyskinesia.png" }
-  };
+  var STATE_META = {};
+
+  function buildStateMeta() {
+    STATE_META = {
+      off: { name: S.offName, short: S.offShort, desc: S.offDesc, full: S.offFull, art: "assets/off-freezing.png" },
+      on: { name: S.onName, short: S.onShort, desc: S.onDesc, full: S.onFull, art: "assets/on-standing.png" },
+      extra: { name: S.extraName, short: S.extraShort, desc: S.extraDesc, full: S.extraFull, art: "assets/extra-dyskinesia.png" }
+    };
+  }
+
+  function setLang(code) {
+    var base = LANGS.en;
+    var over = LANGS[code] || {};
+    // Merge rather than swap, so an untranslated key falls back to English.
+    S = Object.keys(base).reduce(function (acc, k) {
+      acc[k] = Object.prototype.hasOwnProperty.call(over, k) ? over[k] : base[k];
+      return acc;
+    }, {});
+    buildStateMeta();
+    document.documentElement.lang = code;
+    // Indic scripts fall back to the phone's own fonts — the bundled Latin
+    // faces carry no Devanagari or Gujarati glyphs.
+    document.documentElement.setAttribute("data-lang", code);
+  }
+
+  buildStateMeta();
+
+  /* Which colours the patient is offered.
+   *
+   * Two by default. Most patients do not have troublesome dyskinesia, and a
+   * third button is a cost every patient pays to serve a minority — more to
+   * explain, more to mis-tap, and a state they may log wrongly because they
+   * never really understood it. The doctor turns blue on when dyskinesia is
+   * the question being asked.
+   *
+   * Existing 'extra' entries still render on the chart even when the button is
+   * hidden; turning the question off must not erase answers already given. */
+  function activeStates() {
+    return data.settings.trackDyskinesia ? STATES : ["off", "on"];
+  }
+
+  /* What the reports show. The active states, plus any state already present in
+   * the log. Turning the blue button off must not hide dyskinesia a patient
+   * already recorded — that would quietly delete evidence from the chart the
+   * doctor is reading. */
+  function reportStates() {
+    var active = activeStates();
+    return STATES.filter(function (s) {
+      return (
+        active.indexOf(s) !== -1 ||
+        (data.entries || []).some(function (e) {
+          return e.state === s;
+        })
+      );
+    });
+  }
 
   // Old colour-named values, for migrating data written before v7.
   var LEGACY_STATE = { red: "off", yellow: "on", green: "extra" };
@@ -628,7 +1134,7 @@
       // the original "no navigation bar" and "history never on the home screen"
       // rules. The toggle stays, so it can be turned off for a patient who
       // mis-taps it.
-      settings: { navMode: true, captions: false }
+      settings: { navMode: true, captions: false, lang: "en", trackDyskinesia: false }
     };
   }
 
@@ -693,6 +1199,8 @@
     if (d.settings) {
       if (typeof d.settings.navMode === "boolean") base.settings.navMode = d.settings.navMode;
       if (typeof d.settings.captions === "boolean") base.settings.captions = d.settings.captions;
+      if (typeof d.settings.lang === "string" && LANGS[d.settings.lang]) base.settings.lang = d.settings.lang;
+      if (typeof d.settings.trackDyskinesia === "boolean") base.settings.trackDyskinesia = d.settings.trackDyskinesia;
     }
     return base;
   }
@@ -722,7 +1230,7 @@
    * ===================================================================== */
 
   var data = load();
-  var view = data.tablets.length ? "log" : "welcome";
+  var view = data.tablets.length ? "log" : "language";
   var fromMenu = false;
   var selected = null; // colour picked but not yet confirmed
   var alarm = null; // active alarm payload
@@ -733,6 +1241,9 @@
   var draft = null; // in-progress setup edits
   var reportOffset = 0; // 0 = today; earlier days are read-only
   var fillHour = null; // hour currently being filled in, or null
+  var wizard = null; // staff setup wizard: array of {name, dose, times[]}
+  var setupStage = "intro";
+  var setupIdx = 0;
 
   var app = document.getElementById("app");
 
@@ -844,8 +1355,8 @@
       '<div class="pop">' +
       "<h1>" + S.welcomeTitle + "</h1>" +
       '<div class="video-wrap">' +
-      '<video id="intro" controls playsinline preload="auto" crossorigin="anonymous" src="assets/doctor-intro.mp4?v=7">' +
-      '<track kind="subtitles" srclang="en" label="English" src="assets/captions-en.vtt?v=7"' +
+      '<video id="intro" controls playsinline preload="auto" crossorigin="anonymous" src="assets/doctor-intro.mp4?v=8">' +
+      '<track kind="subtitles" srclang="en" label="English" src="assets/captions-en.vtt?v=8"' +
       (data.settings.captions ? " default" : "") +
       " />" +
       "</video>" +
@@ -883,7 +1394,7 @@
     return (
       '<div class="pop">' +
       "<h1>" + S.coloursTitle + "</h1>" +
-      STATES.map(function (c) {
+      activeStates().map(function (c) {
         var m = STATE_META[c];
         return (
           '<div class="panel panel-' + c + '" style="margin-bottom:14px;padding:20px">' +
@@ -897,6 +1408,33 @@
         );
       }).join("") +
       '<button class="btn-primary" data-act="go" data-view="menu">' + S.backToMenu + "</button>" +
+      "</div>"
+    );
+  }
+
+  /* Language is asked first, before anything else is read — a patient who does
+   * not read English cannot be expected to work out that the menu has a
+   * language switch. Each option is written in its own script, so it needs no
+   * translation to be found. */
+  function screenLanguage() {
+    return (
+      '<div class="step pop">' +
+      "<h1>" + S.languageTitle + "</h1>" +
+      '<div class="stack">' +
+      Object.keys(LANGS)
+        .map(function (code) {
+          var on = data.settings.lang === code;
+          return (
+            '<button class="btn-menu' + (on ? " lang-on" : "") + '" data-act="set-lang" data-code="' +
+            code + '" style="text-align:center;font-size:22px">' + esc(LANGS[code].langName) + "</button>"
+          );
+        })
+        .join("") +
+      "</div>" +
+      '<p class="muted center" style="margin-top:12px;font-size:15px">' + esc(S.languageHint) + "</p>" +
+      '<div style="margin-top:14px">' +
+      '<button class="btn-primary" data-act="go" data-view="' + (fromMenu ? "menu" : "welcome") + '">' +
+      (fromMenu ? S.backToMenu : S.next) + "</button></div>" +
       "</div>"
     );
   }
@@ -938,7 +1476,183 @@
     );
   }
 
+  /* ---------- Staff setup wizard ----------
+   *
+   * Filled in by the doctor or nurse before the phone reaches the patient, so
+   * it optimises for someone entering a regimen they already know, quickly,
+   * across a desk — not for a tremoring patient discovering the app.
+   *
+   * One question per screen, one tablet at a time: name, dose, how many times a
+   * day, then the actual clock times. The old all-cards-at-once form asked
+   * staff to parse the whole structure before typing anything, which is the
+   * wrong shape for dictation from a prescription.
+   */
+  var SETUP_STAGES = ["intro", "name", "dose", "freq", "times", "more", "dysk", "review"];
+
+  function blankTablet() {
+    return { name: "", dose: "1 tablet", times: ["08:00"] };
+  }
+
+  function wizardTablet() {
+    if (!wizard[setupIdx]) wizard[setupIdx] = blankTablet();
+    return wizard[setupIdx];
+  }
+
+  /** Sensible default clock times for n doses a day, spread across waking hours. */
+  function suggestTimes(n) {
+    var start = hhmmToMinutes(data.waking.start) + 60;
+    var end = hhmmToMinutes(data.waking.end) - 60;
+    if (n === 1) return [minutesToHhmm(start)];
+    var span = Math.max(0, end - start);
+    var out = [];
+    for (var i = 0; i < n; i++) {
+      // round to the nearest half hour — staff enter tidy times, not 09:47
+      var m = start + Math.round((span * i) / (n - 1) / 30) * 30;
+      out.push(minutesToHhmm(m));
+    }
+    return out;
+  }
+
+  function wizardStep(title, hint, body, opts) {
+    opts = opts || {};
+    return (
+      '<div class="pop wizard">' +
+      '<div class="wiz-pos">' + esc(opts.pos || "") + "</div>" +
+      "<h1>" + esc(title) + "</h1>" +
+      (hint ? '<p class="muted">' + esc(hint) + "</p>" : "") +
+      body +
+      '<div class="wiz-foot">' +
+      (opts.hideBack
+        ? ""
+        : '<button class="btn-secondary" data-act="setup-back" style="flex:1">' + S.backStep + "</button>") +
+      (opts.hideNext
+        ? ""
+        : '<button class="btn-primary" data-act="setup-next" style="flex:2">' +
+          esc(opts.nextLabel || S.nextStep) + "</button>") +
+      "</div></div>"
+    );
+  }
+
   function screenSetup() {
+    if (!wizard) wizard = data.tablets.length ? tabletsToWizard(data.tablets) : [blankTablet()];
+    var tab = wizardTablet();
+    var n = setupIdx + 1;
+    var pos = S.tabletNumber(n);
+
+    switch (setupStage) {
+      case "intro":
+        return wizardStep(
+          S.staffTitle,
+          S.staffIntro,
+          '<div class="card"><p style="margin:0">' + esc(S.setupFootnote) + "</p></div>",
+          { hideBack: true, nextLabel: S.staffBegin }
+        );
+
+      case "name":
+        return wizardStep(S.askName, S.askNameHint,
+          '<div class="card">' +
+          '<input type="text" data-field="wiz-name" value="' + esc(tab.name) +
+          '" placeholder="Syndopa 110" autocomplete="off" />' +
+          '<div class="section-label">' + S.presetsLabel + "</div>" +
+          '<div class="quick-doses">' +
+          TABLET_PRESETS.map(function (p, i) {
+            return (
+              '<button data-act="wiz-preset" data-i="' + i + '" style="min-height:52px;text-align:left;padding:8px 12px">' +
+              "<strong>" + esc(p.name) + "</strong></button>"
+            );
+          }).join("") +
+          "</div></div>",
+          { pos: pos });
+
+      case "dose":
+        return wizardStep(S.askDose, S.askDoseHint,
+          '<div class="card">' +
+          '<input type="text" data-field="wiz-dose" value="' + esc(tab.dose) + '" placeholder="1 tablet" />' +
+          '<div class="quick-doses">' +
+          S.quickDoses.map(function (q) {
+            return '<button data-act="wiz-dose-quick" data-val="' + esc(q) + '">' + esc(q) + "</button>";
+          }).join("") +
+          "</div></div>",
+          { pos: pos });
+
+      case "freq":
+        return wizardStep(S.askFreq, S.askFreqHint,
+          '<div class="card"><div class="freq-grid">' +
+          [1, 2, 3, 4, 5, 6].map(function (f) {
+            return (
+              '<button class="freq-btn' + (tab.times.length === f ? " on" : "") +
+              '" data-act="wiz-freq" data-f="' + f + '">' + f + "</button>"
+            );
+          }).join("") +
+          "</div></div>",
+          { pos: pos });
+
+      case "times":
+        return wizardStep(S.askTimes, S.askTimesHint,
+          '<div class="card">' +
+          tab.times.map(function (tm, i) {
+            return (
+              '<div class="field"><label>' + esc(S.timeN(i + 1)) + "</label>" +
+              '<input type="time" data-field="wiz-time" data-i="' + i + '" value="' + esc(tm) + '" /></div>'
+            );
+          }).join("") +
+          "</div>",
+          { pos: pos });
+
+      case "more":
+        return wizardStep(S.askMore, "",
+          '<div class="card"><p style="margin:0 0 4px"><strong>' + esc(tab.name || S.tabletNumber(n)) +
+          "</strong></p>" +
+          '<p class="muted" style="margin:0">' + esc(tab.dose) + " · " +
+          tab.times.map(function (x) { return scheduleLabel(x); }).join(", ") + "</p></div>" +
+          '<div class="stack" style="margin-top:14px">' +
+          '<button class="btn-secondary" data-act="wiz-add-tablet">' + S.addAnotherTablet + "</button>" +
+          "</div>",
+          { pos: pos, nextLabel: S.noMoreTablets });
+
+      case "dysk":
+        return wizardStep(S.askDyskinesia, "",
+          '<div class="card"><p style="margin:0">' + esc(S.dyskinesiaExplain) + "</p></div>" +
+          '<div class="stack" style="margin-top:14px">' +
+          '<button class="btn-secondary" data-act="wiz-dysk" data-v="1">' + S.dyskinesiaYes + "</button>" +
+          '<button class="btn-secondary" data-act="wiz-dysk" data-v="0">' + S.dyskinesiaNo + "</button>" +
+          "</div>",
+          { hideNext: true });
+
+      default:
+        return setupReview();
+    }
+  }
+
+  /** Wizard shape -> stored shape. */
+  function wizardToTablets(w) {
+    return w
+      .map(function (t) {
+        return {
+          name: (t.name || "").trim(),
+          doses: t.times.map(function (tm) {
+            return { time: tm, dose: t.dose || "" };
+          })
+        };
+      })
+      .filter(function (t) {
+        return t.name && t.doses.length;
+      });
+  }
+
+  function tabletsToWizard(tabs) {
+    return tabs.map(function (t) {
+      return {
+        name: t.name,
+        dose: (t.doses[0] && t.doses[0].dose) || "1 tablet",
+        times: t.doses.map(function (d) {
+          return d.time;
+        })
+      };
+    });
+  }
+
+  function setupReview() {
     if (!draft) {
       draft = data.tablets.length
         ? JSON.parse(JSON.stringify(data.tablets))
@@ -1105,7 +1819,7 @@
     } else {
       body =
         '<div class="colour-buttons">' +
-        STATES.map(function (c) {
+        activeStates().map(function (c) {
           return colourButton(c, "select");
         }).join("") +
         "</div>";
@@ -1136,6 +1850,11 @@
       '<p class="muted">' + sub + "</p>" +
       '<button class="btn-menu" data-act="go" data-view="welcome">' + S.menuVideo + "</button>" +
       '<button class="btn-menu" data-act="go" data-view="colours">' + S.menuColours + "</button>" +
+      '<button class="btn-menu" data-act="go" data-view="language">' + S.menuLanguage +
+      ' <span style="opacity:0.6">· ' + esc(S.langName) + "</span></button>" +
+      '<button class="btn-menu" data-act="toggle-dysk">' + S.menuDyskinesia +
+      ' <span style="opacity:0.6">· ' +
+      (data.settings.trackDyskinesia ? S.dyskinesiaOn : S.dyskinesiaOff) + "</span></button>" +
       '<button class="btn-menu" data-act="go" data-view="waking">' + S.menuWaking + "</button>" +
       '<button class="btn-menu" data-act="go" data-view="profile">' + S.menuProfile + "</button>" +
       '<button class="btn-menu" data-act="go" data-view="setup">' + S.menuTablets + "</button>" +
@@ -1257,7 +1976,7 @@
         '<div class="card pop" style="margin-top:12px">' +
         '<h2 style="font-size:24px;margin-bottom:12px">' + esc(S.fillPrompt(hourLabel(fillHour))) + "</h2>" +
         '<div class="fill-choices">' +
-        STATES.map(function (c) {
+        activeStates().map(function (c) {
           return (
             '<button class="fill-btn ' + c + '" data-act="fill-colour" data-state="' + c + '">' +
             esc(STATE_META[c].short) + "</button>"
@@ -1294,11 +2013,7 @@
       ' aria-label="next day">' + S.nextDay + "</button>" +
       "</div>" +
       '<p class="muted">' + header + "</p>" +
-      '<div class="tiles">' +
-      '<div class="tile off"><span class="big">' + counts.off + '</span><span class="label">' + S.off + "</span></div>" +
-      '<div class="tile on"><span class="big">' + counts.on + '</span><span class="label">' + S.normal + "</span></div>" +
-      '<div class="tile extra"><span class="big">' + counts.extra + '</span><span class="label">' + S.extra + "</span></div>" +
-      "</div>" +
+      tilesHtml(counts) +
       '<div class="section-label">' + S.hourByHour + "</div>" +
       '<p class="muted" style="font-size:15px;margin:-4px 0 10px">' +
       (isToday ? S.fillHint : S.pastDayReadOnly) + "</p>" +
@@ -1310,6 +2025,23 @@
       '<button class="btn-secondary" data-act="print">' + S.print + "</button>" +
       '<button class="btn-primary" data-act="go" data-view="menu">' + S.backToMenu + "</button>" +
       "</div></div>"
+    );
+  }
+
+  /** Count/percentage tiles, limited to the states in play. */
+  function tilesHtml(values, suffix) {
+    var label = { off: S.off, on: S.normal, extra: S.extra };
+    return (
+      '<div class="tiles" style="grid-template-columns:repeat(' + reportStates().length + ',1fr)">' +
+      reportStates()
+        .map(function (s) {
+          return (
+            '<div class="tile ' + s + '"><span class="big">' + values[s] + (suffix || "") +
+            '</span><span class="label">' + label[s] + "</span></div>"
+          );
+        })
+        .join("") +
+      "</div>"
     );
   }
 
@@ -1402,9 +2134,12 @@
 
     var legend =
       '<div class="legend">' +
-      '<span class="legend-item"><span class="swatch off"></span>' + S.off + "</span>" +
-      '<span class="legend-item"><span class="swatch on"></span>' + S.normal + "</span>" +
-      '<span class="legend-item"><span class="swatch extra"></span>' + S.extra + "</span>" +
+      reportStates()
+        .map(function (s) {
+          var label = { off: S.off, on: S.normal, extra: S.extra }[s];
+          return '<span class="legend-item"><span class="swatch ' + s + '"></span>' + label + "</span>";
+        })
+        .join("") +
       '<span class="legend-item"><span class="swatch unlogged"></span>' + S.notLogged + "</span>" +
       '<span class="legend-item"><span class="swatch split"></span>' + S.multiple + "</span>" +
       '<span class="legend-item"><span class="swatch late"></span>' + S.filledLater + "</span>" +
@@ -1424,11 +2159,7 @@
       // toggle reads as broken.
       '<p class="muted" style="font-size:15px;margin:-4px 0 12px">' +
       esc(S.showingWindow(rows.length, chartRange)) + "</p>" +
-      '<div class="tiles">' +
-      '<div class="tile off"><span class="big">' + stats.pct.off + '%</span><span class="label">' + S.off + "</span></div>" +
-      '<div class="tile on"><span class="big">' + stats.pct.on + '%</span><span class="label">' + S.normal + "</span></div>" +
-      '<div class="tile extra"><span class="big">' + stats.pct.extra + '%</span><span class="label">' + S.extra + "</span></div>" +
-      "</div>" +
+      tilesHtml(stats.pct, "%") +
       (stats.total === 0 ? '<p class="muted">' + S.noDataYet + "</p>" : "") +
       '<div class="chart-scroll"><div class="chart">' + head + body + "</div>" + legend + "</div>" +
       '<div class="stack" style="margin-top:18px">' +
@@ -1514,7 +2245,7 @@
     } else {
       inner =
         '<div class="pic-buttons">' +
-        STATES.map(function (c) {
+        activeStates().map(function (c) {
           return colourButton(c, "select-alarm");
         }).join("") +
         "</div>" +
@@ -1538,12 +2269,15 @@
       return screenStep("off", "stepOn");
     },
     stepOn: function () {
-      return screenStep("on", "stepExtra");
+      // Skip the blue screen entirely when dyskinesia is not being tracked —
+      // explaining a colour the patient will never see is worse than useless.
+      return screenStep("on", data.settings.trackDyskinesia ? "stepExtra" : "stepAlarms");
     },
     stepExtra: function () {
       return screenStep("extra", "stepAlarms");
     },
     stepAlarms: screenStepAlarms,
+    language: screenLanguage,
     colours: screenColours,
     waking: screenWaking,
     setup: screenSetup,
@@ -1583,6 +2317,13 @@
         var target = el.getAttribute("data-view");
         // Plain navigation must not clobber fromMenu (§7/§11.5).
         if (target === "setup" || target === "waking") draft = null;
+        if (target === "setup") {
+          wizard = null;
+          setupIdx = 0;
+          // From the menu the regimen already exists and needs editing, not
+          // re-dictating, so land on the card view.
+          setupStage = fromMenu && data.tablets.length ? "review" : "intro";
+        }
         go(target);
         break;
 
@@ -1778,6 +2519,9 @@
             return t.name && t.doses.length;
           });
         draft = null;
+        wizard = null;
+        setupIdx = 0;
+        setupStage = "intro";
         save();
         fromMenu = false;
         go("log");
@@ -1806,6 +2550,55 @@
         }
         break;
 
+      case "setup-next":
+        advanceWizard(1);
+        break;
+
+      case "setup-back":
+        advanceWizard(-1);
+        break;
+
+      case "wiz-preset":
+        var wp = TABLET_PRESETS[+el.getAttribute("data-i")];
+        var wt = wizardTablet();
+        wt.name = wp.name;
+        wt.dose = wp.dose;
+        wt.times = wp.times.slice();
+        // A preset carries dose and timings too, so those questions are already
+        // answered — jump past them rather than making staff confirm twice.
+        setupStage = "more";
+        render();
+        break;
+
+      case "wiz-dose-quick":
+        wizardTablet().dose = el.getAttribute("data-val");
+        render();
+        break;
+
+      case "wiz-freq":
+        var f = +el.getAttribute("data-f");
+        var wtf = wizardTablet();
+        if (wtf.times.length !== f) wtf.times = suggestTimes(f);
+        setupStage = "times";
+        render();
+        break;
+
+      case "wiz-add-tablet":
+        setupIdx++;
+        wizard[setupIdx] = blankTablet();
+        setupStage = "name";
+        render();
+        break;
+
+      case "wiz-dysk":
+        data.settings.trackDyskinesia = el.getAttribute("data-v") === "1";
+        save();
+        setupStage = "review";
+        draft = wizardToTablets(wizard);
+        if (!draft.length) draft = null;
+        render();
+        break;
+
       case "preset":
         var preset = TABLET_PRESETS[+el.getAttribute("data-i")];
         // Replace a still-blank first card rather than stacking an empty one.
@@ -1819,6 +2612,19 @@
         };
         if (blank) draft[0] = filled;
         else draft.push(filled);
+        render();
+        break;
+
+      case "set-lang":
+        data.settings.lang = el.getAttribute("data-code");
+        save();
+        setLang(data.settings.lang);
+        render();
+        break;
+
+      case "toggle-dysk":
+        data.settings.trackDyskinesia = !data.settings.trackDyskinesia;
+        save();
         render();
         break;
 
@@ -1857,6 +2663,12 @@
     } else if (field === "profile") {
       data.profile[el.getAttribute("data-key")] = el.value;
       save();
+    } else if (field === "wiz-name") {
+      wizardTablet().name = el.value;
+    } else if (field === "wiz-dose") {
+      wizardTablet().dose = el.value;
+    } else if (field === "wiz-time") {
+      wizardTablet().times[+el.getAttribute("data-i")] = el.value;
     } else if (field === "tablet-name") {
       draft[+el.getAttribute("data-t")].name = el.value;
       needsRedraw = true; // card heading follows the name
@@ -1870,6 +2682,40 @@
   });
 
   /* ---------- Backup ---------- */
+
+  /* Move through the wizard. Validation is deliberately light — staff are
+   * entering a regimen they already know, and blocking on an empty field mid-
+   * dictation is more obstructive than a blank they can fix at the review. The
+   * one thing enforced is a tablet name, since a nameless tablet cannot be
+   * matched to a dose on the chart. */
+  function advanceWizard(dir) {
+    var i = SETUP_STAGES.indexOf(setupStage);
+    if (dir > 0) {
+      if (setupStage === "name" && !wizardTablet().name.trim()) return; // needs a name
+      if (setupStage === "times") {
+        setupStage = "more";
+        render();
+        return;
+      }
+      if (setupStage === "more") {
+        setupStage = "dysk";
+        render();
+        return;
+      }
+      setupStage = SETUP_STAGES[Math.min(i + 1, SETUP_STAGES.length - 1)];
+    } else {
+      if (setupStage === "name" && setupIdx > 0) {
+        // stepping back out of a second tablet returns to the previous one
+        wizard.pop();
+        setupIdx--;
+        setupStage = "more";
+        render();
+        return;
+      }
+      setupStage = SETUP_STAGES[Math.max(i - 1, 0)];
+    }
+    render();
+  }
 
   function exportBackup() {
     try {
@@ -1925,7 +2771,7 @@
 
   // Screens that must never be interrupted: an alarm navigates to `log` and
   // would discard half-typed tablet timings (§8).
-  var PROTECTED = ["welcome", "stepOff", "stepOn", "stepExtra", "stepAlarms", "waking", "setup", "profile"];
+  var PROTECTED = ["language", "welcome", "stepOff", "stepOn", "stepExtra", "stepAlarms", "waking", "setup", "profile"];
   // Only these views show live data worth refreshing on the tick (§11.3).
   var LIVE = ["log", "today", "month"];
 
@@ -1996,6 +2842,7 @@
     });
   }
 
+  setLang(data.settings.lang);
   render();
 
   // Exposed for the browser test pass only.
@@ -2032,8 +2879,9 @@
       alarm = null;
       selected = null;
       fromMenu = false;
+      setLang("en");
       save();
-      go("welcome");
+      go("language");
     }
   };
 })();

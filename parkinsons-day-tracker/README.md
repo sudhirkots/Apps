@@ -65,6 +65,50 @@ full-screen and works with no connection.
 
 ---
 
+## Two colours by default
+
+The patient answers with **red and green only**. Blue is added by the doctor at setup, or from
+Menu → Track extra movements, when dyskinesia is the question being asked.
+
+Most patients do not have troublesome dyskinesia, and a third button is a cost every patient pays to
+serve a minority — more to explain, more to mis-tap, and a state some will log wrongly because they
+never really grasped it. Dropping to two also lets the buttons grow from 135px to 246px.
+
+Turning it off never hides data: an `extra` entry already in the log still renders on the chart, and
+the legend and percentage tiles show whatever states are actually present. Hiding a state the patient
+recorded would delete evidence from the chart the doctor is reading.
+
+## Setup is filled in by staff, not the patient
+
+`setup` is a wizard for the doctor or nurse to complete before handing the phone over: one question
+per screen, one tablet at a time — name, dose, how many times a day, then the clock times. It is
+shaped for someone dictating a regimen they already know, not for a patient discovering the app.
+Choosing a preset fills dose and timings too and skips those questions.
+
+The last question asks whether to track dyskinesia. Then a review card list, which is also where
+Menu → Change tablet timings lands — editing an existing regimen in place beats walking back through
+one question per screen.
+
+## Languages
+
+English, Hindi, Marathi and Gujarati. The language question is the first screen on a fresh install,
+with each option written in its own script so it needs no translation to be found.
+
+Every language is an **override map merged over English**, so a missing key falls back to English
+rather than rendering blank. Only the patient-facing surface is translated; the staff wizard stays in
+English, since clinic staff enter drug names and dosing in English anyway.
+
+**The Hindi, Marathi and Gujarati strings are drafts and have not been clinically reviewed.** They
+must be read by a clinician who speaks the language before any patient sees them. The risk is not
+grammar — it is a word like "off" or "stiff" landing with the wrong clinical sense and quietly
+changing what gets logged.
+
+The bundled fonts are Latin-only, so Devanagari and Gujarati fall through to the phone's own fonts
+(Android and iOS both ship Noto for these). Those scripts also get a looser line height, because
+matras clip at the Latin default.
+
+---
+
 ## Reading the squares chart
 
 This is the artefact the whole app exists to produce. One row per logged day, one column per waking

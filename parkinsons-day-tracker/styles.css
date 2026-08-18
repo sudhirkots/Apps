@@ -4,13 +4,13 @@
 /* ---------- Fonts (bundled; the app must look identical offline) ---------- */
 @font-face {
   font-family: "Caprasimo";
-  src: url("assets/fonts/caprasimo.woff2?v=7") format("woff2");
+  src: url("assets/fonts/caprasimo.woff2?v=8") format("woff2");
   font-weight: 400;
   font-display: swap;
 }
 @font-face {
   font-family: "Figtree";
-  src: url("assets/fonts/figtree-variable.woff2?v=7") format("woff2");
+  src: url("assets/fonts/figtree-variable.woff2?v=8") format("woff2");
   font-weight: 300 900;
   font-display: swap;
 }
@@ -448,6 +448,92 @@ button:focus-visible {
 
 .log-screen.with-nav h1 {
   font-size: clamp(26px, 7.2vw, 32px);
+}
+
+/* ---------- Staff setup wizard ---------- */
+.wizard {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100dvh - 32px);
+}
+
+.wizard h1 {
+  font-size: clamp(26px, 6.4vw, 34px);
+}
+
+.wiz-pos {
+  font-family: var(--mono, var(--font-body));
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-neutral-600);
+  font-weight: 700;
+  min-height: 18px;
+}
+
+.wiz-foot {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 18px;
+}
+
+.wiz-foot button {
+  min-height: 62px;
+}
+
+.freq-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.freq-btn {
+  min-height: 76px;
+  font-size: 28px;
+  font-family: var(--font-heading);
+  background: var(--color-neutral-200);
+  border-radius: 20px;
+}
+
+.freq-btn.on {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.lang-on {
+  background: var(--color-accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Devanagari (Hindi, Marathi) and Gujarati are not in the bundled Latin faces,
+   so those scripts fall through to the phone's own fonts. Android and iOS both
+   ship Noto for these. The display face is Latin-only, so headings in these
+   languages use the body stack rather than rendering in a fallback that clashes
+   with Caprasimo's weight. */
+:root[data-lang="hi"],
+:root[data-lang="mr"],
+:root[data-lang="gu"] {
+  --font-heading: "Noto Sans Devanagari", "Noto Sans Gujarati", system-ui, sans-serif;
+  --font-body: "Noto Sans Devanagari", "Noto Sans Gujarati", system-ui, sans-serif;
+}
+
+/* Indic scripts sit taller than Latin; give them a little more room so
+   ascenders and matras are not clipped by tight line heights. */
+:root[data-lang="hi"] body,
+:root[data-lang="mr"] body,
+:root[data-lang="gu"] body {
+  line-height: 1.65;
+}
+
+:root[data-lang="hi"] h1,
+:root[data-lang="mr"] h1,
+:root[data-lang="gu"] h1,
+:root[data-lang="hi"] h2,
+:root[data-lang="mr"] h2,
+:root[data-lang="gu"] h2 {
+  line-height: 1.3;
 }
 
 /* ---------- Forms ---------- */
