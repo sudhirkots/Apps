@@ -17,7 +17,7 @@
   // Bump with every deploy, together with CACHE and the ?v= query strings.
   // Shown in the menu so a device can be identified at a glance — an installed
   // PWA silently running an old build is otherwise invisible.
-  var APP_VERSION = "v27";
+  var APP_VERSION = "v28";
 
   /* Strings are per language. English is the base; every other language is an
    * OVERRIDE MAP merged over it, so a missing or not-yet-translated key falls
@@ -27,6 +27,7 @@
 
   LANGS.en = {
     langName: "English",
+    langEn: "English",
     appName: "Day Tracker",
 
     // The three states. Stored as off / on / extra — the clinical state, never
@@ -310,6 +311,7 @@
 
   LANGS.hi = {
     langName: "हिंदी",
+    langEn: "Hindi",
 
     offName: "लाल — दवा का असर नहीं है",
     offShort: "लाल",
@@ -433,6 +435,7 @@
 
   LANGS.mr = {
     langName: "मराठी",
+    langEn: "Marathi",
 
     offName: "लाल — औषध काम करत नाही",
     offShort: "लाल",
@@ -556,6 +559,7 @@
 
   LANGS.gu = {
     langName: "ગુજરાતી",
+    langEn: "Gujarati",
 
     offName: "લાલ — દવાની અસર નથી",
     offShort: "લાલ",
@@ -677,6 +681,7 @@
 
   LANGS.ta = {
     langName: "தமிழ்",
+    langEn: "Tamil",
 
     offName: "சிவப்பு — மருந்தின் வேலை இல்லை",
     offShort: "சிவப்பு",
@@ -798,6 +803,7 @@
 
   LANGS.te = {
     langName: "తెలుగు",
+    langEn: "Telugu",
 
     offName: "ఎరుపు — మందు పని చేయడం లేదు",
     offShort: "ఎరుపు",
@@ -919,6 +925,7 @@
 
   LANGS.kn = {
     langName: "ಕನ್ನಡ",
+    langEn: "Kannada",
 
     offName: "ಕೆಂಪು — ಔಷಧದ ಪರಿಣಾಮ ಇಲ್ಲ",
     offShort: "ಕೆಂಪು",
@@ -1040,6 +1047,7 @@
 
   LANGS.ml = {
     langName: "മലയാളം",
+    langEn: "Malayalam",
 
     offName: "ചുവപ്പ് — മരുന്നിന്റെ ഫലം ഇല്ല",
     offShort: "ചുവപ്പ്",
@@ -1161,6 +1169,7 @@
 
   LANGS.bn = {
     langName: "বাংলা",
+    langEn: "Bengali",
 
     offName: "লাল — ওষুধের কাজ হচ্ছে না",
     offShort: "লাল",
@@ -1820,6 +1829,7 @@
   var wizard = null; // staff setup wizard: array of {name, dose, times[]}
   var setupStage = "intro";
   var setupIdx = 0;
+  var langReturn = null; // where to return after changing language mid-flow
 
   var app = document.getElementById("app");
 
@@ -1992,16 +2002,35 @@
           var on = data.settings.lang === code;
           return (
             '<button class="lang-btn' + (on ? " lang-on" : "") + '" data-act="set-lang" data-code="' +
-            code + '" lang="' + code + '">' + esc(LANGS[code].langName) + "</button>"
+            code + '" lang="' + code + '">' +
+            '<span class="lang-native">' + esc(LANGS[code].langName) + "</span>" +
+            (LANGS[code].langEn !== LANGS[code].langName
+              ? '<span class="lang-en">' + esc(LANGS[code].langEn) + "</span>"
+              : "") +
+            "</button>"
           );
         })
         .join("") +
       "</div>" +
       '<p class="muted center" style="margin-top:12px;font-size:15px">' + esc(S.languageHint) + "</p>" +
       '<div style="margin-top:14px">' +
-      '<button class="btn-primary" data-act="go" data-view="' + (fromMenu ? "menu" : "stepOff") + '">' +
-      (fromMenu ? S.backToMenu : S.next) + "</button></div>" +
+      '<button class="btn-primary" data-act="go" data-view="' +
+      (langReturn || (fromMenu ? "menu" : "stepOff")) + '">' +
+      (langReturn || fromMenu ? S.backToMenu : S.next) + "</button></div>" +
       "</div>"
+    );
+  }
+
+  /* A language button on every patient-facing screen. The language question is
+   * asked once at the start, but the wrong answer there — or a patient handed
+   * the phone after someone else set it up — leaves them stuck reading a script
+   * they cannot. This is the way out, from wherever they are. */
+  function langBar() {
+    return (
+      '<div class="lang-bar">' +
+      '<button data-act="open-language" aria-label="change language">' +
+      "🌐 " + esc(S.langEn) +
+      "</button></div>"
     );
   }
 
@@ -2844,15 +2873,23 @@
   // suppressed there — two bars stacked at the foot of a phone is one too many.
   var NAV_VIEWS = ["log", "today", "menu", "colours"];
 
+  /* The chart is doctor-facing and already carries its own bar; the language
+   * screen would be showing a button to itself. Everything else gets it. */
+  var LANG_BAR_VIEWS = ["stepOff", "stepOn", "stepExtra", "stepAlarms", "waking",
+                        "setup", "log", "colours", "today", "menu", "profile"];
+
   function render() {
     var builder = SCREENS[view] || screenLog;
-    var html = builder();
+    var showLangBar = LANG_BAR_VIEWS.indexOf(view) !== -1 && !alarm;
+    var html = (showLangBar ? langBar() : "") + builder();
     if (data.settings.navMode && NAV_VIEWS.indexOf(view) !== -1 && !alarm) {
       html += navBar();
     }
     if (toast) html += '<div class="toast">' + esc(toast) + "</div>";
     html += overlayHtml();
     app.innerHTML = html;
+    // Full-height screens subtract the bar, or they overflow by exactly its height.
+    app.style.setProperty("--topbar", showLangBar ? "46px" : "0px");
     app.classList.toggle("has-nav", data.settings.navMode && NAV_VIEWS.indexOf(view) !== -1 && !alarm);
   }
 
@@ -2866,6 +2903,7 @@
     switch (act) {
       case "go":
         var target = el.getAttribute("data-view");
+        if (view === "language") langReturn = null;
         // Plain navigation must not clobber fromMenu (§7/§11.5).
         if (target === "setup" || target === "waking") draft = null;
         if (target === "setup") {
@@ -3153,6 +3191,11 @@
         if (blank) draft[0] = filled;
         else draft.push(filled);
         render();
+        break;
+
+      case "open-language":
+        langReturn = view;
+        go("language");
         break;
 
       case "set-lang":

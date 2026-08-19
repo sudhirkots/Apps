@@ -4,13 +4,13 @@
 /* ---------- Fonts (bundled; the app must look identical offline) ---------- */
 @font-face {
   font-family: "Caprasimo";
-  src: url("assets/fonts/caprasimo.woff2?v=27") format("woff2");
+  src: url("assets/fonts/caprasimo.woff2?v=28") format("woff2");
   font-weight: 400;
   font-display: swap;
 }
 @font-face {
   font-family: "Figtree";
-  src: url("assets/fonts/figtree-variable.woff2?v=27") format("woff2");
+  src: url("assets/fonts/figtree-variable.woff2?v=28") format("woff2");
   font-weight: 300 900;
   font-display: swap;
 }
@@ -274,7 +274,7 @@ button:focus-visible {
   /* Fixed to the viewport, not merely a minimum. With only min-height the screen
      grew past the phone on the longest translations and took the Next button
      with it; pinning the height forces the children to give way instead. */
-  height: calc(100dvh - 32px);
+  height: calc(100dvh - 32px - var(--topbar, 0px));
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -337,7 +337,7 @@ button:focus-visible {
 .log-screen {
   display: flex;
   flex-direction: column;
-  min-height: calc(100dvh - 32px);
+  min-height: calc(100dvh - 32px - var(--topbar, 0px));
   gap: 10px;
 }
 
@@ -471,7 +471,7 @@ button:focus-visible {
    shrink to the 44px floor rather than push the screen into scrolling —
    this is exactly the trade-off the phone test is meant to expose. */
 .log-screen.with-nav {
-  min-height: calc(100dvh - 32px - 74px);
+  min-height: calc(100dvh - 32px - 74px - var(--topbar, 0px));
 }
 
 .log-screen.with-nav .colour-btn {
@@ -491,7 +491,7 @@ button:focus-visible {
 .wizard {
   display: flex;
   flex-direction: column;
-  min-height: calc(100dvh - 32px);
+  min-height: calc(100dvh - 32px - var(--topbar, 0px));
 }
 
 .wizard h1 {
@@ -1220,5 +1220,53 @@ button.hour-cell {
     border-left: 1px solid var(--color-divider);
     padding-left: 18px;
     align-self: center;
+  }
+}
+
+/* ---------- Language bar ----------
+   A way out of the wrong language from anywhere, not only from the menu. Small
+   and quiet — it is an escape hatch, not a feature to invite fiddling with. */
+.lang-bar {
+  display: flex;
+  justify-content: flex-end;
+  height: 46px;
+  align-items: center;
+}
+
+.lang-bar button {
+  min-height: 38px;
+  padding: 6px 14px;
+  font-size: 15px;
+  background: var(--color-surface);
+  color: var(--color-neutral-700);
+  border-radius: 999px;
+}
+
+/* Native script above the English name, so a reader who cannot decipher a
+   script can still find their language by its English label. */
+.lang-btn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  line-height: 1.2;
+}
+
+.lang-native {
+  font-size: 19px;
+}
+
+.lang-en {
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+.lang-on .lang-en {
+  opacity: 0.9;
+}
+
+@media print {
+  .lang-bar {
+    display: none !important;
   }
 }
