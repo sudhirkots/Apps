@@ -17,7 +17,7 @@
   // Bump with every deploy, together with CACHE and the ?v= query strings.
   // Shown in the menu so a device can be identified at a glance — an installed
   // PWA silently running an old build is otherwise invisible.
-  var APP_VERSION = "v28";
+  var APP_VERSION = "v30";
 
   /* Strings are per language. English is the base; every other language is an
    * OVERRIDE MAP merged over it, so a missing or not-yet-translated key falls
@@ -49,7 +49,7 @@
 
     extraName: "Blue — too much",
     extraShort: "Blue",
-    extraDesc: "Extra movements you cannot control",
+    extraDesc: "Unwanted extra movements",
     extraFull:
       "Extra movements you cannot control, getting in the way of what you are doing.",
     extraExample:
@@ -329,7 +329,7 @@
 
     extraName: "नीला — बहुत ज़्यादा हलचल",
     extraShort: "नीला",
-    extraDesc: "अपने आप होने वाली हलचल",
+    extraDesc: "अनचाही, अतिरिक्त हलचल",
     extraFull: "ऐसी हलचल जो आपके काबू में नहीं है और आपके काम में रुकावट डालती है।",
     extraExample:
       "शरीर, सिर या हाथ अपने आप हिलते हैं, जिससे खाना या स्थिर बैठना मुश्किल होता है।",
@@ -698,7 +698,7 @@
 
     extraName: "நீலம் — மிக அதிக அசைவு",
     extraShort: "நீலம்",
-    extraDesc: "தானாக நிகழும் அசைவுகள்",
+    extraDesc: "தேவையற்ற கூடுதல் அசைவுகள்",
     extraFull: "உங்கள் கட்டுப்பாட்டில் இல்லாத கூடுதல் அசைவுகள், அவை உங்கள் வேலைக்கு இடையூறாக இருக்கும்.",
     extraExample: "உடல், தலை அல்லது கைகள் தானாக அசைகின்றன, அதனால் சாப்பிடுவதோ அமைதியாக உட்காருவதோ கடினம்.",
     next: "அடுத்து",
@@ -820,7 +820,7 @@
 
     extraName: "నీలం — మరీ ఎక్కువ కదలిక",
     extraShort: "నీలం",
-    extraDesc: "వాటంతట అవే జరిగే కదలికలు",
+    extraDesc: "అవసరం లేని అదనపు కదలికలు",
     extraFull: "మీ అదుపులో లేని అదనపు కదలికలు, అవి మీ పనికి అడ్డుపడతాయి.",
     extraExample: "శరీరం, తల లేదా చేతులు వాటంతట అవే కదులుతాయి, దాంతో తినడం లేదా కదలకుండా కూర్చోవడం కష్టం.",
     next: "తర్వాత",
@@ -942,7 +942,7 @@
 
     extraName: "ನೀಲಿ — ತುಂಬಾ ಹೆಚ್ಚು ಚಲನೆ",
     extraShort: "ನೀಲಿ",
-    extraDesc: "ತಾನಾಗಿಯೇ ಆಗುವ ಚಲನೆ",
+    extraDesc: "ಬೇಡವಾದ ಹೆಚ್ಚುವರಿ ಚಲನೆ",
     extraFull: "ನಿಮ್ಮ ಹಿಡಿತದಲ್ಲಿಲ್ಲದ ಹೆಚ್ಚುವರಿ ಚಲನೆಗಳು, ಅವು ನಿಮ್ಮ ಕೆಲಸಕ್ಕೆ ಅಡ್ಡಿಯಾಗುತ್ತವೆ.",
     extraExample: "ದೇಹ, ತಲೆ ಅಥವಾ ಕೈಗಳು ತಾವಾಗಿಯೇ ಅಲುಗಾಡುತ್ತವೆ, ಇದರಿಂದ ಊಟ ಮಾಡುವುದು ಅಥವಾ ಸುಮ್ಮನೆ ಕೂರುವುದು ಕಷ್ಟ.",
     next: "ಮುಂದೆ",
@@ -1064,7 +1064,7 @@
 
     extraName: "നീല — അമിതമായ ചലനം",
     extraShort: "നീല",
-    extraDesc: "തനിയെ സംഭവിക്കുന്ന ചലനങ്ങൾ",
+    extraDesc: "വേണ്ടാത്ത അധിക ചലനങ്ങൾ",
     extraFull: "നിങ്ങളുടെ നിയന്ത്രണത്തിലില്ലാത്ത അധിക ചലനങ്ങൾ, അവ നിങ്ങളുടെ ജോലിക്ക് തടസ്സമാകുന്നു.",
     extraExample: "ശരീരം, തല അല്ലെങ്കിൽ കൈകൾ തനിയെ ചലിക്കുന്നു, അതിനാൽ ഭക്ഷണം കഴിക്കാനോ അനങ്ങാതെ ഇരിക്കാനോ പ്രയാസം.",
     next: "അടുത്തത്",
@@ -1186,7 +1186,7 @@
 
     extraName: "নীল — খুব বেশি নড়াচড়া",
     extraShort: "নীল",
-    extraDesc: "নিজে থেকেই হওয়া নড়াচড়া",
+    extraDesc: "অবাঞ্ছিত বাড়তি নড়াচড়া",
     extraFull: "আপনার নিয়ন্ত্রণের বাইরে বাড়তি নড়াচড়া, যা আপনার কাজে বাধা দেয়।",
     extraExample: "শরীর, মাথা বা হাত নিজে থেকেই নড়ে, ফলে খাওয়া বা স্থির হয়ে বসা কঠিন হয়।",
 
@@ -1356,6 +1356,13 @@
 
   // Old colour-named values, for migrating data written before v7.
   var LEGACY_STATE = { red: "off", yellow: "on", green: "extra" };
+
+  /* The clinical words stay in English in every language. "On", "off" and
+   * "dyskinesia" are what the doctor says across the desk and what the family
+   * repeats at home — they are shared vocabulary, not jargon to be translated
+   * away. Keeping them on the button also means a doctor can read a patient's
+   * phone in a script they do not know. */
+  var CLINICAL_EN = { off: "OFF", on: "ON", extra: "DYSKINESIA" };
 
   var LOCK_MINUTES = 15;
   var SNOOZE_MINUTES = 10;
@@ -2349,7 +2356,9 @@
     return (
       '<button class="colour-btn ' + colour + '" data-act="' + act + '" data-state="' + colour + '">' +
       '<img src="' + m.art + '" alt="" />' +
-      "<span><span class=\"name\">" + esc(m.short) + '</span><span class="desc">' + esc(m.desc) + "</span></span>" +
+      "<span><span class=\"name\">" + esc(m.short) +
+      ' <span class="clinical">' + CLINICAL_EN[colour] + "</span></span>" +
+      '<span class="desc">' + esc(m.desc) + "</span></span>" +
       "</button>"
     );
   }
@@ -2433,8 +2442,11 @@
     }
 
     var nav = data.settings.navMode;
+    // Flagged so the CSS can shed chrome when three buttons and a short screen
+    // would otherwise push them under the 132px floor.
+    var three = activeStates().length > 2;
     return (
-      '<div class="log-screen' + (nav ? " with-nav" : "") + '">' +
+      '<div class="log-screen' + (nav ? " with-nav" : "") + (three ? " three" : "") + '">' +
       (nav ? todayStrip() : "") +
       "<h1>" + S.logQuestion + "</h1>" +
       body +

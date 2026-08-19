@@ -70,8 +70,8 @@ BLUE — too much movement
 
 10. BUTTON
    (the short line on the button the patient taps every hour — must stay short)
-   English:  Extra movements you cannot control
-   Current:  వాటంతట అవే జరిగే కదలికలు
+   English:  Unwanted extra movements
+   Current:  అవసరం లేని అదనపు కదలికలు
 
 11. DEFINITION
    (the main explanation of what this colour means)

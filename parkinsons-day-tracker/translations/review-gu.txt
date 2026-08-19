@@ -70,7 +70,7 @@ BLUE — too much movement
 
 10. BUTTON
    (the short line on the button the patient taps every hour — must stay short)
-   English:  Extra movements you cannot control
+   English:  Unwanted extra movements
    Current:  વધારે પડતું હલન-ચલન જે તમે સંભાળી ના શકો
 
 11. DEFINITION

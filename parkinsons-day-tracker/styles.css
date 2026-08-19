@@ -4,13 +4,13 @@
 /* ---------- Fonts (bundled; the app must look identical offline) ---------- */
 @font-face {
   font-family: "Caprasimo";
-  src: url("assets/fonts/caprasimo.woff2?v=28") format("woff2");
+  src: url("assets/fonts/caprasimo.woff2?v=30") format("woff2");
   font-weight: 400;
   font-display: swap;
 }
 @font-face {
   font-family: "Figtree";
-  src: url("assets/fonts/figtree-variable.woff2?v=28") format("woff2");
+  src: url("assets/fonts/figtree-variable.woff2?v=30") format("woff2");
   font-weight: 300 900;
   font-display: swap;
 }
@@ -382,6 +382,17 @@ button:focus-visible {
   font-size: 30px;
   display: block;
   line-height: 1.1;
+}
+
+/* The English clinical word, always shown. Smaller and set apart from the
+   colour name so it reads as a label rather than part of the sentence. */
+.clinical {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  opacity: 0.75;
+  white-space: nowrap;
 }
 
 .colour-btn .desc {
@@ -1268,5 +1279,35 @@ button.hour-cell {
 @media print {
   .lang-bar {
     display: none !important;
+  }
+}
+
+/* ---------- Short screens with three colours ----------
+   On a 360x640 phone the language bar, the today strip, the heading and the
+   navigation bar together leave three buttons at 111px — below the 132px floor
+   that exists because these hands shake. The summary strip and some heading
+   size give way; the buttons do not. Two colours is unaffected, and two is the
+   default. */
+@media (max-height: 700px) {
+  .log-screen.three .today-strip {
+    display: none;
+  }
+
+  .log-screen.three h1 {
+    font-size: clamp(22px, 6vw, 28px);
+    margin-bottom: 0;
+  }
+
+  .log-screen.three .colour-btn img {
+    width: 58px;
+    height: 58px;
+  }
+
+  .log-screen.three .clinical {
+    font-size: 12px;
+  }
+
+  .lang-bar {
+    height: 40px;
   }
 }

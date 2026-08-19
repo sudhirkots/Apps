@@ -18,7 +18,7 @@ RED — the medicine is not working
 1. HEADING
    (the title of this colour, shown above the explanation)
    English:  Red — you are off
-   Current:  लाल — औषधाचा परिणाम नाही
+   Current:  लाल — औषध काम करत नाही
 
 2. BUTTON
    (the short line on the button the patient taps every hour — must stay short)
@@ -28,12 +28,12 @@ RED — the medicine is not working
 3. DEFINITION
    (the main explanation of what this colour means)
    English:  Stiff or frozen. Hard to get up from a chair or from bed. Movements feel slow. Or a shaking tremor.
-   Current:  ताठरपणा किंवा जखडल्यासारखं. खुर्चीतून किंवा अंथरुणातून उठणं कठीण. हालचाली मंद. किंवा कंप.
+   Current:  लाल म्हणजे औषधाचा परिणाम उतरला आहे. शरीर ताठ होतं, जड होतं, अंग जखडल्यासारखं वाटतं. खुर्चीतून किंवा अंथरुणातून उठणं कठीण जातं. हालचाल मंद होते. कधी कधी हात-पाय कापतात, कंपण येतो.
 
 4. EXAMPLE
    (a concrete illustration, shown in italics under the definition)
    English:  Your feet feel stuck to the floor, or you need help to stand up. That is red.
-   Current:  पाय जमिनीला चिकटल्यासारखे वाटतात, किंवा उठायला मदत लागते. हेच लाल.
+   Current:  पाय जमिनीला चिकटल्यासारखे वाटतात. उठायला कोणाची तरी मदत लागते.
 
 ==========================================================
 GREEN — the medicine is working
@@ -42,7 +42,7 @@ GREEN — the medicine is working
 5. HEADING
    (the title of this colour, shown above the explanation)
    English:  Green — you are on
-   Current:  हिरवा — औषध काम करत आहे
+   Current:  हिरवा — औषध चांगलं काम करत आहे
 
 6. BUTTON
    (the short line on the button the patient taps every hour — must stay short)
@@ -52,12 +52,12 @@ GREEN — the medicine is working
 7. DEFINITION
    (the main explanation of what this colour means)
    English:  You get up, walk and do all your work fairly easily. You do not need anyone's help.
-   Current:  तुम्ही कोणत्याही मदती शिवाय सहज उठता, चालता आणि तुमची नियमित कामे सूरळीत करु शकता
+   Current:  हिरवा म्हणजे औषधाचा परिणाम सुरू आहे. शरीर ठीक आहे. तुम्ही स्वतः उठता, चालता. दिवसाची कामं सहज करता. कोणाची मदत लागत नाही.
 
 8. EXAMPLE
    (a concrete illustration, shown in italics under the definition)
    English:  This is your good period. Most of the day should be green.
-   Current:  हा तुमचा चांगला काळ आहे. दिवसाचा बहुतेक भाग हिरवा असायला हवा.
+   Current:  हा तुमचा चांगला काळ आहे. दिवसाचा बहुतेक वेळ हिरवा असायला हवा.
 
 ==========================================================
 BLUE — too much movement
@@ -66,22 +66,22 @@ BLUE — too much movement
 9. HEADING
    (the title of this colour, shown above the explanation)
    English:  Blue — too much
-   Current:  निळा — खूप जास्त हालचाल
+   Current:  निळा — हालचाली आवरत नाहीत
 
 10. BUTTON
    (the short line on the button the patient taps every hour — must stay short)
-   English:  Extra movements you cannot control
+   English:  Unwanted extra movements
    Current:  शरीराची अनियंत्रित हालचाल
 
 11. DEFINITION
    (the main explanation of what this colour means)
    English:  Extra movements you cannot control, getting in the way of what you are doing.
-   Current:  तुमच्या ताब्यात नसलेल्या जास्तीच्या हालचाली, ज्या कामात अडथळा आणतात.
+   Current:  निळा म्हणजे शरीर आपल्या ताब्यात राहत नाही. डोकं, हात किंवा शरीर आपोआप हलतं. आपल्याला नको असूनही हालचाली होतात. या हालचालींमुळे कामात अडथळा येतो.
 
 12. EXAMPLE
    (a concrete illustration, shown in italics under the definition)
    English:  Your body, head or arms move on their own, so eating or sitting still is difficult.
-   Current:  शरीर, डोकं किंवा हात-पाय आपल्या हालतात, जरूर नसताना. त्यामुळे जेवण किंवा स्थिर बसणे कठीण होते.
+   Current:  जेवणं किंवा स्थिर बसणं कठीण होतं.
 
 ==========================================================
 End. 12 items.
