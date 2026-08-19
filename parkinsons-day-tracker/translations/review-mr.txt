@@ -17,7 +17,7 @@ RED — the medicine is not working
 
 1. HEADING
    (the title of this colour, shown above the explanation)
-   English:  Red — you are off
+   English:  Red — Off period
    Current:  लाल — औषध काम करत नाही
 
 2. BUTTON
@@ -41,12 +41,12 @@ GREEN — the medicine is working
 
 5. HEADING
    (the title of this colour, shown above the explanation)
-   English:  Green — you are on
+   English:  Green — On period
    Current:  हिरवा — औषध चांगलं काम करत आहे
 
 6. BUTTON
    (the short line on the button the patient taps every hour — must stay short)
-   English:  Moving and working easily
+   English:  Moving and working easily, mild tremor or none
    Current:  शरीराची सहज आणि सुरळीत हालचाल
 
 7. DEFINITION
@@ -65,7 +65,7 @@ BLUE — too much movement
 
 9. HEADING
    (the title of this colour, shown above the explanation)
-   English:  Blue — too much
+   English:  Blue — Dyskinesia
    Current:  निळा — हालचाली आवरत नाहीत
 
 10. BUTTON
@@ -75,7 +75,7 @@ BLUE — too much movement
 
 11. DEFINITION
    (the main explanation of what this colour means)
-   English:  Extra movements you cannot control, getting in the way of what you are doing.
+   English:  Unwanted and extra movements that you cannot control. They get in the way of what you are doing.
    Current:  निळा म्हणजे शरीर आपल्या ताब्यात राहत नाही. डोकं, हात किंवा शरीर आपोआप हलतं. आपल्याला नको असूनही हालचाली होतात. या हालचालींमुळे कामात अडथळा येतो.
 
 12. EXAMPLE

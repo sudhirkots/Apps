@@ -17,7 +17,7 @@
   // Bump with every deploy, together with CACHE and the ?v= query strings.
   // Shown in the menu so a device can be identified at a glance — an installed
   // PWA silently running an old build is otherwise invisible.
-  var APP_VERSION = "v33";
+  var APP_VERSION = "v34";
 
   /* Strings are per language. English is the base; every other language is an
    * OVERRIDE MAP merged over it, so a missing or not-yet-translated key falls
@@ -32,7 +32,7 @@
 
     // The three states. Stored as off / on / extra — the clinical state, never
     // the colour — so the palette can change without touching data.
-    offName: "Red — you are off",
+    offName: "Red — Off period",
     offShort: "Red",
     offDesc: "Slow, tremor, stiff or frozen",
     offFull:
@@ -40,18 +40,18 @@
     offExample:
       "Your feet feel stuck to the floor, or you need help to stand up. That is red.",
 
-    onName: "Green — you are on",
+    onName: "Green — On period",
     onShort: "Green",
-    onDesc: "Moving and working easily",
+    onDesc: "Moving and working easily, mild tremor or none",
     onFull:
       "You get up, walk and do all your work fairly easily. You do not need anyone's help.",
     onExample: "This is your good period. Most of the day should be green.",
 
-    extraName: "Blue — too much",
+    extraName: "Blue — Dyskinesia",
     extraShort: "Blue",
     extraDesc: "Unwanted extra movements",
     extraFull:
-      "Extra movements you cannot control, getting in the way of what you are doing.",
+      "Unwanted and extra movements that you cannot control. They get in the way of what you are doing.",
     extraExample:
       "Your body, head or arms move on their own, so eating or sitting still is difficult.",
 

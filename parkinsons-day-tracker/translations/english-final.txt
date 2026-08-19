@@ -22,7 +22,7 @@ cannot grow much without breaking the layout.
 ==================================================================
 
 3. offName
-   Red — you are off
+   Red — Off period
 
 4. offDesc [SHORT]
    Slow, tremor, stiff or frozen
@@ -38,10 +38,10 @@ cannot grow much without breaking the layout.
 ==================================================================
 
 7. onName
-   Green — you are on
+   Green — On period
 
 8. onDesc [SHORT]
-   Moving and working easily
+   Moving and working easily, mild tremor or none
 
 9. onFull
    You get up, walk and do all your work fairly easily. You do not need anyone's help.
@@ -54,13 +54,13 @@ cannot grow much without breaking the layout.
 ==================================================================
 
 11. extraName
-   Blue — too much
+   Blue — Dyskinesia
 
 12. extraDesc [SHORT]
    Unwanted extra movements
 
 13. extraFull
-   Extra movements you cannot control, getting in the way of what you are doing.
+   Unwanted and extra movements that you cannot control. They get in the way of what you are doing.
 
 14. extraExample
    Your body, head or arms move on their own, so eating or sitting still is difficult.
@@ -286,7 +286,7 @@ cannot grow much without breaking the layout.
    Your details
 
 75. pName
-   Day Tracker
+   Name
 
 76. pAge
    Age
