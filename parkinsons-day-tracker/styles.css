@@ -4,13 +4,13 @@
 /* ---------- Fonts (bundled; the app must look identical offline) ---------- */
 @font-face {
   font-family: "Caprasimo";
-  src: url("assets/fonts/caprasimo.woff2?v=30") format("woff2");
+  src: url("assets/fonts/caprasimo.woff2?v=32") format("woff2");
   font-weight: 400;
   font-display: swap;
 }
 @font-face {
   font-family: "Figtree";
-  src: url("assets/fonts/figtree-variable.woff2?v=30") format("woff2");
+  src: url("assets/fonts/figtree-variable.woff2?v=32") format("woff2");
   font-weight: 300 900;
   font-display: swap;
 }
@@ -384,15 +384,20 @@ button:focus-visible {
   line-height: 1.1;
 }
 
-/* The English clinical word, always shown. Smaller and set apart from the
-   colour name so it reads as a label rather than part of the sentence. */
+/* The English clinical word, always shown, at the same size as the colour name
+   beside it — it is the word the doctor and family actually use, not a footnote.
+   Set apart only by a little transparency. */
 .clinical {
-  font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  opacity: 0.75;
+  font-size: inherit;
+  font-family: inherit;
+  opacity: 0.8;
   white-space: nowrap;
+}
+
+/* With three buttons the name line carries "DYSKINESIA", which wraps at full
+   size. The name and the clinical word scale together, so they stay matched. */
+.log-screen.three .colour-btn .name {
+  font-size: clamp(20px, 5.6vw, 26px);
 }
 
 .colour-btn .desc {
@@ -1303,8 +1308,9 @@ button.hour-cell {
     height: 58px;
   }
 
-  .log-screen.three .clinical {
-    font-size: 12px;
+  /* Trimmed further where vertical room is scarcest. */
+  .log-screen.three .colour-btn .name {
+    font-size: clamp(19px, 5.2vw, 23px);
   }
 
   .lang-bar {
