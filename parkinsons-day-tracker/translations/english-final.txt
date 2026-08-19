@@ -1,0 +1,383 @@
+DAY TRACKER — ENGLISH TEXT, FOR FINAL APPROVAL
+
+Everything a patient or a member of staff reads, grouped by where it appears.
+Settle this first; the eight translations are then made from it once, rather
+than chasing it.
+
+Mark anything you want changed. Lines marked SHORT appear on a button and
+cannot grow much without breaking the layout.
+
+==================================================================
+1 · CHOOSING A LANGUAGE  (first screen on a new phone)
+==================================================================
+
+1. languageTitle
+   Which language?
+
+2. languageHint
+   This can be changed later from the menu.
+
+==================================================================
+2 · RED  (shown during onboarding, and from the menu)
+==================================================================
+
+3. offName
+   Red — you are off
+
+4. offDesc [SHORT]
+   Slow, tremor, stiff or frozen
+
+5. offFull
+   Stiff or frozen. Hard to get up from a chair or from bed. Movements feel slow. Or a shaking tremor.
+
+6. offExample
+   Your feet feel stuck to the floor, or you need help to stand up. That is red.
+
+==================================================================
+3 · GREEN
+==================================================================
+
+7. onName
+   Green — you are on
+
+8. onDesc [SHORT]
+   Moving and working easily
+
+9. onFull
+   You get up, walk and do all your work fairly easily. You do not need anyone's help.
+
+10. onExample
+   This is your good period. Most of the day should be green.
+
+==================================================================
+4 · BLUE  (only when dyskinesia tracking is on)
+==================================================================
+
+11. extraName
+   Blue — too much
+
+12. extraDesc [SHORT]
+   Unwanted extra movements
+
+13. extraFull
+   Extra movements you cannot control, getting in the way of what you are doing.
+
+14. extraExample
+   Your body, head or arms move on their own, so eating or sitting still is difficult.
+
+==================================================================
+5 · HOW THE ALARMS WORK  (onboarding)
+==================================================================
+
+15. alarmsTitle
+   The alarm rings
+
+16. alarmsLine1
+   Once every hour while you are awake, to ask you for a colour.
+
+17. alarmsLine2
+   And again at each tablet time, to remind you to take that tablet.
+
+18. alarmsLine3
+   You can also press a colour any time, without waiting for the alarm.
+
+==================================================================
+6 · THE MAIN LOGGING SCREEN  (seen every hour)
+==================================================================
+
+19. logQuestion
+   How are you feeling right now?
+
+20. selectedPrefix
+   Selected 
+
+21. confirm [SHORT]
+   Confirm
+
+22. changeAnswer
+   Change my answer
+
+23. saved
+   Saved
+
+24. menu [SHORT]
+   Menu
+
+==================================================================
+7 · THE HOURLY ALARM
+==================================================================
+
+25. checkIn
+    · check in
+
+26. notNow [SHORT]
+   Not now
+
+27. lockedDuringAlarm
+   You logged a colour a moment ago, so there is nothing to answer right now.
+
+28. dismiss [SHORT]
+   Close
+
+==================================================================
+8 · THE TABLET ALARM
+==================================================================
+
+29. tabletTime
+    · tablet time
+
+30. tabletBody
+   Take it now, at this time. Keep the same timing every day.
+
+31. haveTaken [SHORT]
+   I have taken it
+
+32. snooze
+   Remind me in 10 minutes
+
+==================================================================
+9 · FILLING IN A MISSED HOUR
+==================================================================
+
+33. fillHint
+   Tap any hour to fill it in or change it.
+
+34. clearHour
+   Clear this hour
+
+35. cancelFill
+   Never mind
+
+36. pastDayReadOnly
+   This day is finished and cannot be changed. Hours are filled in on the day itself, while you still remember.
+
+37. restOfDayTitle
+   The rest of the day
+
+38. restOfDayFine
+   The hours I did not fill were fine
+
+39. restOfDayNote
+   Marks every empty hour up to now as green. Only press this if that is true — an hour left blank tells the doctor more than a wrong colour.
+
+==================================================================
+10 · THE END-OF-DAY PROMPT  (about 9:20pm)
+==================================================================
+
+40. endOfDayKicker
+   Before you sleep
+
+41. endOfDayTitle
+   Fill in the rest of today?
+
+42. endOfDayBody
+   Some hours today are still empty. You can fill them in now, while you still remember. After tonight this day is closed.
+
+43. endOfDayGo
+   Fill in today
+
+44. endOfDaySkip
+   Leave them empty
+
+==================================================================
+11 · THE DAY REPORT
+==================================================================
+
+45. todayTitle
+   Today's report
+
+46. hourByHour
+   HOUR BY HOUR
+
+47. tabletSchedule
+   TABLET SCHEDULE
+
+48. markTaken [SHORT]
+   Mark taken
+
+49. print
+   Print / save
+
+50. noDataYet
+   Nothing logged yet. Press a colour on the home screen to start.
+
+==================================================================
+12 · THE CHART
+==================================================================
+
+51. monthTitle
+   All days
+
+52. week [SHORT]
+   1 week
+
+53. month [SHORT]
+   1 month
+
+54. off [SHORT]
+   Off
+
+55. normal [SHORT]
+   Normal
+
+56. extra [SHORT]
+   Extra
+
+57. notLogged
+   Not logged
+
+58. tabletTaken
+   Tablet taken
+
+59. tabletNotConfirmed
+   Tablet time not confirmed
+
+==================================================================
+13 · THE MENU
+==================================================================
+
+60. menuColours
+   What the colours mean
+
+61. menuLanguage
+   Language
+
+62. menuDyskinesia
+   Track extra movements
+
+63. menuWaking
+   Waking hours
+
+64. menuProfile
+   Your details
+
+65. menuTablets
+   Change tablet timings
+
+66. menuToday
+   Today's report
+
+67. menuMonth
+   All days — squares chart
+
+68. menuTestAlarm
+   Test the alarm screen
+
+69. menuExport
+   Save a backup file
+
+70. menuImport
+   Load a backup file
+
+71. backToLogging
+   Back to logging
+
+72. backToMenu
+   Back to menu
+
+73. noProfile
+   Patient details not filled in yet
+
+==================================================================
+14 · PATIENT DETAILS
+==================================================================
+
+74. profileTitle
+   Your details
+
+75. pName
+   Day Tracker
+
+76. pAge
+   Age
+
+77. pYear
+   Year diagnosed
+
+78. pDoctor
+   Doctor
+
+79. pNotes
+   Anything else to note
+
+==================================================================
+15 · THE STAFF SETUP WIZARD  (English only, filled by doctor or nurse)
+==================================================================
+
+80. staffTitle
+   Set up for the patient
+
+81. staffIntro
+   Fill this in with the patient before handing over the phone. One tablet at a time.
+
+82. staffBegin
+   Start
+
+83. askName
+   What is the tablet called?
+
+84. askNameHint
+   Write the name once. It is not asked again.
+
+85. askDose
+   How much is taken each time?
+
+86. askDoseHint
+   For example: 1 tablet, half tablet.
+
+87. askFreq
+   How many times a day?
+
+88. askFreqHint
+   The number of doses in a day.
+
+89. askTimes
+   At what times?
+
+90. askTimesHint
+   Use the patient's usual timings. These repeat every day.
+
+91. askMore
+   Any other tablet?
+
+92. addAnotherTablet
+   Yes, add another tablet
+
+93. noMoreTablets
+   No, that is all
+
+94. askDyskinesia
+   Track extra movements as well?
+
+95. dyskinesiaExplain
+   By default the patient answers with two colours only — red when off, green when on. Turn this on to add a third colour for dyskinesia, when that is the question you are trying to answer.
+
+96. dyskinesiaYes
+   Yes, add the blue button
+
+97. dyskinesiaNo
+   No, two colours only
+
+98. wakingTitle
+   When are you awake?
+
+99. wakingStaffHint
+   Ask the patient. The app only asks for a colour between these hours, and these also set the suggested tablet times.
+
+100. setupTitle
+   Your tablets
+
+101. setupFootnote
+   Once saved the timings are locked in and repeat every day.
+
+102. handOver
+   Save and hand over
+
+103. backStep
+   Back
+
+104. nextStep
+   Next
+
+==================================================================
+End. 104 items.
