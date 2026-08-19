@@ -4,13 +4,13 @@
 /* ---------- Fonts (bundled; the app must look identical offline) ---------- */
 @font-face {
   font-family: "Caprasimo";
-  src: url("assets/fonts/caprasimo.woff2?v=24") format("woff2");
+  src: url("assets/fonts/caprasimo.woff2?v=27") format("woff2");
   font-weight: 400;
   font-display: swap;
 }
 @font-face {
   font-family: "Figtree";
-  src: url("assets/fonts/figtree-variable.woff2?v=24") format("woff2");
+  src: url("assets/fonts/figtree-variable.woff2?v=27") format("woff2");
   font-weight: 300 900;
   font-display: swap;
 }
@@ -261,39 +261,76 @@ button:focus-visible {
   background: var(--color-accent-200);
 }
 
-/* ---------- Onboarding step screens ---------- */
+/* ---------- Onboarding step screens ----------
+   These must fit a 375x667 phone with the Next button reachable — a patient who
+   has to scroll to continue is a patient who gets stuck.
+
+   The text here is clinical wording set by a reviewing neurologist, so it is not
+   ours to trim. The layout absorbs the length instead: the illustration and
+   headings scale with the viewport, and the whole screen is a flex column with
+   the button pinned after the content rather than the panel being vertically
+   centred at a fixed height. Verified with the longest translation. */
 .step {
-  min-height: 78dvh;
+  /* Fixed to the viewport, not merely a minimum. With only min-height the screen
+     grew past the phone on the longest translations and took the Next button
+     with it; pinning the height forces the children to give way instead. */
+  height: calc(100dvh - 32px);
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 10px;
 }
 
+/* Last resort: if the words still do not fit the smallest phone, the panel
+   scrolls inside itself. The button stays put and reachable either way. */
+.step .panel {
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* Full size when the text leaves room, shrinking only when it does not — so a
+   short English screen keeps the illustration and a long translated one gives
+   the words the space instead. flex-shrink does the deciding, not a breakpoint. */
 .step-art {
-  width: 150px;
   height: 150px;
-  border-radius: 36px;
+  width: auto;
+  aspect-ratio: 1;
+  min-height: 76px;
+  flex: 0 1 auto;
+  border-radius: 30px;
   object-fit: contain;
   background: rgba(255, 255, 255, 0.5);
-  margin: 0 auto 18px;
+  margin: 0 auto 10px;
   display: block;
 }
 
+.step .panel {
+  padding: clamp(16px, 4vw, 26px);
+}
+
 .step h2 {
-  font-size: 40px;
+  font-size: clamp(24px, 6.4vw, 40px);
   text-align: center;
+  margin-bottom: 8px;
 }
 
 .step .definition {
-  font-size: 20px;
+  font-size: clamp(16px, 4.4vw, 20px);
   text-align: center;
+  margin-bottom: 8px;
 }
 
 .step .example {
-  font-size: 18px;
+  font-size: clamp(15px, 4vw, 18px);
   font-style: italic;
   text-align: center;
   opacity: 0.85;
+  margin-bottom: 0;
+}
+
+/* The button never scrolls out of reach. */
+.step > div:last-child {
+  flex: none;
 }
 
 /* ---------- The log screen — must not scroll at 375x667 (§11.4) ---------- */
