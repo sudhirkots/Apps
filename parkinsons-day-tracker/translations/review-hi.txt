@@ -22,8 +22,8 @@ RED — the medicine is not working
 
 2. BUTTON
    (the short line on the button the patient taps every hour — must stay short)
-   English:  Stiff, frozen or slow
-   Current:  अकड़न, जकड़न या धीमापन
+   English:  Slow, tremor, stiff or frozen
+   Current:  धीमापन, कँपकँपी, अकड़न या जकड़न
 
 3. DEFINITION
    (the main explanation of what this colour means)

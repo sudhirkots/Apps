@@ -22,8 +22,8 @@ RED — the medicine is not working
 
 2. BUTTON
    (the short line on the button the patient taps every hour — must stay short)
-   English:  Stiff, frozen or slow
-   Current:  விறைப்பு, உறைவு அல்லது மந்தம்
+   English:  Slow, tremor, stiff or frozen
+   Current:  மந்தம், நடுக்கம், விறைப்பு அல்லது உறைவு
 
 3. DEFINITION
    (the main explanation of what this colour means)

@@ -17,7 +17,7 @@
   // Bump with every deploy, together with CACHE and the ?v= query strings.
   // Shown in the menu so a device can be identified at a glance — an installed
   // PWA silently running an old build is otherwise invisible.
-  var APP_VERSION = "v32";
+  var APP_VERSION = "v33";
 
   /* Strings are per language. English is the base; every other language is an
    * OVERRIDE MAP merged over it, so a missing or not-yet-translated key falls
@@ -34,7 +34,7 @@
     // the colour — so the palette can change without touching data.
     offName: "Red — you are off",
     offShort: "Red",
-    offDesc: "Stiff, frozen or slow",
+    offDesc: "Slow, tremor, stiff or frozen",
     offFull:
       "Stiff or frozen. Hard to get up from a chair or from bed. Movements feel slow. Or a shaking tremor.",
     offExample:
@@ -315,7 +315,7 @@
 
     offName: "लाल — दवा का असर नहीं है",
     offShort: "लाल",
-    offDesc: "अकड़न, जकड़न या धीमापन",
+    offDesc: "धीमापन, कँपकँपी, अकड़न या जकड़न",
     offFull:
       "अकड़न या जकड़न। कुर्सी या बिस्तर से उठना मुश्किल। चलने-फिरने में धीमापन। या कँपकँपी।",
     offExample:
@@ -685,7 +685,7 @@
 
     offName: "சிவப்பு — மருந்தின் வேலை இல்லை",
     offShort: "சிவப்பு",
-    offDesc: "விறைப்பு, உறைவு அல்லது மந்தம்",
+    offDesc: "மந்தம், நடுக்கம், விறைப்பு அல்லது உறைவு",
     offFull:
       "விறைப்பு அல்லது உறைந்தது போல். நாற்காலியிலிருந்தோ படுக்கையிலிருந்தோ எழுவது கடினம். அசைவுகள் மெதுவாக. அல்லது நடுக்கம்.",
     offExample: "கால்கள் தரையில் ஒட்டிக்கொண்டது போல் இருக்கும், அல்லது எழ உதவி தேவைப்படும். அதுதான் சிவப்பு.",
@@ -807,7 +807,7 @@
 
     offName: "ఎరుపు — మందు పని చేయడం లేదు",
     offShort: "ఎరుపు",
-    offDesc: "బిగుసుకుపోవడం, కదలలేకపోవడం లేదా నెమ్మది",
+    offDesc: "నెమ్మది, వణుకు, బిగుసుకుపోవడం లేదా కదలలేకపోవడం",
     offFull:
       "బిగుసుకుపోవడం లేదా కదలలేకపోవడం. కుర్చీ నుంచి లేదా మంచం నుంచి లేవడం కష్టం. కదలికలు నెమ్మది. లేదా వణుకు.",
     offExample: "కాళ్లు నేలకు అతుక్కుపోయినట్టు అనిపిస్తుంది, లేదా లేవడానికి సాయం కావాలి. అదే ఎరుపు.",
@@ -929,7 +929,7 @@
 
     offName: "ಕೆಂಪು — ಔಷಧದ ಪರಿಣಾಮ ಇಲ್ಲ",
     offShort: "ಕೆಂಪು",
-    offDesc: "ಬಿಗಿತ, ಸ್ತಬ್ಧತೆ ಅಥವಾ ನಿಧಾನ",
+    offDesc: "ನಿಧಾನ, ನಡುಕ, ಬಿಗಿತ ಅಥವಾ ಸ್ತಬ್ಧತೆ",
     offFull:
       "ಬಿಗಿತ ಅಥವಾ ಸ್ತಬ್ಧವಾದಂತೆ. ಕುರ್ಚಿಯಿಂದ ಅಥವಾ ಹಾಸಿಗೆಯಿಂದ ಏಳುವುದು ಕಷ್ಟ. ಚಲನೆ ನಿಧಾನ. ಅಥವಾ ನಡುಕ.",
     offExample: "ಕಾಲುಗಳು ನೆಲಕ್ಕೆ ಅಂಟಿಕೊಂಡಂತೆ ಅನಿಸುತ್ತದೆ, ಅಥವಾ ಏಳಲು ಸಹಾಯ ಬೇಕಾಗುತ್ತದೆ. ಅದೇ ಕೆಂಪು.",
@@ -1051,7 +1051,7 @@
 
     offName: "ചുവപ്പ് — മരുന്നിന്റെ ഫലം ഇല്ല",
     offShort: "ചുവപ്പ്",
-    offDesc: "മുറുക്കം, ഉറഞ്ഞുപോകൽ അല്ലെങ്കിൽ മന്ദത",
+    offDesc: "മന്ദത, വിറയൽ, മുറുക്കം അല്ലെങ്കിൽ ഉറഞ്ഞുപോകൽ",
     offFull:
       "മുറുക്കം അല്ലെങ്കിൽ ഉറഞ്ഞുപോയതു പോലെ. കസേരയിൽ നിന്നോ കിടക്കയിൽ നിന്നോ എഴുന്നേൽക്കാൻ പ്രയാസം. ചലനങ്ങൾ മന്ദം. അല്ലെങ്കിൽ വിറയൽ.",
     offExample: "കാലുകൾ നിലത്ത് ഒട്ടിപ്പിടിച്ചതു പോലെ തോന്നും, അല്ലെങ്കിൽ എഴുന്നേൽക്കാൻ സഹായം വേണം. അതാണ് ചുവപ്പ്.",
@@ -1173,7 +1173,7 @@
 
     offName: "লাল — ওষুধের কাজ হচ্ছে না",
     offShort: "লাল",
-    offDesc: "শক্ত হয়ে যাওয়া, আটকে যাওয়া বা ধীরগতি",
+    offDesc: "ধীরগতি, কাঁপুনি, শক্ত হয়ে যাওয়া বা আটকে যাওয়া",
     offFull:
       "শক্ত হয়ে যাওয়া বা আটকে যাওয়ার মতো। চেয়ার বা বিছানা থেকে উঠতে কষ্ট। নড়াচড়া ধীর। অথবা কাঁপুনি।",
     offExample: "পা যেন মেঝেতে আটকে আছে মনে হয়, বা উঠতে কারও সাহায্য লাগে। সেটাই লাল।",

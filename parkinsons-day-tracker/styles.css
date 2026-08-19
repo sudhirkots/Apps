@@ -4,13 +4,13 @@
 /* ---------- Fonts (bundled; the app must look identical offline) ---------- */
 @font-face {
   font-family: "Caprasimo";
-  src: url("assets/fonts/caprasimo.woff2?v=32") format("woff2");
+  src: url("assets/fonts/caprasimo.woff2?v=33") format("woff2");
   font-weight: 400;
   font-display: swap;
 }
 @font-face {
   font-family: "Figtree";
-  src: url("assets/fonts/figtree-variable.woff2?v=32") format("woff2");
+  src: url("assets/fonts/figtree-variable.woff2?v=33") format("woff2");
   font-weight: 300 900;
   font-display: swap;
 }
